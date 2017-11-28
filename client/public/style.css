@@ -1,0 +1,15 @@
+li:hover {
+  cursor: pointer;
+}
+
+td, th {
+  border-right: 1px solid grey !important;
+  padding: 5px 5px !important;
+}
+tr {
+  border-top: 1px solid grey !important;
+}
+table {
+  border-left: 1px solid grey !important;
+  border-bottom: 1px solid grey !important;
+}
