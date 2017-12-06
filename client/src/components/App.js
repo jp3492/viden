@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
-import { BrowserRouter, Route } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { BrowserRouter, Route } from 'react-router-dom';
+import { fetchUser } from '../actions';
 
-const Header = () => <div>Header</div>;
+import Header from './Header';
 const Home = () => <div>Landing</div>;
 
 class App extends Component {
-
+  componentDidMount(){
+    this.props.fetchUser();
+  }
   render(){
     return(
         <div className="container-fluid">
@@ -23,4 +26,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default connect(null, {fetchUser})(App);
