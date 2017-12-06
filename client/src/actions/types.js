@@ -1,16 +1,2 @@
-export const FETCH_USER = 'fetch_user';
-export const UPLOAD_FILE = 'upload_file';
-export const NAME_CHANGE = 'name_change';
-export const PROCESS_FILE = 'process_file';
-export const UPLOAD_PLAYER = 'upload_player';
-export const UPLOAD_TEAM = 'upload_team';
-export const UPLOAD_COMPETITION = 'upload_competition';
-export const UPLOAD_LEAGUE = 'upload_league';
-export const UPLOAD_GAME = 'upload_game';
-export const UPLOAD_SCOUT = 'upload_scout';
-export const UPLOAD_REPORT = 'upload_report';
-export const UPLOAD_STATS = 'upload_stats';
-export const FETCH_SCOUTS = 'fetch_scouts';
-export const FILTER_STATS = 'filter_stats';
-export const SELECT_GAME = 'select_game';
-export const SET_FILTER = 'set_filter';
+// export all your action types here to keep them consistent
+export const EXAMPLE_ACTION = 'example_action';

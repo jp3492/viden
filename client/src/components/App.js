@@ -1,20 +1,12 @@
 import React, { Component } from 'react';
-import 'materialize-css';
 import { BrowserRouter, Route } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { fetchUser } from '../actions';
 
-import Header from './Header';
-import AddGame from './AddGame';
-import CheckGame from './CheckGame';
-import CheckSave from './CheckSave';
-import MyGames from './MyGames';
-import Game from './Game';
+const Header = () => <div>Header</div>;
+const Home = () => <div>Landing</div>;
 
 class App extends Component {
-  componentDidMount(){
-  this.props.fetchUser();
-}
+
   render(){
     return(
         <div className="container-fluid">
@@ -22,11 +14,7 @@ class App extends Component {
             <div>
               <Route path="/" component={Header} />
               <div className="container">
-                <Route exact path="/game" component={Game} />
-                <Route exact path="/games" component={MyGames} />
-                <Route exact path="/games/new" component={AddGame} />
-                <Route exact path="/games/new/check" component={CheckGame} />
-                <Route exact path="/games/new/check/save" component={CheckSave} />
+                <Route exact path="/home" component={Home} />
               </div>
             </div>
           </BrowserRouter>
@@ -35,4 +23,4 @@ class App extends Component {
   }
 }
 
-export default connect(null, {fetchUser})(App);
+export default App;

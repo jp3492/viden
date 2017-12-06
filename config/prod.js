@@ -1,3 +1,4 @@
+// add to Heroku env variables in your Project
 module.exports = {
   googleClientID: process.env.GOOGLE_CLIENT_ID,
   googleClientSecret: process.env.GOOGLE_CLIENT_SECRET,

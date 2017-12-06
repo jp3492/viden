@@ -7,14 +7,7 @@ const axios = require('axios');
 
 const keys = require('./config/keys');
 require('./models/User');
-require('./models/Country');
-require('./models/City');
-require('./models/League');
-require('./models/Competition');
-require('./models/Game');
-require('./models/Team');
-require('./models/Player');
-require('./models/Scout');
+// reqire mongoDb models here
 require('./services/passport');
 
 mongoose.connect(keys.mongoURI);
@@ -44,9 +37,3 @@ if (process.env.NODE_ENV === 'production') {
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT);
-
-// if (process.env.NODE_ENV === 'production') {
-//   setInterval(function() {
-//       axios.get("https://aqueous-bastion-77302.herokuapp.com/");
-//   }, 30000);
-// }
