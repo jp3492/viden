@@ -4,20 +4,28 @@ import { BrowserRouter, Route } from 'react-router-dom';
 import { fetchUser } from '../actions';
 
 import Header from './Header';
-const Home = () => <div>Landing</div>;
+import NewHighlights from './NewHighlights';
+import Highlights from './Highlights';
+import VideoEditor from './VideoEditor';
+import VideoViewer from './VideoViewer';
+import Settings from './Settings';
 
 class App extends Component {
-  componentDidMount(){
+  componentWillMount(){
     this.props.fetchUser();
   }
   render(){
     return(
-        <div className="container-fluid">
+        <div className="container-fluid fullHeight">
           <BrowserRouter>
-            <div>
+            <div className="fullHeight">
               <Route path="/" component={Header} />
-              <div className="container">
-                <Route exact path="/home" component={Home} />
+              <div>
+                <Route exact path="/new" component={NewHighlights} />
+                <Route exact path="/list" component={Highlights} />
+                <Route exact path="/editor" component={VideoEditor} />
+                <Route exact path="/viewer" component={VideoViewer} />
+                <Route exact path="/settings" component={Settings} />
               </div>
             </div>
           </BrowserRouter>

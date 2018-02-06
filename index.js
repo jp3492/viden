@@ -7,6 +7,7 @@ const axios = require('axios');
 
 const keys = require('./config/keys');
 require('./models/User');
+require('./models/Highlights');
 // reqire mongoDb models here
 require('./services/passport');
 
@@ -17,7 +18,7 @@ const app = express();
 app.use(bodyParser.json({limit: '1mb' }));
 app.use(
   cookieSession({
-      maxAge: 1 * 2 * 60 * 60 * 1000,
+      maxAge: 10 * 2 * 60 * 60 * 1000,
       keys: [keys.cookieKey]
   })
 );
