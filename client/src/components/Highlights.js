@@ -21,6 +21,7 @@ class Highlights extends Component{
     const title = (selectedHighlights === null) ? "Select Project": selectedHighlights.title;
     const videoId = (selectedHighlights === null) ? "": selectedHighlights.videoId;
     const listt = (selectedHighlights === null) ? 0: list.length;
+    const projectId = (selectedHighlights === null) ? "": selectedHighlights._id;
     return(
       <div className="row">
         <div className="col s4">
@@ -30,6 +31,7 @@ class Highlights extends Component{
                <div className="card-content white-text">
                  <span className="card-title">{title}</span>
                  <p>{videoId}</p>
+                 <p>{projectId}</p>
                  <p>{listt}</p>
                </div>
                <div className="card-action">
