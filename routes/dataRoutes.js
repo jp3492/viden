@@ -4,6 +4,12 @@ const User = mongoose.model('users');
 const Highlights = mongoose.model('highlights');
 
 module.exports = app => {
+  app.get(`/api/view/:_id`, async (req, res) => {
+    const { _id } = req.params;
+    const highlight = await Highlights.find({_id});
+    console.log(highlight[0]);
+    res.send(highlight[0]);
+  });
   //delete highlight within highlights dataset
   app.delete('/api/highlights/highlight/:_id/:id', async (req, res) => {
     const { _id, id } = req.params;

@@ -1,7 +1,13 @@
 import axios from 'axios';
 import { FETCH_USER, POST_HIGHLIGHTS, POST_HIGHLIGHT, EDIT_HIGHLIGHT, DELETE_HIGHLIGHTS, DELETE_HIGHLIGHT, CHANGE_LINK, CHANGE_TITLE, FETCH_HIGHLIGHTS,
 CHANGE_COMMENT, SET_START, SET_END, SUBMIT_HIGHLIGHT, SELECT_HIGHLIGHTS, PLAY_VIDEO, JUMP_TO, SET_ACTION, SET_STATE, SET_TIME, RESET_SELECTED, SELECT_HIGHLIGHT,
-SEARCH, CHANGE_SEARCH } from './types';
+SEARCH, CHANGE_SEARCH, SEARCH_PROJECT } from './types';
+
+export const searchProject = search => async dispatch => {
+  const res = await axios.get(`/api/view/${search}`);
+  console.log(res.data);
+  dispatch({ type: SELECT_HIGHLIGHTS, payload: res.data });
+}
 
 export const changeSearch = search => dispatch => {
   dispatch({ type: CHANGE_SEARCH, payload: search });
@@ -76,6 +82,9 @@ export const selectHighlights = (edit, highlight, history) => async dispatch => 
   const { _id, title, videoId } = highlight;
   const res = await axios.get(`/api/highlights/${_id}`);
   dispatch({ type: SELECT_HIGHLIGHTS, payload: { _id, title, videoId, highlights: res.data } });
+  if (history !== undefined) {
+    history;
+  }
 }
 
 export const fetchHighlights = () => async dispatch => {

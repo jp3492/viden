@@ -24,6 +24,7 @@ export default function ( state = initialState, action ){
     case FETCH_HIGHLIGHTS:
       return { ...state, list: action.payload };
     case SELECT_HIGHLIGHTS:
+      console.log(action.payload);
       return { ...state, selectedHighlights: action.payload };
     case CHANGE_SEARCH:
       const filteredHighlights = state.selectedHighlights.highlights.filter( h => {

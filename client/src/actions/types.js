@@ -22,3 +22,4 @@ export const RESET_SELECTED = "reset_selected";
 export const SELECT_HIGHLIGHT = "select_highlight";
 export const SEARCH = "search";
 export const CHANGE_SEARCH = "change_search";
+export const SEARCH_PROJECT = "search_project";

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import HighlightsList from './HighlightsList';
-import VideoPlayer from './VideoPlayer';
+import Player from './VideoPlayer';
 import Controls from './Controls';
 
 class VideoViewer extends Component{
@@ -13,7 +13,7 @@ class VideoViewer extends Component{
       <div className="flexBox">
         <div className="row">
           <div className="col s8 fullHeight" id="vid">
-            <VideoPlayer view />
+            <Player view="true" />
           </div>
           <div className="col s4">
             <HighlightsList />

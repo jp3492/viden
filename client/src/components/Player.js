@@ -7,8 +7,23 @@ import { setTime, setAction, submitHighlight, changeComment, deleteHighlight, ed
 class VideoPlayer extends Component {
   constructor (props) {
     super(props);
-    this.state = { player: null };
+    this.state = { player: null, view: false };
     this._onReady = this._onReady.bind(this);
+  }
+  componentDidMount(){
+    if (document.getElementById("search") !== null && document.getElementById("searchResult") !== null) {
+      document.getElementById("search").style.display = "none";
+      document.getElementById("searchResult").style.display = "none";
+      if (this.props.auth._id !== this.props._uid) {
+        document.getElementById("editArea").style.display = "none";
+        document.getElementById("enter").style.display = "none";
+        var x = document.getElementsByClassName("editCell");
+        var i;
+        for (i = 0; i < x.length; i++) {
+            x[i].style.display = "none";
+        }
+      }
+    }
   }
   disableButtons(disable){
     document.getElementById("save").disabled = disable;
@@ -133,6 +148,9 @@ class VideoPlayer extends Component {
   }
   render() {
     console.log( this.props);
+    if (this.props.view === true) {
+      console.log("in View mode");
+    }
     const { videoId } = this.props;
     const h = window.innerHeight - 160;
     const opts = {
@@ -165,8 +183,8 @@ class VideoPlayer extends Component {
   }
 }
 
-const mapStateToProps = ({ controls: { action, edit, start, stop, comment, highlight, searchKey }, highlights: { selectedHighlights: { videoId, _id } } }) => {
-  return{ start, stop, comment, action, edit, videoId, _id, highlight, searchKey }
+const mapStateToProps = ({ auth, controls: { action, edit, start, stop, comment, highlight, searchKey }, highlights: { selectedHighlights: { videoId, _id, _uid } } }) => {
+  return{ auth, start, stop, comment, action, edit, videoId, _id, _uid, highlight, searchKey }
 }
 
 export default connect(mapStateToProps, { setTime, setAction, submitHighlight, changeComment, deleteHighlight, editHighlight, changeSearch })(VideoPlayer);

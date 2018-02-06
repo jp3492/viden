@@ -51,7 +51,7 @@ class Controls extends Component{
           <div className="btn col s2 controlsBtn" onClick={ () => setAction("down") } >   Forward     </div>
           {this.renderEnter(setAction)}
         </div>
-        <div className="col s4">
+        <div className="col s4" id="editArea">
           <div className="col s1">
             <div className="col s12" id="start" onClick={ () => this.selectTime(true) }>  {start}  </div>
             <div className="col s12" id="stop"  onClick={ () => this.selectTime(false)}>  {stop}   </div>

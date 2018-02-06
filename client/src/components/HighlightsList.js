@@ -15,7 +15,7 @@ class HighlightsList extends Component{
         <td onClick={ () => selectHighlight(highlight, i) }>{start}</td>
         <td onClick={ () => selectHighlight(highlight, i) }>{stop}</td>
         <td onClick={ () => selectHighlight(highlight, i) }>{comment}</td>
-        <td onClick={ () => {  selectHighlight(highlight, i); setAction("edit"); } }><a>edit</a></td>
+        <td className="editCell" onClick={ () => {  selectHighlight(highlight, i); setAction("edit"); } }><a>edit</a></td>
       </tr>
     )
   }
@@ -29,6 +29,7 @@ class HighlightsList extends Component{
   }
   render () {
     const { highlights, _id, changeSearch, filteredHighlights, searchKey } = this.props;
+    console.log(filteredHighlights, highlights);
     let list = (filteredHighlights === null) ? highlights: filteredHighlights;
     return (
       <div className="col-lg-4">
@@ -41,7 +42,7 @@ class HighlightsList extends Component{
                 <th>START</th>
                 <th>STOP</th>
                 <th>COMMENT</th>
-                <th>EDIT</th>
+                <th className="editCell">EDIT</th>
               </tr>
             </thead>
             <tbody>
