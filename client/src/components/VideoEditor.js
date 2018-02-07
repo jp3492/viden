@@ -6,11 +6,6 @@ import Player from './Player';
 import Controls from './Controls';
 
 class VideoEditor extends Component{
-  componentWillMount(){
-    if (this.props.selectedHighlights === null) {
-      this.props.history.push('/');
-    }
-  }
   componentDidMount(){
     const win = window.innerHeight - 160;
     document.getElementById("highlightsList").style.height = `${win}px`;
@@ -38,9 +33,7 @@ class VideoEditor extends Component{
 }
 
 const mapStateToProps = ({ highlights: { selectedHighlights } }) => {
-  return{
-    selectedHighlights
-  }
+  return{ selectedHighlights }
 }
 
 export default connect(mapStateToProps)(VideoEditor);

@@ -8,6 +8,42 @@ td, th {
 textarea {
     resize: none;
 }
+table {
+  border-collapse: collapse !important;
+    table-layout: fixed !important;
+}
+.collection {
+  margin: 0 !important;
+}
+#searchBar {
+  width: 50%;
+  margin: 0 !important;
+  font-size: 1.5rem !important;
+}
+.col4 {
+  word-wrap: break-word !important;
+  width: 60% !important;
+}
+.col1 {
+  width: 5% !important;
+}
+.col2, .col3 {
+  width: 12.5% !important;
+  overflow: hidden !important;
+}
+.col6 {
+  width: 10% !important;
+}
+.infoCardFoot {
+  position: absolute !important;
+  bottom: 70px !important;
+}
+.infoCard {
+  margin: 0 !important;
+  position: fixed !important;
+  height: 100% !important;
+  width: 33.3333334% !important;
+}
 #cover {
   position: absolute;
   width: 66.6666666667%;

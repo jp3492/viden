@@ -4,10 +4,15 @@ const User = mongoose.model('users');
 const Highlights = mongoose.model('highlights');
 
 module.exports = app => {
+  app.get(`/api/search/:term`, async(req, res) => {
+    const { term } = req.params;
+    const byName = await Highlights.find({ "title": { "$regex": term, "$options": "i" } });
+    console.log(byName);
+    res.send(byName);
+  });
   app.get(`/api/view/:_id`, async (req, res) => {
     const { _id } = req.params;
     const highlight = await Highlights.find({_id});
-    console.log(highlight[0]);
     res.send(highlight[0]);
   });
   //delete highlight within highlights dataset
@@ -68,7 +73,7 @@ module.exports = app => {
     const { id } = req.user;
     let highlights = await Highlights.find({ _uid: id });
     highlights = highlights.map( h => {
-      return { _id: h._id, title: h.title, videoId: h.videoId };
+      return { _id: h._id, title: h.title, videoId: h.videoId, _uid: h._uid };
     });
     res.send(highlights);
   });

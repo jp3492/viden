@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { selectHighlights, resetSelected, deleteHighlights, fetchHighlights } from '../actions';
+import { selectHighlights, resetSelected, deleteHighlights, fetchHighlights, fetchUser } from '../actions';
 
 class Highlights extends Component{
   componentWillMount(){
+    this.props.fetchUser();
     this.props.fetchHighlights();
-    this.props.resetSelected();
   }
   renderHighlight(highlight){
     const { title, videoId, _id } = highlight;
@@ -15,29 +15,48 @@ class Highlights extends Component{
       </li>
     )
   }
+  renderButtons(){
+    const { selectedHighlights, search, auth } = this.props;
+    if (selectedHighlights === null) {
+      return;
+    } else if (selectedHighlights._uid === auth._id) {
+      return(
+        <div>
+          <button className="btn" onClick={ () => this.props.history.push("/editor")}>Select</button>
+          <button className="btn" onClick={ () => deleteHighlights(selectedHighlights._id)}>Delete</button>
+        </div>
+      )
+    } else {
+      return (
+        <div>
+          <button className="btn" onClick={ () => this.props.history.push("/editor")}>Select</button>
+        </div>
+      )
+    }
 
+  }
   render(){
-    const { list, selectedHighlights, deleteHighlights } = this.props;
+    const { list, search, selectedHighlights, deleteHighlights } = this.props;
     const title = (selectedHighlights === null) ? "Select Project": selectedHighlights.title;
     const videoId = (selectedHighlights === null) ? "": selectedHighlights.videoId;
-    const listt = (selectedHighlights === null) ? 0: list.length;
     const projectId = (selectedHighlights === null) ? "": selectedHighlights._id;
+    let listt = list;
+    if (search.active === true) {
+      listt = search.list;
+    }
     return(
       <div className="row">
         <div className="col s4">
           <div className="row">
            <div className="col s12">
-             <div className="card blue-grey darken-1">
+             <div className="card blue-grey darken-1 infoCard">
                <div className="card-content white-text">
                  <span className="card-title">{title}</span>
                  <p>{videoId}</p>
                  <p>{projectId}</p>
-                 <p>{listt}</p>
                </div>
-               <div className="card-action">
-                 <button className="btn" onClick={ () => this.props.history.push("/editor")}>Select</button>
-                 <button className="btn">Save</button>
-                 <button className="btn" onClick={ () => deleteHighlights(selectedHighlights._id)}>Delete</button>
+               <div className="card-action infoCardFoot">
+                 {this.renderButtons()}
                </div>
              </div>
            </div>
@@ -45,7 +64,7 @@ class Highlights extends Component{
         </div>
         <div className="col s8">
           <ul className="collection">
-            {list.map( highlight => this.renderHighlight(highlight) )}
+            {listt.map( highlight => this.renderHighlight(highlight) )}
           </ul>
         </div>
       </div>
@@ -53,11 +72,13 @@ class Highlights extends Component{
   }
 }
 
-const mapStateToProps = ({ highlights: { list, selectedHighlights } }) => {
+const mapStateToProps = ({ auth, search, highlights: { list, selectedHighlights } }) => {
   return{
+    auth,
+    search,
     list,
     selectedHighlights
   }
 }
 
-export default connect(mapStateToProps, { selectHighlights, resetSelected, deleteHighlights, fetchHighlights })(Highlights);
+export default connect(mapStateToProps, { selectHighlights, resetSelected, deleteHighlights, fetchHighlights, fetchUser })(Highlights);
