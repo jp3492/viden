@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
+import { fetchUser } from '../actions';
+
 import HighlightsList from './HighlightsList';
 import Player from './Player';
 import Controls from './Controls';
+import Edit from './Edit';
 
 class VideoEditor extends Component{
   componentDidMount(){
@@ -13,18 +16,21 @@ class VideoEditor extends Component{
   }
   render(){
     return(
-      <div className="flexBox">
-        <div className="row fullHeight" id="topRow">
-          <div className="col s8 fullHeight" id="vid">
+      <div className="row">
+        <div className="col s8 editorLeft">
+          <div id="editorPlayer">
             <Player />
           </div>
-          <div className="col s4" id="highlightsList">
-            <HighlightsList />
+          <div id="editorControls">
+            <Controls />
           </div>
         </div>
-        <div className="row flexBoxBottom">
-          <div className="col s12">
-            <Controls />
+        <div className="col s4 editorRight">
+          <div id="highlightsList">
+            <HighlightsList />
+          </div>
+          <div className="editorEdit">
+            <Edit />
           </div>
         </div>
       </div>
@@ -32,8 +38,4 @@ class VideoEditor extends Component{
   }
 }
 
-const mapStateToProps = ({ highlights: { selectedHighlights } }) => {
-  return{ selectedHighlights }
-}
-
-export default connect(mapStateToProps)(VideoEditor);
+export default VideoEditor;

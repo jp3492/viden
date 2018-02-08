@@ -25,8 +25,9 @@ export default function ( state = initialState, action ){
     case SET_TIME:
       return { ...state, [action.payload.key]: action.payload.time };
     case SELECT_HIGHLIGHT:
+      console.log(action.payload);
       const { i, highlight: { start, stop, comment, _id } } = action.payload;
-      return { ...state, start, stop, comment, highlight: { number: i, id: _id }, action: "jump", edit: "selected" };
+      return { ...state, start, stop, comment, highlight: { number: i, _id }, action: "jump", edit: "selected" };
     case SELECT_HIGHLIGHTS:
       return initialState;
     case SET_ACTION:
@@ -51,9 +52,10 @@ export default function ( state = initialState, action ){
         case "editStop":
           return { ...state, action: action.payload, edit: "editStop" };
         case "save":
-          return { ...state, action: action.payload, edit: null }
+          return { ...state, action: action.payload, edit: null };
+        default:
+          return  { ...state, action: action.payload };
       }
-      return { ...state, action: action.payload };
     default:
       return state;
   }

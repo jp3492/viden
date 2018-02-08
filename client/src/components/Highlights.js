@@ -1,14 +1,17 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { selectHighlights, resetSelected, deleteHighlights, fetchHighlights, fetchUser } from '../actions';
+import { selectHighlights, deleteHighlights, fetchHighlights, fetchUser } from '../actions';
 
 class Highlights extends Component{
   componentWillMount(){
-    this.props.fetchUser();
-    this.props.fetchHighlights();
+    console.log(this.props);
+
+  }
+  componentDidMount(){
+    console.log(this.props);
   }
   renderHighlight(highlight){
-    const { title, videoId, _id } = highlight;
+    const { title, _id } = highlight;
     return(
       <li key={_id} onClick={ () => this.props.selectHighlights( true, highlight ) } className="collection-item">
         <h4>{title}</h4>
@@ -16,7 +19,7 @@ class Highlights extends Component{
     )
   }
   renderButtons(){
-    const { selectedHighlights, search, auth } = this.props;
+    const { selectedHighlights, auth } = this.props;
     if (selectedHighlights === null) {
       return;
     } else if (selectedHighlights._uid === auth._id) {
@@ -36,7 +39,7 @@ class Highlights extends Component{
 
   }
   render(){
-    const { list, search, selectedHighlights, deleteHighlights } = this.props;
+    const { list, search, selectedHighlights } = this.props;
     const title = (selectedHighlights === null) ? "Select Project": selectedHighlights.title;
     const videoId = (selectedHighlights === null) ? "": selectedHighlights.videoId;
     const projectId = (selectedHighlights === null) ? "": selectedHighlights._id;
@@ -81,4 +84,4 @@ const mapStateToProps = ({ auth, search, highlights: { list, selectedHighlights 
   }
 }
 
-export default connect(mapStateToProps, { selectHighlights, resetSelected, deleteHighlights, fetchHighlights, fetchUser })(Highlights);
+export default connect(mapStateToProps, { selectHighlights, deleteHighlights, fetchHighlights, fetchUser })(Highlights);

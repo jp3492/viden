@@ -7,11 +7,12 @@ import Header from './Header';
 import NewHighlights from './NewHighlights';
 import Highlights from './Highlights';
 import VideoEditor from './VideoEditor';
-import VideoViewer from './VideoViewer';
 import Settings from './Settings';
+import Player from './Player';
 
 class App extends Component {
   componentWillMount(){
+    console.log(this.props);
     this.props.fetchUser();
   }
   render(){
@@ -24,7 +25,6 @@ class App extends Component {
                 <Route exact path="/new" component={NewHighlights} />
                 <Route exact path="/list" component={Highlights} />
                 <Route exact path="/editor" component={VideoEditor} />
-                <Route exact path="/viewer" component={VideoViewer} />
                 <Route exact path="/settings" component={Settings} />
               </div>
             </div>
@@ -34,4 +34,8 @@ class App extends Component {
   }
 }
 
-export default connect(null, {fetchUser})(App);
+const mapStateToProps = ({ auth, highlights }) => {
+  return { auth, highlights }
+}
+
+export default connect(mapStateToProps, {fetchUser})(App);

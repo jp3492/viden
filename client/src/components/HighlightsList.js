@@ -10,7 +10,7 @@ class HighlightsList extends Component{
     const { start, stop, comment, _id } = highlight;
     const { setAction, selectHighlight } = this.props;
     return(
-      <tr id={_id} key={i}>
+      <tr id={_id} key={i} className="tableRow">
         <td onClick={ () => selectHighlight(highlight, i) } className="col1">          {i}       </td>
         <td onClick={ () => selectHighlight(highlight, i) } className="col2">          {start}   </td>
         <td onClick={ () => selectHighlight(highlight, i) } className="col3">          {stop}    </td>
@@ -38,7 +38,7 @@ class HighlightsList extends Component{
     }
   }
   render () {
-    const { highlights, _id, changeSearch, filteredHighlights, searchKey, _uid, auth } = this.props;
+    const { highlights, _id, changeSearch, filteredHighlights, _uid, auth } = this.props;
     let list = (filteredHighlights === null) ? highlights: filteredHighlights;
     const admin = (_uid === auth._id) ? true: false;
     return (
@@ -65,8 +65,8 @@ class HighlightsList extends Component{
   }
 }
 
-const mapStateToProps = ({ auth, controls: { action, searchKey }, highlights: { selectedHighlights: { highlights, _id, _uid }, filteredHighlights } }) => {
-  return{ searchKey, action, filteredHighlights, highlights, _id, _uid, auth }
+const mapStateToProps = ({ auth, controls: { action, searchKey, highlight }, highlights: { selectedHighlights: { highlights, _id, _uid }, filteredHighlights } }) => {
+  return{ searchKey, action, highlight, filteredHighlights, highlights, _id, _uid, auth }
 }
 
 export default connect(mapStateToProps, { jumpTo, setAction, selectHighlight, changeSearch })(HighlightsList);

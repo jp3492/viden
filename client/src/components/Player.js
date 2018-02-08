@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import YouTube from 'react-youtube';
 import { connect } from 'react-redux';
 
-import { setTime, setAction, submitHighlight, changeComment, deleteHighlight, editHighlight, changeSearch } from '../actions';
+import { setTime, setAction, submitHighlight, changeComment, deleteHighlight, editHighlight, changeSearch, selectHighlight } from '../actions';
 
 class VideoPlayer extends Component {
   constructor (props) {
@@ -11,12 +11,11 @@ class VideoPlayer extends Component {
     this._onReady = this._onReady.bind(this);
   }
   componentDidMount(){
-    const { auth: { _id }, _uid } = this.props;
+    const { auth: { _id }, selectedHighlights: { _uid } } = this.props;
     const search                  =  document.getElementById("search");
     const searchResult            =  document.getElementById("searchResult");
     const editArea                =  document.getElementById("editArea");
     const enter                   =  document.getElementById("enter");
-
     if ( search !== null && searchResult !== null) {
       search.style.display        = "none";
       searchResult.style.display  = "none";
@@ -35,9 +34,12 @@ class VideoPlayer extends Component {
     document.getElementById("delete").disabled  = disable;
   }
   componentWillReceiveProps(nextProps){
-    const { _id, action, edit, start, stop, comment, searchKey, highlight, setTime, setAction,
-      submitHighlight, changeComment, deleteHighlight, editHighlight, changeSearch } = nextProps;
+    const { selectedHighlights: { _id }, action, edit, start, stop, comment, searchKey, highlight, setTime, setAction,
+      submitHighlight, changeComment, deleteHighlight, editHighlight, changeSearch, selectHighlight } = nextProps;
     const { player }              = this.state;
+    if (player === null) {
+      return;
+    }
     let time                      = player.getCurrentTime();
     const state                   = player.getPlayerState();
     const commentText             = document.getElementById("commentText");
@@ -49,6 +51,18 @@ class VideoPlayer extends Component {
     const rateIndex               = rates.indexOf(player.getPlaybackRate());
 
     switch (action) {
+      case "up":            if (highlight.number !== 0) {
+                              const lastIndex = highlight.number - 1;
+                              selectHighlight(this.props.selectedHighlights.highlights[lastIndex], lastIndex);
+                            }
+                            return;
+        break;
+      case "down":          if (highlight.number !== this.props.selectedHighlights.highlights.length - 1) {
+                              const nextIndex = highlight.number + 1;
+                              selectHighlight(this.props.selectedHighlights.highlights[nextIndex], nextIndex);
+                            }    
+                            return;
+        break;
       case "mute":          if (player.isMuted()) { player.unMute() }
                             else {                  player.mute()   }
         break;
@@ -98,7 +112,11 @@ class VideoPlayer extends Component {
                             if      (edit === "editStart") {  setTime("start", time.toFixed(2)) }
                             else if (edit === "editStop")  {  setTime("stop", time.toFixed(2))  }
         break;
-      case "jump":          player.seekTo(start);
+      case "jump":          if (document.getElementById(this.props.highlight._id) !== null) {
+                              document.getElementById(this.props.highlight._id).classList.remove("selected");
+                            }
+                            document.getElementById(highlight._id).classList.add("selected");
+                            player.seekTo(start);
                             player.playVideo();
                             const timer = setInterval( () => {
                               time      = Number(player.getCurrentTime().toFixed(2));
@@ -130,8 +148,12 @@ class VideoPlayer extends Component {
                                                               setTime("stop", "");
                                                               changeComment("");
                                 break;
+                              default:
+                                break;
                             }
-      break;
+        break;
+      default:
+        break;
     }
     setAction(null);
     return;
@@ -139,7 +161,7 @@ class VideoPlayer extends Component {
   shouldComponentUpdate(nextProps, nextState){ return false }
 
   render() {
-    const { videoId }     = this.props;
+    const { selectedHighlights: { videoId } }     = this.props;
     const h               = window.innerHeight - 160;
     const opts            = { width: '100%', height: h, playerVars: {
                               autoplay: 1, start: 0, controls: 0, rel: 0, showinfo: 0, modestbranding: 0 }};
@@ -154,8 +176,8 @@ class VideoPlayer extends Component {
   }
 }
 
-const mapStateToProps = ({ auth, controls: { action, edit, start, stop, comment, highlight, searchKey }, highlights: { selectedHighlights: { videoId, _id, _uid } } }) => {
-  return{ auth, start, stop, comment, action, edit, videoId, _id, _uid, highlight, searchKey }
+const mapStateToProps = ({ auth, controls: { action, edit, start, stop, comment, highlight, searchKey }, highlights: { selectedHighlights } }) => {
+  return{ auth, start, stop, comment, action, edit, selectedHighlights, highlight, searchKey }
 }
 
-export default connect(mapStateToProps, { setTime, setAction, submitHighlight, changeComment, deleteHighlight, editHighlight, changeSearch })(VideoPlayer);
+export default connect(mapStateToProps, { setTime, setAction, submitHighlight, changeComment, deleteHighlight, editHighlight, changeSearch, selectHighlight })(VideoPlayer);

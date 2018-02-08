@@ -4,14 +4,27 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import ReduxThunk from 'redux-thunk';
+import { PersistGate } from 'redux-persist/integration/react';
+import { persistStore, persistReducer } from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
 
 import App from './components/App';
 import reducer from './reducer';
 
-const store = createStore(reducer, {}, applyMiddleware(ReduxThunk));
+const persistConfig = {
+  key: 'root',
+  storage,
+}
+
+const persistedReducer = persistReducer(persistConfig, reducer);
+
+const store = createStore(persistedReducer, {}, applyMiddleware(ReduxThunk));
+const persistor = persistStore(store);
 
 ReactDOM.render(
     <Provider store={store}>
-      <App />
+      <PersistGate loading={null} persistor={persistor}>
+        <App />
+      </PersistGate>
     </Provider>,
     document.querySelector('#root'));

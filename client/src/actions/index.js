@@ -1,7 +1,7 @@
 import axios from 'axios';
-import { FETCH_USER, POST_HIGHLIGHTS, POST_HIGHLIGHT, EDIT_HIGHLIGHT, DELETE_HIGHLIGHTS, DELETE_HIGHLIGHT, CHANGE_LINK, CHANGE_TITLE, FETCH_HIGHLIGHTS,
-CHANGE_COMMENT, SET_START, SET_END, SUBMIT_HIGHLIGHT, SELECT_HIGHLIGHTS, PLAY_VIDEO, JUMP_TO, SET_ACTION, SET_STATE, SET_TIME, RESET_SELECTED, SELECT_HIGHLIGHT,
-SEARCH, CHANGE_SEARCH, SEARCH_PROJECT, MY_LIST, SET_SEARCH } from './types';
+import { FETCH_USER, POST_HIGHLIGHTS, POST_HIGHLIGHT, CHANGE_LINK, CHANGE_TITLE, FETCH_HIGHLIGHTS,
+CHANGE_COMMENT, SUBMIT_HIGHLIGHT, SELECT_HIGHLIGHTS, PLAY_VIDEO, JUMP_TO, SET_ACTION, SET_STATE, SET_TIME, SELECT_HIGHLIGHT,
+CHANGE_SEARCH, SEARCH_PROJECT, MY_LIST, SET_SEARCH } from './types';
 
 export const setSearch = search => dispatch => {
   dispatch({ type: SET_SEARCH, payload: search });
@@ -14,7 +14,6 @@ export const selectMyList = callback => dispatch => {
 
 export const searchProject = (search, history) => async dispatch => {
   const res = await axios.get(`/api/search/${search}`);
-  console.log(res.data);
   if (res.data.length !== 0 && search.length > 2) {
     dispatch({ type: SEARCH_PROJECT, payload: res.data });
     history.push('/list');
@@ -26,11 +25,8 @@ export const changeSearch = search => dispatch => {
 }
 
 export const selectHighlight = (highlight, i) => dispatch => {
+  console.log(i);
   dispatch({ type: SELECT_HIGHLIGHT, payload: { highlight, i } });
-}
-
-export const resetSelected = () => dispatch => {
-  dispatch({ type: RESET_SELECTED });
 }
 
 export const setTime = (key, time) => dispatch => {
@@ -99,9 +95,10 @@ export const selectHighlights = (edit, highlight, history) => async dispatch => 
   }
 }
 
-export const fetchHighlights = () => async dispatch => {
+export const fetchHighlights = (history) => async dispatch => {
   const res = await axios.get('/api/highlights');
   dispatch({ type: FETCH_HIGHLIGHTS, payload: res.data });
+  history
 }
 
 export const postHighlights = ( title, videoId ) => async dispatch => {

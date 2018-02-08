@@ -18,7 +18,6 @@ export const JUMP_TO = 'jump_to';
 export const SET_ACTION = 'set_action';
 export const SET_STATE = "set_state";
 export const SET_TIME = "set_time";
-export const RESET_SELECTED = "reset_selected";
 export const SELECT_HIGHLIGHT = "select_highlight";
 export const SEARCH = "search";
 export const CHANGE_SEARCH = "change_search";
