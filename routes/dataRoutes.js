@@ -7,7 +7,6 @@ module.exports = app => {
   app.get(`/api/search/:term`, async(req, res) => {
     const { term } = req.params;
     const byName = await Highlights.find({ "title": { "$regex": term, "$options": "i" } });
-    console.log(byName);
     res.send(byName);
   });
   app.get(`/api/view/:_id`, async (req, res) => {
@@ -54,12 +53,9 @@ module.exports = app => {
   // //Post a new highlight to highlights dataset
   app.post('/api/highlights/:_id', async (req, res) => {
     const { _id } = req.params;
-    const { start, stop, comment } = req.body;
+    console.log(req.body);
     await Highlights.findOneAndUpdate({ _id }, { $push: { highlights: req.body } } );
     const highlights = await Highlights.findOne({ _id });
-    // const high = highlights.highlights.filter( h => {
-    //   return h.comment === comment && h.start === start;
-    // });
     res.send(highlights.highlights);
   });
   // get highlihts of selected highlight
@@ -73,15 +69,15 @@ module.exports = app => {
     const { id } = req.user;
     let highlights = await Highlights.find({ _uid: id });
     highlights = highlights.map( h => {
-      return { _id: h._id, title: h.title, videoId: h.videoId, _uid: h._uid };
+      return { _id: h._id, title: h.title, videos: h.videos, _uid: h._uid };
     });
     res.send(highlights);
   });
   //Post a new highlight dataset
   app.post('/api/highlights', async (req, res) => {
-    const { title, videoId } = req.body;
+    const { title, videos } = req.body;
     const { id } = req.user;
-    const newHighlights = new Highlights({ title, videoId, _uid: id });
+    const newHighlights = new Highlights({ title, videos, _uid: id });
     await newHighlights.save();
     res.send(newHighlights);
   });

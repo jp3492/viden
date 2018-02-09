@@ -7,8 +7,8 @@ class HighlightsList extends Component{
     this.props.changeComment(text);
   }
   renderHighlight(highlight, id, i, admin){
-    const { start, stop, comment, _id } = highlight;
-    const { setAction, selectHighlight } = this.props;
+    const { start, stop, comment, _id, videoId }   = highlight;
+    const { setAction, selectHighlight }  = this.props;
     return(
       <tr id={_id} key={i} className="tableRow">
         <td onClick={ () => selectHighlight(highlight, i) } className="col1">          {i}       </td>
@@ -21,16 +21,11 @@ class HighlightsList extends Component{
   }
   renderSearch(){
     const { searchKey } = this.props;
-    if (searchKey === null || searchKey === "") {
-      return "";
-    } else {
-      return searchKey;
-    }
+    if (searchKey === null || searchKey === "") { return "" }
+    else {                                        return searchKey }
   }
   renderEditHead(admin){
-    if (admin === true) {
-      return <th className="editCell col5"></th>;
-    }
+    if (admin === true) {                         return <th className="editCell col5"></th> }
   }
   renderEditBody(admin, setAction, selectHighlight, highlight, i){
     if (admin === true) {
@@ -39,7 +34,7 @@ class HighlightsList extends Component{
   }
   render () {
     const { highlights, _id, changeSearch, filteredHighlights, _uid, auth } = this.props;
-    let list = (filteredHighlights === null) ? highlights: filteredHighlights;
+    let list  = (filteredHighlights === null) ? highlights: filteredHighlights;
     const admin = (_uid === auth._id) ? true: false;
     return (
       <div className="col-lg-4">
@@ -48,9 +43,9 @@ class HighlightsList extends Component{
           <table className="table striped">
             <thead>
               <tr>
-                <th className="col1">#</th>
-                <th className="col2">></th>
-                <th className="col3">|</th>
+                <th className="col1">   #   </th>
+                <th className="col2">   >   </th>
+                <th className="col3">   |   </th>
                 <th className="col4">COMMENT</th>
                 {this.renderEditHead(admin)}
               </tr>

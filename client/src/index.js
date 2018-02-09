@@ -11,16 +11,13 @@ import storage from 'redux-persist/lib/storage';
 import App from './components/App';
 import reducer from './reducer';
 
-const persistConfig = {
-  key: 'root',
-  storage,
-}
+const persistConfig = { key: 'root', storage }
 
 const persistedReducer = persistReducer(persistConfig, reducer);
 
 const store = createStore(persistedReducer, {}, applyMiddleware(ReduxThunk));
 const persistor = persistStore(store);
-
+// persistor.purge();
 ReactDOM.render(
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>

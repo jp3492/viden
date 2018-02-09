@@ -8,7 +8,6 @@ import NewHighlights from './NewHighlights';
 import Highlights from './Highlights';
 import VideoEditor from './VideoEditor';
 import Settings from './Settings';
-import Player from './Player';
 
 class App extends Component {
   componentWillMount(){

@@ -2,12 +2,12 @@ import React, { Component } from 'react';
 import YouTube from 'react-youtube';
 import { connect } from 'react-redux';
 
-import { setTime, setAction, submitHighlight, changeComment, deleteHighlight, editHighlight, changeSearch, selectHighlight } from '../actions';
+import { setTime, setAction, submitHighlight, changeComment, deleteHighlight, editHighlight, changeSearch, selectHighlight, navVideo, setVideo } from '../actions';
 
 class VideoPlayer extends Component {
   constructor (props) {
     super(props);
-    this.state    = { player: null, view: false };
+    this.state    = { view: false };
     this._onReady = this._onReady.bind(this);
   }
   componentDidMount(){
@@ -28,18 +28,23 @@ class VideoPlayer extends Component {
         }
       }
     }
+    document.getElementById("v0").style.display = "block";
   }
   disableButtons(disable){
     document.getElementById("save").disabled    = disable;
     document.getElementById("delete").disabled  = disable;
   }
   componentWillReceiveProps(nextProps){
-    const { selectedHighlights: { _id }, action, edit, start, stop, comment, searchKey, highlight, setTime, setAction,
-      submitHighlight, changeComment, deleteHighlight, editHighlight, changeSearch, selectHighlight } = nextProps;
-    const { player }              = this.state;
-    if (player === null) {
-      return;
-    }
+    const { selectedHighlights: { _id, videos }, action, edit, start, stop, comment, searchKey, highlight, setTime, setAction,
+      submitHighlight, changeComment, deleteHighlight, editHighlight, changeSearch, selectHighlight, video, navVideo, setVideo } = nextProps;
+
+    if (this.props.video !== video) {     this.state[`v${this.props.video}`].pauseVideo();
+                                          document.getElementById(`v${this.props.video}`).style.display = "none";
+                                          document.getElementById(`v${video}`).style.display = "block"; }
+    const vidNum = `v${video}`;
+    const player = this.state[vidNum];
+    if (player === null || player === undefined) { return }
+    console.log(action);
     let time                      = player.getCurrentTime();
     const state                   = player.getPlayerState();
     const commentText             = document.getElementById("commentText");
@@ -51,6 +56,10 @@ class VideoPlayer extends Component {
     const rateIndex               = rates.indexOf(player.getPlaybackRate());
 
     switch (action) {
+      case "backv":         navVideo(false, videos.length);
+        break;
+      case "nextv":         navVideo(true, videos.length);
+        break;
       case "up":            if (highlight.number !== 0) {
                               const lastIndex = highlight.number - 1;
                               selectHighlight(this.props.selectedHighlights.highlights[lastIndex], lastIndex);
@@ -60,7 +69,7 @@ class VideoPlayer extends Component {
       case "down":          if (highlight.number !== this.props.selectedHighlights.highlights.length - 1) {
                               const nextIndex = highlight.number + 1;
                               selectHighlight(this.props.selectedHighlights.highlights[nextIndex], nextIndex);
-                            }    
+                            }
                             return;
         break;
       case "mute":          if (player.isMuted()) { player.unMute() }
@@ -112,10 +121,15 @@ class VideoPlayer extends Component {
                             if      (edit === "editStart") {  setTime("start", time.toFixed(2)) }
                             else if (edit === "editStop")  {  setTime("stop", time.toFixed(2))  }
         break;
-      case "jump":          if (document.getElementById(this.props.highlight._id) !== null) {
-                              document.getElementById(this.props.highlight._id).classList.remove("selected");
+      case "jump":          if (highlight.videoId !== videos[video].videoId) {
+                              let index = 0;
+                              videos.map( (v, i) => { if (v.videoId === highlight.videoId) { index = i } });
+                              setVideo(index);
                             }
-                            document.getElementById(highlight._id).classList.add("selected");
+                            if (document.getElementById(this.props.highlight.id) !== null) {
+                              document.getElementById(this.props.highlight.id).classList.remove("selected");
+                            }
+                            document.getElementById(highlight.id).classList.add("selected");
                             player.seekTo(start);
                             player.playVideo();
                             const timer = setInterval( () => {
@@ -138,7 +152,8 @@ class VideoPlayer extends Component {
                                                               commentText.focus();
                                 break;
                               case "submit":                  player.playVideo();
-                                                              submitHighlight(_id, { start, stop, comment }, searchKey);
+                                                              console.log(videos[video].videoId);
+                                                              submitHighlight(_id, { start, stop, comment, videoId: videos[video].videoId }, searchKey);
                                                               highlightsList.scrollTop = highlightsList.scrollHeight;
                                                               commentText.blur();
                                                               commentText.readOnly = true;
@@ -159,25 +174,34 @@ class VideoPlayer extends Component {
     return;
   }
   shouldComponentUpdate(nextProps, nextState){ return false }
-
+  renderVideo(video, i, opts){
+    const v = `v${i}`;
+    return (
+      <div id={v} className="videoBox">
+        <YouTube videoId={video.videoId} opts={opts} onReady={ event => this._onReady(event, v)} />
+      </div>
+    )
+  }
   render() {
-    const { selectedHighlights: { videoId } }     = this.props;
-    const h               = window.innerHeight - 160;
-    const opts            = { width: '100%', height: h, playerVars: {
-                              autoplay: 1, start: 0, controls: 0, rel: 0, showinfo: 0, modestbranding: 0 }};
-
-    return (  <div className="row fullHeight"><div id="cover"></div>
-                <YouTube videoId={videoId} opts={opts} onReady={this._onReady} />
-              </div>  );
+    const { selectedHighlights: { videos } }      = this.props;
+    const h                                       = window.innerHeight - 160;
+    const opts                                    = { width: '100%', height: h, playerVars: { autoplay: 1, start: 0, controls: 0, rel: 0, showinfo: 0, modestbranding: 0 } };
+    return (
+      <div className="row fullHeight">
+        <div id="cover"></div>
+        {videos.map( (v, i) => this.renderVideo(v, i, opts))}
+      </div>
+    );
   }
-  _onReady(event) {
+  _onReady(event, v) {
     setTimeout( () => event.target.pauseVideo(), 500);
-    this.setState({ player: event.target });
+    this.setState({ [v]: event.target });
   }
 }
 
-const mapStateToProps = ({ auth, controls: { action, edit, start, stop, comment, highlight, searchKey }, highlights: { selectedHighlights } }) => {
-  return{ auth, start, stop, comment, action, edit, selectedHighlights, highlight, searchKey }
+const mapStateToProps = ({ auth, controls: { action, edit, start, stop, comment, highlight, searchKey, video }, highlights: { selectedHighlights } }) => {
+  return{ auth, start, stop, comment, action, edit, selectedHighlights, highlight, searchKey, video }
 }
 
-export default connect(mapStateToProps, { setTime, setAction, submitHighlight, changeComment, deleteHighlight, editHighlight, changeSearch, selectHighlight })(VideoPlayer);
+export default connect(mapStateToProps, { setTime, setAction, submitHighlight, changeComment, deleteHighlight,
+  editHighlight, changeSearch, selectHighlight, navVideo, setVideo })(VideoPlayer);

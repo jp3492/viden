@@ -12,6 +12,17 @@ table {
   border-collapse: collapse !important;
     table-layout: fixed !important;
 }
+#controls {
+  position: absolute !important;
+  bottom: 0 !important;
+  width: 66.6666666667% !important;
+}
+.create {
+  margin-top: 20px !important;
+}
+.addLink {
+  margin-top: 8px !important;
+}
 .collection {
   margin: 0 !important;
 }
@@ -44,11 +55,17 @@ table {
   height: 100% !important;
   width: 33.3333334% !important;
 }
+.videoBox {
+  position: absolute;
+  width: 66.6666666667%;
+  display: none;
+}
 #cover {
   position: absolute;
   width: 66.6666666667%;
   background-color: green;
   opacity: 0;
+  z-index: 1000;
 }
 #search {
   margin: 0 !important;

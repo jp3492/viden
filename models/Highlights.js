@@ -4,8 +4,14 @@ const { Schema } = mongoose;
 const HighlightSchema = new Schema({
   start: Number,
   stop: Number,
-  comment: String
+  comment: String,
+  videoId: String
 });
+
+const VideoSchema = new Schema({
+  type: String,
+  videoId: String
+})
 
 const HighlightsSchema = new Schema({
   _uid: {
@@ -13,7 +19,7 @@ const HighlightsSchema = new Schema({
     ref: 'users'
   },
   title: String,
-  videoId: String,
+  videos: [VideoSchema],
   highlights: [HighlightSchema]
 });
 

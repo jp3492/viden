@@ -9,7 +9,7 @@ import MenuIcon from 'material-ui-icons/Menu';
 import Button from 'material-ui/Button';
 import Drawer from 'material-ui/Drawer';
 
-import { searchProject, selectHighlights, fetchHighlights, setSearch } from '../actions';
+import { searchProject, selectHighlights, fetchHighlights, setSearch, navNew } from '../actions';
 
 const styles = theme => ({
   root:       { marginTop: 0, width: '100%' },
@@ -57,7 +57,7 @@ class Header extends React.Component {
     }
   }
   render() {
-    const { classes, history, fetchHighlights, search } = this.props;
+    const { classes, history, fetchHighlights, search, navNew } = this.props;
     const { anchorEl } = this.state;
     const open = Boolean(anchorEl);
     return (
@@ -74,7 +74,7 @@ class Header extends React.Component {
               className="collection-item"
               tabIndex={0}
               role="button"
-              onClick={() => { this.toggleDrawer(false); history.push("/new"); }}
+              onClick={() => { this.toggleDrawer(false); navNew(history); }}
               onKeyDown={() => this.toggleDrawer(false)}
             >
             New Hihglight
@@ -114,6 +114,6 @@ class Header extends React.Component {
 
 Header.propTypes = { classes: PropTypes.object.isRequired };
 
-const mapStateToProps = ({ auth, search }) => { return{ search, auth } }
+const mapStateToProps = ({ auth, search }) => { return { search, auth } }
 
-export default withStyles(styles)(connect(mapStateToProps, { searchProject, selectHighlights, fetchHighlights, setSearch })(Header));
+export default withStyles(styles)(connect(mapStateToProps, { searchProject, selectHighlights, fetchHighlights, setSearch, navNew })(Header));

@@ -3,15 +3,8 @@ import { connect } from 'react-redux';
 import { selectHighlights, deleteHighlights, fetchHighlights, fetchUser } from '../actions';
 
 class Highlights extends Component{
-  componentWillMount(){
-    console.log(this.props);
-
-  }
-  componentDidMount(){
-    console.log(this.props);
-  }
   renderHighlight(highlight){
-    const { title, _id } = highlight;
+    const { title, _id }                = highlight;
     return(
       <li key={_id} onClick={ () => this.props.selectHighlights( true, highlight ) } className="collection-item">
         <h4>{title}</h4>
@@ -19,7 +12,7 @@ class Highlights extends Component{
     )
   }
   renderButtons(){
-    const { selectedHighlights, auth } = this.props;
+    const { selectedHighlights, auth, deleteHighlights }  = this.props;
     if (selectedHighlights === null) {
       return;
     } else if (selectedHighlights._uid === auth._id) {
@@ -76,12 +69,6 @@ class Highlights extends Component{
 }
 
 const mapStateToProps = ({ auth, search, highlights: { list, selectedHighlights } }) => {
-  return{
-    auth,
-    search,
-    list,
-    selectedHighlights
-  }
-}
+  return{ auth, search, list, selectedHighlights } }
 
 export default connect(mapStateToProps, { selectHighlights, deleteHighlights, fetchHighlights, fetchUser })(Highlights);
