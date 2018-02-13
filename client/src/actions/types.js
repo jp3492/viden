@@ -1,7 +1,6 @@
 // export all your action types here to keep them consistent
 export const FETCH_USER = 'fetch_user';
 export const POST_HIGHLIGHTS = 'post_highlights';
-export const POST_HIGHLIGHT = 'post_highlight';
 export const EDIT_HIGHLIGHT = 'edit_highlight';
 export const DELETE_HIGHLIGHTS = 'delete_highlights';
 export const DELETE_HIGHLIGHT = 'delete_highlight';
@@ -28,3 +27,12 @@ export const ADD_VIDEO_ID = "add_video_id";
 export const NAV_NEW = "nav_new";
 export const NAV_VIDEO = "nav_video";
 export const SET_VIDEO = "set_video";
+export const FETCH_USERS = "fetch_users";
+export const ADD_VIDEO_LINK = "add_video_link"
+export const POSTING_HIGHLIGHTS = "posting_highlights";
+export const SELECTING_HIGHLIGHT = "selecting_highlights";
+export const PLAYER_LOADED = "player_loaded";
+export const REFRESH_PLAYER = "refresh_player";
+export const SUBMITTING_HIGHLIGHT = "submitting_highight";
+export const DELETING_HIGHLIGHT = "deleting_highlight";
+export const REMOVE_LINK = "remove_link";

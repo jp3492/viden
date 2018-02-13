@@ -6,16 +6,21 @@ class HighlightsList extends Component{
   onTextChange(text){
     this.props.changeComment(text);
   }
+  componentWillReceiveProps(nextProps){
+    // console.log(nextProps);
+  }
   renderHighlight(highlight, id, i, admin){
-    const { start, stop, comment, _id, videoId }   = highlight;
-    const { setAction, selectHighlight }  = this.props;
+    const { start, stop, comment, _id, videoId }        = highlight;
+    const { setAction, selectHighlight, video, videos } = this.props;
+    let videoIndex;
+    videos.map( (v, i) => { if (v.videoId === videoId) { videoIndex = i } });
+    const info = (highlight.deleting === true) ? "deleting...": null;
     return(
-      <tr id={_id} key={i} className="tableRow">
-        <td onClick={ () => selectHighlight(highlight, i) } className="col1">          {i}       </td>
-        <td onClick={ () => selectHighlight(highlight, i) } className="col2">          {start}   </td>
-        <td onClick={ () => selectHighlight(highlight, i) } className="col3">          {stop}    </td>
-        <td onClick={ () => selectHighlight(highlight, i) } className="comment col4">  {comment} </td>
-        {this.renderEditBody(admin, setAction, selectHighlight, highlight, i)}
+      <tr onDoubleClick={ () => this.renderEdit(admin, setAction) } onClick={ () => selectHighlight(highlight, i, videoIndex) } id={_id} key={i} className="tableRow">
+        <td className="col1">          {i}       </td>
+        <td className="col2">          {start}   </td>
+        <td className="col3">          {stop}    </td>
+        <td className="comment col4">  {comment} <a className="right-align">{info}</a></td>
       </tr>
     )
   }
@@ -24,17 +29,13 @@ class HighlightsList extends Component{
     if (searchKey === null || searchKey === "") { return "" }
     else {                                        return searchKey }
   }
-  renderEditHead(admin){
-    if (admin === true) {                         return <th className="editCell col5"></th> }
-  }
-  renderEditBody(admin, setAction, selectHighlight, highlight, i){
-    if (admin === true) {
-      return ( <td className="editCell col5" onClick={ () => {  selectHighlight(highlight, i); setAction("edit"); } }><a>edit</a></td> );
-    }
+  renderEdit(admin, setAction){
+    if (admin === true) {                         setAction("edit") }
   }
   render () {
     const { highlights, _id, changeSearch, filteredHighlights, _uid, auth } = this.props;
     let list  = (filteredHighlights === null) ? highlights: filteredHighlights;
+    // console.log(filteredHighlights);
     const admin = (_uid === auth._id) ? true: false;
     return (
       <div className="col-lg-4">
@@ -47,7 +48,6 @@ class HighlightsList extends Component{
                 <th className="col2">   >   </th>
                 <th className="col3">   |   </th>
                 <th className="col4">COMMENT</th>
-                {this.renderEditHead(admin)}
               </tr>
             </thead>
             <tbody>
@@ -60,8 +60,8 @@ class HighlightsList extends Component{
   }
 }
 
-const mapStateToProps = ({ auth, controls: { action, searchKey, highlight }, highlights: { selectedHighlights: { highlights, _id, _uid }, filteredHighlights } }) => {
-  return{ searchKey, action, highlight, filteredHighlights, highlights, _id, _uid, auth }
+const mapStateToProps = ({ auth, controls: { action, searchKey, highlight, video }, highlights: { selectedHighlights: { highlights, _id, _uid, videos }, filteredHighlights } }) => {
+  return{ searchKey, action, highlight, filteredHighlights, highlights, _id, _uid, auth, video, videos }
 }
 
 export default connect(mapStateToProps, { jumpTo, setAction, selectHighlight, changeSearch })(HighlightsList);

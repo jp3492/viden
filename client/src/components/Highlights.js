@@ -2,40 +2,70 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { selectHighlights, deleteHighlights, fetchHighlights, fetchUser } from '../actions';
 
+const load = (<div className="preloader-wrapper small active"><div className="spinner-layer spinner-green-only"><div className="circle-clipper left">
+        <div className="circle"></div></div><div className="gap-patch"><div className="circle"></div></div><div className="circle-clipper right">
+        <div className="circle"></div></div></div></div>);
+
 class Highlights extends Component{
   renderHighlight(highlight){
     const { title, _id }                = highlight;
     return(
-      <li key={_id} onClick={ () => this.props.selectHighlights( true, highlight ) } className="collection-item">
+      <li id={_id} key={_id}
+        onDoubleClick={ () => this.props.selectHighlights( true, this.props.selectedHighlights, this.props.history ) }
+        onClick={ () => {
+          let items = document.getElementsByTagName("li");
+          for(let i = 0; i < items.length; i++){
+            items[i].classList.remove("selected");
+          }
+          document.getElementById(_id).classList.add("selected");
+          this.props.selectHighlights( false, highlight );
+        } }
+        className="collection-item">
         <h4>{title}</h4>
       </li>
     )
   }
   renderButtons(){
-    const { selectedHighlights, auth, deleteHighlights }  = this.props;
+    const { selectedHighlights, auth, deleteHighlights, history, selectHighlights, load: { select } }  = this.props;
     if (selectedHighlights === null) {
       return;
-    } else if (selectedHighlights._uid === auth._id) {
-      return(
-        <div>
-          <button className="btn" onClick={ () => this.props.history.push("/editor")}>Select</button>
-          <button className="btn" onClick={ () => deleteHighlights(selectedHighlights._id)}>Delete</button>
-        </div>
-      )
+    } else if (!select) {
+      if (selectedHighlights._uid === auth._id) {
+        return(
+          <div>
+            <button className="btn" onClick={ () => selectHighlights( true, selectedHighlights, history )}>Select</button>
+            <button className="btn" onClick={ () => deleteHighlights(selectedHighlights._id)}>Delete</button>
+          </div>
+        )
+      } else {
+        return (
+          <div>
+            <button className="btn" onClick={ () => this.props.history.push("/editor")}>Select</button>
+          </div>
+        )
+      }
     } else {
-      return (
-        <div>
-          <button className="btn" onClick={ () => this.props.history.push("/editor")}>Select</button>
-        </div>
-      )
+      return load;
     }
+  }
+  renderVideos(video, i){
+    return <p>{i}: {video.title}</p>;
+  }
+  renderInfos(selectedHighlights){
+    if (selectedHighlights === null) { return <span className="card-title">Select Project</span> }
+    const { title, videos, _id } = selectedHighlights;
+    return (
+      <div>
+        <span className="card-title">{title}</span>
+        <p>ID:{_id}</p>
+        Videos:
+        {videos.map( (v, i) => this.renderVideos(v, i))}
+      </div>
+    )
 
   }
   render(){
     const { list, search, selectedHighlights } = this.props;
-    const title = (selectedHighlights === null) ? "Select Project": selectedHighlights.title;
-    const videoId = (selectedHighlights === null) ? "": selectedHighlights.videoId;
-    const projectId = (selectedHighlights === null) ? "": selectedHighlights._id;
     let listt = list;
     if (search.active === true) {
       listt = search.list;
@@ -47,9 +77,7 @@ class Highlights extends Component{
            <div className="col s12">
              <div className="card blue-grey darken-1 infoCard">
                <div className="card-content white-text">
-                 <span className="card-title">{title}</span>
-                 <p>{videoId}</p>
-                 <p>{projectId}</p>
+                 {this.renderInfos(selectedHighlights)}
                </div>
                <div className="card-action infoCardFoot">
                  {this.renderButtons()}
@@ -68,7 +96,7 @@ class Highlights extends Component{
   }
 }
 
-const mapStateToProps = ({ auth, search, highlights: { list, selectedHighlights } }) => {
-  return{ auth, search, list, selectedHighlights } }
+const mapStateToProps = ({ load, auth, search, highlights: { list, selectedHighlights } }) => {
+  return{ auth, search, list, selectedHighlights, load } }
 
 export default connect(mapStateToProps, { selectHighlights, deleteHighlights, fetchHighlights, fetchUser })(Highlights);

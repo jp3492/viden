@@ -12,6 +12,21 @@ table {
   border-collapse: collapse !important;
     table-layout: fixed !important;
 }
+.link {
+  border: 1px solid #e0e0e0 !important;
+}
+.links {
+  border: none !important;
+}
+#loadVideo{
+  position: absolute;
+  background-color: white;
+  opacity: 0.9;
+  z-index: 1000;
+  padding-left: 45%;
+  width: 100%;
+  height: 100%;
+}
 #controls {
   position: absolute !important;
   bottom: 0 !important;

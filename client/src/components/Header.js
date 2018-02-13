@@ -9,7 +9,7 @@ import MenuIcon from 'material-ui-icons/Menu';
 import Button from 'material-ui/Button';
 import Drawer from 'material-ui/Drawer';
 
-import { searchProject, selectHighlights, fetchHighlights, setSearch, navNew } from '../actions';
+import { searchProject, selectHighlights, fetchHighlights, setSearch, navNew, navAdmin } from '../actions';
 
 const styles = theme => ({
   root:       { marginTop: 0, width: '100%' },
@@ -18,6 +18,11 @@ const styles = theme => ({
 });
 
 class Header extends React.Component {
+  componentWillMount(){
+    if (!this.props.auth) {
+      this.props.history.push("/");
+    }
+  }
   state = { anchorEl: null, left: false };
 
   toggleDrawer(open){                   this.setState({ left: open })                     };
@@ -54,6 +59,24 @@ class Header extends React.Component {
       return <input id="searchBar" value={search.term} placeholder="Search Project by Name..." onChange={ e => this.renderSearch(e.target.value)}/>;
     } else {
       return "Please Sign up or Log in to Search for Projects";
+    }
+  }
+  renderAdmin(){
+    const { history, auth, navAdmin } = this.props;
+    if (auth !== false) {
+      if (auth._id.toString() === "5a8173342071dc046cc91087") {
+        return (
+          <div
+            className="collection-item"
+            tabIndex={1}
+            role="button"
+            onClick={() => { this.toggleDrawer(false); navAdmin(history); }}
+            onKeyDown={() => this.toggleDrawer(false)}
+          >
+          Admin
+          </div>
+        )
+      }
     }
   }
   render() {
@@ -105,6 +128,7 @@ class Header extends React.Component {
             >
             <a href="/api/logout">Logout</a>
             </div>
+            {this.renderAdmin()}
           </div>
         </Drawer>
       </div>
@@ -116,4 +140,4 @@ Header.propTypes = { classes: PropTypes.object.isRequired };
 
 const mapStateToProps = ({ auth, search }) => { return { search, auth } }
 
-export default withStyles(styles)(connect(mapStateToProps, { searchProject, selectHighlights, fetchHighlights, setSearch, navNew })(Header));
+export default withStyles(styles)(connect(mapStateToProps, { searchProject, selectHighlights, fetchHighlights, setSearch, navNew, navAdmin })(Header));

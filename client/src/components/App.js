@@ -8,11 +8,12 @@ import NewHighlights from './NewHighlights';
 import Highlights from './Highlights';
 import VideoEditor from './VideoEditor';
 import Settings from './Settings';
+import Admin from './Admin';
 
 class App extends Component {
   componentWillMount(){
-    console.log(this.props);
     this.props.fetchUser();
+    // alert("need to edit delete");
   }
   render(){
     return(
@@ -25,6 +26,7 @@ class App extends Component {
                 <Route exact path="/list" component={Highlights} />
                 <Route exact path="/editor" component={VideoEditor} />
                 <Route exact path="/settings" component={Settings} />
+                <Route exact path="/admin" component={Admin} />
               </div>
             </div>
           </BrowserRouter>

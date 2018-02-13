@@ -1,4 +1,5 @@
-import { SET_ACTION, SELECT_HIGHLIGHTS, SELECT_HIGHLIGHT, SET_TIME, CHANGE_COMMENT, SUBMIT_HIGHLIGHT, CHANGE_SEARCH, NAV_VIDEO, SET_VIDEO } from '../actions/types';
+import { SET_ACTION, SELECT_HIGHLIGHTS, SELECT_HIGHLIGHT, SET_TIME, CHANGE_COMMENT, SUBMIT_HIGHLIGHT, CHANGE_SEARCH, NAV_VIDEO, SET_VIDEO,
+EDIT_HIGHLIGHT } from '../actions/types';
 
 const initialState = { highlight: { number: null, id: null }, comment: "", start: "", stop: "", action: null, edit: null, searchKey: "", video: 0 };
 
@@ -13,12 +14,12 @@ export default function ( state = initialState, action ){
                                                                           return { ...state, video: 0 } }
                                         else {                            return { ...state, video: state.video + 1 } } }
     case CHANGE_SEARCH:               return { ...state, searchKey: action.payload };
-    case SUBMIT_HIGHLIGHT:            const s = state.searchKey;
-                                      return { ...initialState, searchKey:s, video: state.video };
+    case EDIT_HIGHLIGHT:              return { ...initialState, highlight: state.highlight, searchKey:state.searchKey, video: state.video };
+    case SUBMIT_HIGHLIGHT:            return { ...initialState, searchKey:state.searchKey, video: state.video };
     case CHANGE_COMMENT:              return { ...state, comment: action.payload };
     case SET_TIME:                    return { ...state, [action.payload.key]: action.payload.time };
-    case SELECT_HIGHLIGHT:            const { i, highlight: { start, stop, comment, _id, videoId } } = action.payload;
-                                      return { ...state, start, stop, comment, highlight: { number: i, id:_id, videoId }, action: "jump", edit: "selected" };
+    case SELECT_HIGHLIGHT:            const { i, highlight: { start, stop, comment, _id, videoId }, video } = action.payload;
+                                      return { ...state, start, stop, comment, highlight: { number: i, id:_id, videoId }, action: "jump", edit: "selected", video };
     case SELECT_HIGHLIGHTS:           return initialState;
     case SET_ACTION:                  if (action.payload === "enter") {
                                         switch (state.edit) {

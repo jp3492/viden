@@ -10,7 +10,8 @@ const HighlightSchema = new Schema({
 
 const VideoSchema = new Schema({
   type: String,
-  videoId: String
+  videoId: String,
+  title: String
 })
 
 const HighlightsSchema = new Schema({

@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 
-import { fetchUser } from '../actions';
-
 import HighlightsList from './HighlightsList';
 import Player from './Player';
 import Controls from './Controls';
