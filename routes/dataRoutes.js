@@ -29,11 +29,12 @@ module.exports = app => {
                                                                             res.send(highlights);
                                                                           });
   app.post('/api/highlights/highlight/:_id/:id', async (req, res) => {      const { _id, id } = req.params;
-                                                                            const { start, stop, comment } = req.body;
+                                                                            const { start, stop, comment, videoId } = req.body;
                                                                             await Highlights.update(
                                                                               { "_id": _id, "highlights._id": id },
-                                                                              { $set: { "highlights.$" : { start, stop, comment } } });
+                                                                              { $set: { "highlights.$" : { start, stop, comment, videoId } } });
                                                                             const high = await Highlights.findById(_id);
+                                                                            console.log(high);
                                                                             res.send(high.highlights);
                                                                           });
   app.post('/api/highlights/:_id', async (req, res) => {                    const { _id } = req.params;

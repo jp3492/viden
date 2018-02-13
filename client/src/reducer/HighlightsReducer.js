@@ -37,11 +37,14 @@ export default function ( state = initialState, action ){
                                             }
                                             return h;
                                           });
+                                          console.log("edited:", edited);
                                           let selectedHighlights = state.selectedHighlights;
+                                          console.log("selectedHighlights:", selectedHighlights);
                                           filteredHighlights = edited.filter( h => {
                                             if (h.comment.includes(action.payload.s)) { return true }
                                             return false;
                                           });
+                                          console.log("filtered:", filteredHighlights);
                                           selectedHighlights.highlights = edited;
                                           return { ...state, selectedHighlights, filteredHighlights };
     case SUBMIT_HIGHLIGHT:                highlights = state.selectedHighlights.highlights;

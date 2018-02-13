@@ -73,7 +73,8 @@ export const deleteHighlights = _id => async dispatch => {            const res 
                                                                       dispatch({ type: FETCH_HIGHLIGHTS, payload: res.data }); }
 
 export const editHighlight = ( _id, id, start, stop, comment, videoId, search ) => async dispatch => {
-                                                                      await axios.post(`/api/highlights/highlight/${_id}/${id}`, { start, stop, comment });
+                                                                      console.log({_id, id, start, stop, comment, videoId, search});
+                                                                      await axios.post(`/api/highlights/highlight/${_id}/${id}`, { start, stop, comment, videoId });
                                                                       dispatch({ type: EDIT_HIGHLIGHT, payload: { h: { start, stop, comment, videoId, _id: id }, s: search } }); }
 
 export const selectHighlights = ( get, highlight, history ) => async dispatch => {
@@ -81,18 +82,20 @@ export const selectHighlights = ( get, highlight, history ) => async dispatch =>
                                                                       if (get === true) {
                                                                         dispatch({ type: SELECTING_HIGHLIGHT });
                                                                         const res = await axios.get(`/api/highlights/${_id}`);
+                                                                        console.log("selectHighlight", res.data);
                                                                         dispatch({ type: SELECT_HIGHLIGHTS, payload: { _id, title, videos, highlights: res.data, _uid } });
                                                                       } else {
                                                                         dispatch({ type: SELECT_HIGHLIGHTS, payload: { _id, title, videos, highlights: [], _uid } });
                                                                       }
                                                                       if (history !== undefined) { history.push("/editor") } }
 
-export const fetchHighlights = (history) => async dispatch => {       const res = await axios.get('/api/highlights');
+export const fetchHighlights = (history) => async dispatch => {
+                                                                      const res = await axios.get('/api/highlights');
+                                                                      console.log("fetching highlights", res.data);
                                                                       dispatch({ type: FETCH_HIGHLIGHTS, payload: res.data });
                                                                       history; }
 
 export const postHighlights = ( title, videos, history ) => async dispatch => {
-                                                                      console.log(videos);
                                                                       dispatch({ type: POSTING_HIGHLIGHTS });
                                                                       const res = await axios.post(`/api/highlights`, { title, videos });
                                                                       dispatch({ type: POST_HIGHLIGHTS, payload: res.data });

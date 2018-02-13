@@ -5,7 +5,7 @@ const initialState = { highlight: { number: null, id: null }, comment: "", start
 
 export default function ( state = initialState, action ){
   switch (action.type) {
-    case SET_VIDEO:                   return { ...state, video: action.payload };
+    case SET_VIDEO:                   console.log(action.payload);return { ...state, video: action.payload };
     case NAV_VIDEO:                   if (action.payload.next === false) {
                                         if (state.video === 0) {          return { ...state, video: action.payload.length - 1 } }
                                         else {                            return { ...state, video: state.video - 1 } } }

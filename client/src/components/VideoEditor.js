@@ -7,9 +7,10 @@ import Edit from './Edit';
 
 class VideoEditor extends Component{
   componentDidMount(){
-    const win = window.innerHeight - 160;
-    document.getElementById("highlightsList").style.height = `${win}px`;
-    document.getElementById("cover").style.height = `${win}px`;
+    const win = window.innerHeight - 144;
+    const sw = win - 17;
+    document.getElementById("highlightsList").style.height = `${sw}px`;
+    document.getElementById("cover").style.height = `${sw}px`;
   }
   render(){
     return(

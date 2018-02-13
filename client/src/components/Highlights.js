@@ -33,14 +33,16 @@ class Highlights extends Component{
       if (selectedHighlights._uid === auth._id) {
         return(
           <div>
-            <button className="btn" onClick={ () => selectHighlights( true, selectedHighlights, history )}>Select</button>
-            <button className="btn" onClick={ () => deleteHighlights(selectedHighlights._id)}>Delete</button>
+            <button className="btn projBtn" onClick={ () => selectHighlights( true, selectedHighlights, history )}>Select</button>
+            <button className="btn projBtn" onClick={ () => deleteHighlights(selectedHighlights._id)}>Delete</button>
+            <a onClick={ () => alert("newProject") } className="secondary-content btn-floating btn-large waves-effect waves-light orange new"><i className="material-icons">add</i></a>
           </div>
         )
       } else {
         return (
           <div>
             <button className="btn" onClick={ () => this.props.history.push("/editor")}>Select</button>
+            <a onClick={ () => alert("newProject") } className="secondary-content btn-floating btn-large waves-effect waves-light orange new"><i className="material-icons">add</i></a>
           </div>
         )
       }
@@ -56,7 +58,7 @@ class Highlights extends Component{
     const { title, videos, _id } = selectedHighlights;
     return (
       <div>
-        <span className="card-title">{title}</span>
+        <div className="card-title">{title}<a className="secondary-content btn-floating btn-large waves-effect waves-light new"><i className="material-icons editProj">edit</i></a></div>
         <p>ID:{_id}</p>
         Videos:
         {videos.map( (v, i) => this.renderVideos(v, i))}
@@ -81,6 +83,7 @@ class Highlights extends Component{
                </div>
                <div className="card-action infoCardFoot">
                  {this.renderButtons()}
+
                </div>
              </div>
            </div>

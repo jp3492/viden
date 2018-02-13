@@ -35,8 +35,8 @@ class Edit extends Component{
       return (
         <div className="col s12" id="editArea">
           <div className="col s2">
-            <div className="col s12" id="start" onClick={ () => this.selectTime(true) }>    {start}     </div>
-            <div className="col s12" id="stop"  onClick={ () => this.selectTime(false)}>    {stop}      </div>
+            <div className="col s12" id="start" onClick={ () => this.selectTime(true) }>    <b>{start}</b>    </div>
+            <div className="col s12" id="stop"  onClick={ () => this.selectTime(false)}>    <b>{stop}</b>      </div>
           </div>
           <div className="col s9">
             <textarea value={comment} readOnly id="commentText" onChange={ e => changeComment(e.target.value) } className="col s12">
@@ -44,8 +44,8 @@ class Edit extends Component{
           </div>
           <div className="col s1">
             <div>
-              <button id="save" className="col s12 btn smallBtn" >                  Save        </button>
-              <button id="delete" className="col s12 btn smallBtn" >                Delete      </button>
+              <button id="save" className="col s12 btn smallBtn" >         <i className="material-icons ctrl">check</i>        </button>
+              <button id="delete" className="col s12 btn smallBtn" >       <i className="material-icons ctrl">close</i>      </button>
             </div>
           </div>
         </div>
