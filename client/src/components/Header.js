@@ -95,30 +95,12 @@ class Header extends React.Component {
           <div className="collection">
             <div
               className="collection-item"
-              tabIndex={0}
-              role="button"
-              onClick={() => { this.toggleDrawer(false); navNew(history); }}
-              onKeyDown={() => this.toggleDrawer(false)}
-            >
-            New Hihglight
-            </div>
-            <div
-              className="collection-item"
               tabIndex={1}
               role="button"
               onClick={() => { this.toggleDrawer(false); fetchHighlights(history.push("/list")); }}
               onKeyDown={() => this.toggleDrawer(false)}
             >
             My Hihglights
-            </div>
-            <div
-              className="collection-item"
-              tabIndex={1}
-              role="button"
-              onClick={() => { this.toggleDrawer(false); history.push("/settings"); }}
-              onKeyDown={() => this.toggleDrawer(false)}
-            >
-            Settings
             </div>
             <div
               className="collection-item"

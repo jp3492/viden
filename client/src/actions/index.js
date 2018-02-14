@@ -3,9 +3,13 @@ import { FETCH_USER, POST_HIGHLIGHTS, CHANGE_LINK, CHANGE_TITLE, FETCH_HIGHLIGHT
 CHANGE_COMMENT, SUBMIT_HIGHLIGHT, SELECT_HIGHLIGHTS, PLAY_VIDEO, JUMP_TO, SET_ACTION, SET_STATE, SET_TIME, SELECT_HIGHLIGHT,
 CHANGE_SEARCH, SEARCH_PROJECT, MY_LIST, SET_SEARCH, ADD_VIDEO_ID, NAV_NEW, NAV_VIDEO, SET_VIDEO, FETCH_USERS,ADD_VIDEO_LINK,
 POSTING_HIGHLIGHTS, SELECTING_HIGHLIGHT, PLAYER_LOADED, REFRESH_PLAYER, SUBMITTING_HIGHLIGHT, EDIT_HIGHLIGHT, DELETING_HIGHLIGHT,
-DELETE_HIGHLIGHT, REMOVE_LINK } from './types';
+DELETE_HIGHLIGHT, REMOVE_LINK, CREATE, EDIT } from './types';
 
 const ytKey = "AIzaSyDNjPIijQMBwx6H7ZO1bPZpv3bmL2ZhIq4";
+
+export const edit = (editing, infos) => dispatch => {                 dispatch({ type: EDIT, payload: {editing, infos} }) }
+
+export const create = creating => dispatch => {                       dispatch({ type: CREATE, payload: creating }) }
 
 export const removeLink = videoId => dispatch => {                    dispatch({ type: REMOVE_LINK, payload: videoId }) }
 
@@ -73,7 +77,6 @@ export const deleteHighlights = _id => async dispatch => {            const res 
                                                                       dispatch({ type: FETCH_HIGHLIGHTS, payload: res.data }); }
 
 export const editHighlight = ( _id, id, start, stop, comment, videoId, search ) => async dispatch => {
-                                                                      console.log({_id, id, start, stop, comment, videoId, search});
                                                                       await axios.post(`/api/highlights/highlight/${_id}/${id}`, { start, stop, comment, videoId });
                                                                       dispatch({ type: EDIT_HIGHLIGHT, payload: { h: { start, stop, comment, videoId, _id: id }, s: search } }); }
 
@@ -82,24 +85,24 @@ export const selectHighlights = ( get, highlight, history ) => async dispatch =>
                                                                       if (get === true) {
                                                                         dispatch({ type: SELECTING_HIGHLIGHT });
                                                                         const res = await axios.get(`/api/highlights/${_id}`);
-                                                                        console.log("selectHighlight", res.data);
                                                                         dispatch({ type: SELECT_HIGHLIGHTS, payload: { _id, title, videos, highlights: res.data, _uid } });
                                                                       } else {
                                                                         dispatch({ type: SELECT_HIGHLIGHTS, payload: { _id, title, videos, highlights: [], _uid } });
                                                                       }
                                                                       if (history !== undefined) { history.push("/editor") } }
 
-export const fetchHighlights = (history) => async dispatch => {
+export const fetchHighlights = (history) => async dispatch => {       let items = document.getElementsByTagName("li");
+                                                                      for(let i = 0; i < items.length; i++){
+                                                                        items[i].classList.remove("selected");
+                                                                      }
                                                                       const res = await axios.get('/api/highlights');
-                                                                      console.log("fetching highlights", res.data);
                                                                       dispatch({ type: FETCH_HIGHLIGHTS, payload: res.data });
                                                                       history; }
 
-export const postHighlights = ( title, videos, history ) => async dispatch => {
+export const postHighlights = ( title, videos ) => async dispatch => {
                                                                       dispatch({ type: POSTING_HIGHLIGHTS });
                                                                       const res = await axios.post(`/api/highlights`, { title, videos });
-                                                                      dispatch({ type: POST_HIGHLIGHTS, payload: res.data });
-                                                                      history.push("/list"); }
+                                                                      dispatch({ type: POST_HIGHLIGHTS, payload: res.data }); }
 
 export const fetchUser = () => async dispatch => {                    const response = await axios.get('/api/current_user');
                                                                       dispatch({ type: FETCH_USER, payload: response.data }); }

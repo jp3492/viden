@@ -36,3 +36,5 @@ export const REFRESH_PLAYER = "refresh_player";
 export const SUBMITTING_HIGHLIGHT = "submitting_highight";
 export const DELETING_HIGHLIGHT = "deleting_highlight";
 export const REMOVE_LINK = "remove_link";
+export const CREATE = "create";
+export const EDIT = "edit";

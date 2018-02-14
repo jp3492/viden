@@ -12,11 +12,29 @@ table {
   border-collapse: collapse !important;
     table-layout: fixed !important;
 }
+.projects {
+  border-bottom:  1px solid #546e7a !important;
+}
+.card-title{
+  height: 60px !important;
+}
+.addingLink {
+  margin-top: 50px !important;
+}
 .ctrl {
   font-size: 3rem !important;
 }
 .link {
-  border: 1px solid #e0e0e0 !important;
+  border-bottom:  1px solid orange !important;
+  background-color: #546e7a !important;
+
+}
+#editTitle {
+  width: 80% !important;
+}
+.editLinks {
+  border-bottom:  1px solid orange !important;
+  background-color: #546e7a !important;
 }
 .links {
   border: none !important;
@@ -112,6 +130,7 @@ table {
 .selected {
   background-color: orange !important;
   color: white !important;
+  border: none !important;
 }
 .new{
 

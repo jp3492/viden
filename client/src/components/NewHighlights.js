@@ -29,7 +29,7 @@ class NewHighlights extends Component{
   render(){
     const { changeLink, changeTitle, create: { title, link, videos }, removeLink } = this.props;
     return(
-      <div className="container">
+      <div className="container-fluid">
         <input value={title} onChange={ e => changeTitle(e.target.value) } type="text" placeholder="Title" />
         <div className="row">
           <input value={link} className="col s10" onChange={ e => changeLink(e.target.value) } type="text" placeholder="Youtube Link" />
@@ -40,7 +40,6 @@ class NewHighlights extends Component{
             {videos.map( v => this.renderLink(v, removeLink))}
           </ul>
         </div>
-        {this.renderCreateButton(title, videos)}
       </div>
     );
   }
