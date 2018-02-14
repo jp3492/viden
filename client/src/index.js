@@ -7,11 +7,12 @@ import ReduxThunk from 'redux-thunk';
 import { PersistGate } from 'redux-persist/integration/react';
 import { persistStore, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
+import hardSet from 'redux-persist/lib/stateReconciler/hardSet';
 
 import App from './components/App';
 import reducer from './reducer';
 
-const persistConfig = { key: 'root', storage }
+const persistConfig = { key: 'root', storage, stateReconciler: hardSet }
 
 const persistedReducer = persistReducer(persistConfig, reducer);
 
