@@ -2,7 +2,7 @@ import 'materialize-css/dist/css/materialize.min.css';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { createStore, applyMiddleware } from 'redux';
+import { createStore, applyMiddleware, compose } from 'redux';
 import ReduxThunk from 'redux-thunk';
 import { PersistGate } from 'redux-persist/integration/react';
 import { persistStore, persistReducer } from 'redux-persist';
@@ -18,7 +18,7 @@ const persistedReducer = persistReducer(persistConfig, reducer);
 
 const store = createStore(persistedReducer, {}, applyMiddleware(ReduxThunk));
 const persistor = persistStore(store);
-// persistor.purge();
+persistor.purge();
 ReactDOM.render(
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
