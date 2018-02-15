@@ -35,8 +35,6 @@ class HighlightsList extends Component{
   render () {
     const { highlights, _id, changeSearch, filteredHighlights, _uid, auth } = this.props;
     let list  = (filteredHighlights === null) ? highlights: filteredHighlights;
-    // console.log(filteredHighlights, highlights);
-    // console.log(filteredHighlights);
     const admin = (_uid === auth._id) ? true: false;
     return (
       <div className="col-lg-4">

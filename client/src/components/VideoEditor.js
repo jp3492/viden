@@ -11,6 +11,7 @@ class VideoEditor extends Component{
     const sw = win - 17;
     document.getElementById("highlightsList").style.height = `${sw}px`;
     document.getElementById("cover").style.height = `${sw}px`;
+    // window.addEventListener("keydown", e => alert(e), true);
   }
   render(){
     return(

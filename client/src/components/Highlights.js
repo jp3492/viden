@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { selectHighlights, deleteHighlights, fetchHighlights, fetchUser, create, postHighlights, edit, changeTitle, changeLink } from '../actions';
+import { selectHighlights, deleteHighlights, fetchHighlights, fetchUser, create, postHighlights, edit, changeTitle, changeLink, removeLink, removeVideo, addVideo
+, updateHighlights } from '../actions';
 
 import NewHighlights from './NewHighlights';
 
@@ -11,6 +12,9 @@ const load = (<div className="preloader-wrapper small active"><div className="sp
 class Highlights extends Component{
   componentDidMount(){
     this.removeSelected();
+  }
+  componentWillReceiveProps(nextProps){
+    console.log(nextProps);
   }
   removeSelected(){
     let items = document.getElementsByTagName("li");
@@ -34,21 +38,21 @@ class Highlights extends Component{
     )
   }
   renderAddButton(link){
-    const { add_video, load: { addLink } } = this.props;
+    const { load: { addLink }, addVideo } = this.props;
     if (addLink) {
       return load;
     } else {
-      return <button className="btn col s2 offset-s1 addLink" onClick={ () => alert("add Link")}>Add</button>;
+      return <button className="btn col s2 offset-s1 addLink" onClick={ () => addVideo(link)}>Add</button>;
     }
   }
   renderVideos(video, i){
-    const { editing, changeLink, link } = this.props;
+    const { editing, link, removeVideo } = this.props;
     if (editing === true) {
       return (
         <div>
           <div className="collection-item editLinks">
             {video.title}
-            <a onClick={ () => alert("remove")} className="secondary-content">
+            <a onClick={ () => removeVideo(video.videoId)} className="secondary-content">
               <i className="material-icons">
                 clear
               </i>
@@ -60,9 +64,15 @@ class Highlights extends Component{
     }
     return <div className="collection-item editLinks">{video.title}</div>;
   }
-
+  renderUpdate(deleteHighlights,updateHighlights,id, videos, title){
+    if (videos.length !== 0) {
+      updateHighlights(id, videos, title);
+    } else {
+      deleteHighlights(id);
+    }
+  }
   renderCardHeader(){
-    const { selectedHighlights, creating, edit, editing, videos, title, changeTitle }  = this.props;
+    const { selectedHighlights, creating, edit, editing, title, changeTitle, updateHighlights, editedVideos, deleteHighlights }  = this.props;
     if (creating === true) {
       return <span className="card-title">Create Project</span>;
     }
@@ -70,13 +80,13 @@ class Highlights extends Component{
       return <span className="card-title">Select Project</span>;
     } else {
       if (editing === true) {
-        return <div className="card-title"><input onChange={ e => changeTitle(e.target.value) } id="editTitle" value={title} /><a onClick={ () => edit(false, { title, videos }) }className="secondary-content btn-floating btn-large waves-effect waves-light new"><i className="material-icons editProj">check</i></a></div>;
+        return <div className="card-title"><input onChange={ e => changeTitle(e.target.value) } id="editTitle" value={title} /><a onClick={() => this.renderUpdate(deleteHighlights,updateHighlights,selectedHighlights._id, editedVideos, title)} className="secondary-content btn-floating btn-large waves-effect waves-light new"><i className="material-icons editProj">check</i></a></div>;
       }
       return <div className="card-title">{selectedHighlights.title}<a onClick={ () => edit(true, { title: selectedHighlights.title, videos: selectedHighlights.videos }) }className="secondary-content btn-floating btn-large waves-effect waves-light new"><i className="material-icons editProj">edit</i></a></div>;
     }
   }
   renderAdd(){
-    const { editing, link } = this.props;
+    const { editing, link, changeLink } = this.props;
     if (editing) {
       return (
         <div className="row addingLink">
@@ -88,18 +98,19 @@ class Highlights extends Component{
     return;
   }
   renderCardBody(){
-    const { selectedHighlights, creating } = this.props;
+    const { selectedHighlights, creating, videos, editing, editedVideos } = this.props;
     if (creating) {
       return <NewHighlights />;
     }
     if (selectedHighlights !== null) {
-      const { videos, _id } = selectedHighlights;
+      const { _id } = selectedHighlights;
+      const vids = (!editing) ? selectedHighlights.videos: editedVideos;
       return (
         <div>
           <p>ID:{_id}</p>
           Videos:
           <div className="collection">
-            {videos.map( (v, i) => this.renderVideos(v, i))}
+            {vids.map( (v, i) => this.renderVideos(v, i))}
             {this.renderAdd()}
           </div>
         </div>
@@ -171,8 +182,8 @@ class Highlights extends Component{
   }
 }
 
-const mapStateToProps = ({ create: { creating, videos, title, editing, link }, load, auth, search, highlights: { list, selectedHighlights } }) => {
-  return{ auth, search, list, selectedHighlights, load, creating, title, videos, editing, link } }
+const mapStateToProps = ({ create: { creating, videos, title, editing, link, editedVideos, fuckOff }, load, auth, search, highlights: { list, selectedHighlights } }) => {
+  return{ auth, search, list, selectedHighlights, load, creating, title, videos, editing, link, editedVideos, fuckOff } }
 
 export default connect(mapStateToProps, { selectHighlights, deleteHighlights, fetchHighlights, fetchUser, create, postHighlights, edit, changeTitle,
-changeLink })(Highlights);
+changeLink, removeLink, removeVideo, addVideo, updateHighlights })(Highlights);

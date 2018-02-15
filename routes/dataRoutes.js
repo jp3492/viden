@@ -4,6 +4,23 @@ const User = mongoose.model('users');
 const Highlights = mongoose.model('highlights');
 
 module.exports = app => {
+  app.post('/api/highlights/update', async (req, res) => {                  const { id, videos, title } = req.body;
+                                                                            const ids = videos.map( v => { return v.videoId } );
+                                                                            const oldHigh = await Highlights.findById(id);
+                                                                            highs = oldHigh.highlights.filter( h => {
+                                                                              if (ids.includes(h.videoId)) {
+                                                                                return true;
+                                                                              }
+                                                                              return false;
+                                                                            });
+                                                                            await Highlights.findOneAndUpdate({ _id: id}, { videos, title, highlights: highs });
+                                                                            const highlights = await Highlights.findById(id);
+                                                                            res.send(highlights);
+                                                                          });
+  app.get('/api/highlights/videos/:_id', async (req, res) => {              const { _id } = req.params;
+                                                                            const highlight = await Highlights.find({ _id });
+                                                                            res.send(highlight[0].videos);
+                                                                          });
   app.get('/api/users', async (req, res) => {                               const users = await User.find({});
                                                                             res.send(users);
                                                                           });

@@ -44,6 +44,7 @@ class VideoPlayer extends Component {
       submitHighlight, changeComment, deleteHighlight, editHighlight, changeSearch, selectHighlight, video, navVideo, setVideo,
       load } = nextProps;
     if (load.player === 0) { document.getElementById("loadVideo").style.display = "none" }
+    console.log(video);
     document.getElementById(`v${this.props.video}`).style.display = "none";
     document.getElementById(`v${video}`).style.display = "block";
     if (videos[this.props.video] !== videos[video]) {
@@ -69,12 +70,20 @@ class VideoPlayer extends Component {
         break;
       case "up":            if (highlight.number !== 0) {
                               const lastIndex = highlight.number - 1;
-                              selectHighlight(this.props.selectedHighlights.highlights[lastIndex], lastIndex);
+                              let v = 0;
+                              videos.map( (v, i) => { if (v.videoId === this.props.selectedHighlights.highlights[lastIndex].videoId) {
+                                v = i;
+                              }});
+                              selectHighlight(this.props.selectedHighlights.highlights[lastIndex], lastIndex, v );
                             }
                             return;
       case "down":          if (highlight.number !== this.props.selectedHighlights.highlights.length - 1) {
                               const nextIndex = highlight.number + 1;
-                              selectHighlight(this.props.selectedHighlights.highlights[nextIndex], nextIndex);
+                              let vi = 0;
+                              videos.map( (v, i) => { if (v.videoId === this.props.selectedHighlights.highlights[nextIndex].videoId) {
+                                vi = i;
+                              }});
+                              selectHighlight(this.props.selectedHighlights.highlights[nextIndex], nextIndex, vi );
                             }
                             return;
       case "mute":          if (player.isMuted()) { player.unMute() }
@@ -130,7 +139,6 @@ class VideoPlayer extends Component {
                             let rows = document.getElementsByTagName("tr");
                             for (var i = 0; i < rows.length; i++) { rows[i].classList.remove("selected") }
                             document.getElementById(highlight.id).classList.add("selected");
-                            console.log(videos[video].videoId === highlight.videoId);
                             player.seekTo(start);
                             player.playVideo();
                             const timer = setInterval( () => {

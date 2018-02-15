@@ -38,3 +38,6 @@ export const DELETING_HIGHLIGHT = "deleting_highlight";
 export const REMOVE_LINK = "remove_link";
 export const CREATE = "create";
 export const EDIT = "edit";
+export const REMOVE_VIDEO = "remove_video";
+export const ADD_VIDEO = "add_video";
+export const UPDATE_HIGHLIGHTS = "update_highlight";

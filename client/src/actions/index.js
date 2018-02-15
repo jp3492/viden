@@ -3,11 +3,22 @@ import { FETCH_USER, POST_HIGHLIGHTS, CHANGE_LINK, CHANGE_TITLE, FETCH_HIGHLIGHT
 CHANGE_COMMENT, SUBMIT_HIGHLIGHT, SELECT_HIGHLIGHTS, PLAY_VIDEO, JUMP_TO, SET_ACTION, SET_STATE, SET_TIME, SELECT_HIGHLIGHT,
 CHANGE_SEARCH, SEARCH_PROJECT, MY_LIST, SET_SEARCH, ADD_VIDEO_ID, NAV_NEW, NAV_VIDEO, SET_VIDEO, FETCH_USERS,ADD_VIDEO_LINK,
 POSTING_HIGHLIGHTS, SELECTING_HIGHLIGHT, PLAYER_LOADED, REFRESH_PLAYER, SUBMITTING_HIGHLIGHT, EDIT_HIGHLIGHT, DELETING_HIGHLIGHT,
-DELETE_HIGHLIGHT, REMOVE_LINK, CREATE, EDIT } from './types';
+DELETE_HIGHLIGHT, REMOVE_LINK, CREATE, EDIT, REMOVE_VIDEO, ADD_VIDEO, UPDATE_HIGHLIGHTS } from './types';
 
 const ytKey = "AIzaSyDNjPIijQMBwx6H7ZO1bPZpv3bmL2ZhIq4";
 
-export const edit = (editing, infos) => dispatch => {                 dispatch({ type: EDIT, payload: {editing, infos} }) }
+export const updateHighlights = (id, videos, title) => async dispatch => {
+                                                                      const res = await axios.post('/api/highlights/update', {id, videos, title} );
+                                                                      console.log(res.data);
+                                                                      dispatch({ type: UPDATE_HIGHLIGHTS, payload: res.data }) }
+
+export const addVideo = link => async dispatch => {                   const videoId = link.split("v=")[1].split("&")[0];
+                                                                      const info = await axios.get(`https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${videoId}&fields=items/snippet/title,items/snippet/description&key=${ytKey}`);
+                                                                      dispatch({ type: ADD_VIDEO, payload: { type: "youtube", videoId, title: info.data.items[0].snippet.title } })}
+
+export const removeVideo = video => dispatch => {                     dispatch({ type: REMOVE_VIDEO, payload: video }) }
+
+export const edit = (editing, infos) => async dispatch => {           dispatch({ type: EDIT, payload: {editing, infos} }) }
 
 export const create = creating => dispatch => {                       dispatch({ type: CREATE, payload: creating }) }
 
@@ -29,7 +40,6 @@ export const navNew = (history) => dispatch => {                      dispatch({
                                                                       history.push("/new"); }
 
 export const add_video = link => async dispatch => {                  const videoId = link.split("v=")[1].split("&")[0];
-                                                                      dispatch({ type: ADD_VIDEO_LINK, payload: link });
                                                                       const info = await axios.get(`https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${videoId}&fields=items/snippet/title,items/snippet/description&key=${ytKey}`);
                                                                       dispatch({ type: ADD_VIDEO_ID, payload: { type: "youtube", videoId, title: info.data.items[0].snippet.title } }); }
 
@@ -66,7 +76,7 @@ export const changeComment = comment => dispatch => {                 dispatch({
 
 export const changeTitle = title => dispatch => {                     dispatch({ type: CHANGE_TITLE, payload: title }) }
 
-export const changeLink = link => dispatch => {                       dispatch({ type: CHANGE_LINK, payload: link }) }
+export const changeLink = link => dispatch => {                       console.log(link);dispatch({ type: CHANGE_LINK, payload: link }) }
 
 export const deleteHighlight = ( _id, id, search ) => async dispatch => {
                                                                       dispatch({ type: DELETING_HIGHLIGHT, payload: id });
