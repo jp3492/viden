@@ -62,6 +62,7 @@ module.exports = app => {
 
                                                                             scout = clean_scout.map(stat => {
                                                                               setScores(stat[0]);
+                                                                              console.log(p_h, p_v);
                                                                               if (!stat[0].includes('p')) {
                                                                                 let isHome;
                                                                                 let quality;
@@ -81,7 +82,7 @@ module.exports = app => {
                                                                             });
                                                                             scout = scout.map( stat => {
                                                                               const stop = Number(stat.time) + 15;
-                                                                              const comment = `${stat.home} - ${stat.player}: ${stat.action}, ${stat.type} -> ${stat.quality}. ${s_h}:${s_v}, ${p_h}:${p_v}`;
+                                                                              const comment = `${stat.home} - ${stat.player}: ${stat.action}, ${stat.type} -> ${stat.quality}. ${stat.s_h}:${stat.s_v}, ${stat.p_h}:${stat.p_v}`;
                                                                               return { start: Number(stat.time), stop, comment, videoId }
                                                                             })
                                                                             const newHighlights = new Highlights({ title, description, videos, _uid: id });
