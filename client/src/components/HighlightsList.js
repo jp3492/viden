@@ -32,14 +32,14 @@ class HighlightsList extends Component{
   renderEdit(admin, setAction){
     if (admin === true) {                         setAction("edit") }
   }
+  // <input id="search" onChange={ e => changeSearch(e.target.value) } value={this.renderSearch()} type="text" placeholder="Search Hihglights..." />
   render () {
     const { highlights, _id, changeSearch, filteredHighlights, _uid, auth } = this.props;
     let list  = (filteredHighlights === null) ? highlights: filteredHighlights;
     const admin = (_uid === auth._id) ? true: false;
     return (
-      <div className="col-lg-4">
+      <div>
         <div className="row">
-          <input id="search" onChange={ e => changeSearch(e.target.value) } value={this.renderSearch()} type="text" placeholder="Search Hihglights..." />
           <table className="table striped">
             <thead>
               <tr>
@@ -49,7 +49,7 @@ class HighlightsList extends Component{
                 <th className="col4">COMMENT</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody id="tableHigh">
               {list.map( (h, i) => this.renderHighlight(h, _id, i, admin))}
             </tbody>
           </table>

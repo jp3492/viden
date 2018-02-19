@@ -12,8 +12,10 @@ class Edit extends Component{
       save.addEventListener("click", () => {      setAction("save")   });
       del.addEventListener("click", () => {       setAction("delete") });
     }
-    save.disabled = true;
-    del.disabled = true;
+    if (save !== null) {
+      save.disabled = true;
+      del.disabled = true;
+    }
   }
   selectTime(isStart){
     const start                     = document.getElementById("start");

@@ -9,6 +9,8 @@ import Highlights from './Highlights';
 import VideoEditor from './VideoEditor';
 import Settings from './Settings';
 import Admin from './Admin';
+import MenuButton from './ButtonMenu';
+import Grid from './Grid';
 
 class App extends Component {
   componentWillMount(){
@@ -17,9 +19,9 @@ class App extends Component {
   }
   render(){
     return(
-        <div className="container-fluid fullHeight">
+        <div>
           <BrowserRouter>
-            <div className="fullHeight">
+            <div>
               <Route path="/" component={Header} />
               <div>
                 <Route exact path="/new" component={NewHighlights} />
@@ -27,7 +29,9 @@ class App extends Component {
                 <Route exact path="/editor" component={VideoEditor} />
                 <Route exact path="/settings" component={Settings} />
                 <Route exact path="/admin" component={Admin} />
+
               </div>
+              <Route exact path="/grid" component={Grid} />
             </div>
           </BrowserRouter>
         </div>

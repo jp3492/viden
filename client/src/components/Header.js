@@ -21,11 +21,11 @@ class Header extends React.Component {
   componentWillMount(){
     if (!this.props.auth) {
       this.props.history.push("/");
-    }
+    } 
   }
-  state = { anchorEl: null, left: false };
+  state = { anchorEl: null, right: false };
 
-  toggleDrawer(open){                   this.setState({ left: open })                     };
+  toggleDrawer(open){                   this.setState({ right: open })                     };
   handleChange = (event, checked) => {  this.setState({ auth: checked })                  };
   handleMenu = event => {               this.setState({ anchorEl: event.currentTarget })  };
   handleRequestClose = () => {          this.setState({ anchorEl: null })                 };
@@ -67,7 +67,7 @@ class Header extends React.Component {
       if (auth._id.toString() === "5a8173342071dc046cc91087") {
         return (
           <div
-            className="collection-item"
+            className="collection-item right-align menuItem"
             tabIndex={1}
             role="button"
             onClick={() => { this.toggleDrawer(false); navAdmin(history); }}
@@ -79,22 +79,34 @@ class Header extends React.Component {
       }
     }
   }
+  // <AppBar position="static">
+  //   <Toolbar>
+  //     {this.renderLogin(open, anchorEl, classes)}
+  //     {this.renderSearchBar(search)}
+  //   </Toolbar>
+  // </AppBar>
+  renderSearchBar(){
+    document.getElementById("searchField").classList.add("focusedSearch");
+    // document.querySelector("#drawer > div").classList.add("searchedMenu");
+  }
+  renderLog(){
+    if (this.props.auth) {
+      return <button className="btn" id="btnMenu" onClick={ () => this.toggleDrawer(!this.state.right)}><i className="material-icons ctrl">menu</i></button>;
+    } else {
+      return <button className="btn" id="btnMenu"><a href="/auth/google"><i className="material-icons ctrl">menu</i></a></button>;
+    }
+  }
   render() {
     const { classes, history, fetchHighlights, search, navNew } = this.props;
     const { anchorEl } = this.state;
     const open = Boolean(anchorEl);
     return (
       <div className={classes.root}>
-        <AppBar position="static">
-          <Toolbar>
-            {this.renderLogin(open, anchorEl, classes)}
-            {this.renderSearchBar(search)}
-          </Toolbar>
-        </AppBar>
-        <Drawer open={this.state.left} onRequestClose={() => this.toggleDrawer(false)}>
+        {this.renderLog()}
+        <Drawer id="drawer" anchor="right" open={this.state.right} onClose={() => this.toggleDrawer(false)}>
           <div className="collection">
             <div
-              className="collection-item"
+              className="collection-item right-align menuItem"
               tabIndex={1}
               role="button"
               onClick={() => { this.toggleDrawer(false); fetchHighlights(history.push("/list")); }}
@@ -103,7 +115,7 @@ class Header extends React.Component {
             My Hihglights
             </div>
             <div
-              className="collection-item"
+              className="collection-item right-align menuItem"
               tabIndex={1}
               role="button"
               onKeyDown={() => this.toggleDrawer(false)}

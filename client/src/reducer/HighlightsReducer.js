@@ -21,7 +21,7 @@ export default function ( state = initialState, action ){
                                           });
                                           selectedHighlights = { ...state.selectedHighlights, highlights };
                                           return { ...state, selectedHighlights, filteredHighlights };
-    case DELETING_HIGHLIGHT:              console.log(action.type, action.payload);highlights = state.selectedHighlights.highlights.map( h => {
+    case DELETING_HIGHLIGHT:              highlights = state.selectedHighlights.highlights.map( h => {
                                             if (h._id === action.payload) { return { ...h, deleting: true } }
                                             return h;
                                           });
@@ -31,13 +31,13 @@ export default function ( state = initialState, action ){
                                           });
                                           selectedHighlights = { ...state.selectedHighlights, highlights };
                                           return { ...state, selectedHighlights, filteredHighlights };
-    case POST_HIGHLIGHTS:                 console.log(action.type, action.payload);let newList = state.list;
+    case POST_HIGHLIGHTS:                 let newList = state.list;
                                           newList.push(action.payload);
                                           return { ...state, list: newList, selectedHighlights: action.payload };
-    case SUBMITTING_HIGHLIGHT:            console.log(action.type, action.payload);selectedHighlights = state.selectedHighlights;
+    case SUBMITTING_HIGHLIGHT:            selectedHighlights = state.selectedHighlights;
                                           selectedHighlights.highlights.push(action.payload.h);
                                           return { ...state, selectedHighlights };
-    case EDIT_HIGHLIGHT:                  console.log(action.type, action.payload);const { start, stop, comment, _id, videoId } = action.payload.h;
+    case EDIT_HIGHLIGHT:                  const { start, stop, comment, _id, videoId } = action.payload.h;
                                           const edited = state.selectedHighlights.highlights.map( h => {
                                             if (h._id === _id) {
                                               return { ...h, start, stop, comment, videoId };
@@ -51,7 +51,7 @@ export default function ( state = initialState, action ){
                                           });
                                           selectedHighlights.highlights = edited;
                                           return { ...state, selectedHighlights, filteredHighlights };
-    case SUBMIT_HIGHLIGHT:                console.log(action.type, action.payload);highlights = state.selectedHighlights.highlights;
+    case SUBMIT_HIGHLIGHT:                highlights = state.selectedHighlights.highlights;
                                           highlights = highlights.filter( h => {
                                             if (h._id === undefined) { return false }
                                             return true;
@@ -63,13 +63,13 @@ export default function ( state = initialState, action ){
                                           });
                                           selectedHighlights = { ...state.selectedHighlights, highlights };
                                           return { ...state, selectedHighlights, filteredHighlights };
-    case FETCH_HIGHLIGHTS:                console.log(action.type, action.payload);return { ...state, list: action.payload, selectedHighlights: null };
-    case SELECT_HIGHLIGHTS:               console.log(action.type, action.payload);return { ...state, selectedHighlights: action.payload, filteredHighlights: action.payload.highlights };
-    case CHANGE_SEARCH:                   console.log(action.type, action.payload);filteredHighlights = state.selectedHighlights.highlights.filter( h => {
+    case FETCH_HIGHLIGHTS:                return { ...state, list: action.payload, selectedHighlights: null };
+    case SELECT_HIGHLIGHTS:               return { ...state, selectedHighlights: action.payload, filteredHighlights: action.payload.highlights };
+    case CHANGE_SEARCH:                   filteredHighlights = state.selectedHighlights.highlights.filter( h => {
                                             if (h.comment.includes(action.payload)) { return true }
                                             return false;
                                           });
                                           return { ...state, filteredHighlights };
-    default:                              console.log("highlights nothing changed");return state;
+    default:                              return state;
   }
 }

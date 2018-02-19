@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { changeLink, changeTitle, postHighlights, add_video, removeLink } from '../actions';
+import { changeLink, changeTitle, postHighlights, add_video, removeLink, changeDesciption } from '../actions';
 
 const load = (<div className="preloader-wrapper small active"><div className="spinner-layer spinner-green-only"><div className="circle-clipper left">
         <div className="circle"></div></div><div className="gap-patch"><div className="circle"></div></div><div className="circle-clipper right">
@@ -15,7 +15,7 @@ class NewHighlights extends Component{
     if (addLink) {
       return load;
     } else {
-      return <button className="btn col s2 addLink" onClick={ () => add_video(link)}>Add</button>;
+      return <button className="btn col s2 offset-s1 addLink" onClick={ () => add_video(link)}>Add</button>;
     }
   }
   renderCreateButton(title, videos){
@@ -27,18 +27,32 @@ class NewHighlights extends Component{
     }
   }
   render(){
-    const { changeLink, changeTitle, create: { title, link, videos }, removeLink } = this.props;
+    const { changeLink, changeTitle, changeDesciption, create: { title, link, videos, description }, removeLink } = this.props;
     return(
       <div className="container-fluid">
         <input value={title} onChange={ e => changeTitle(e.target.value) } type="text" placeholder="Title" />
+        <textarea className="materialize-textarea" value={description} onChange={ e => changeDesciption(e.target.value) } type="text" placeholder="Desciption..." />
         <div className="row">
-          <input value={link} className="col s10" onChange={ e => changeLink(e.target.value) } type="text" placeholder="Youtube Link" />
+          <input value={link} className="col s9" onChange={ e => changeLink(e.target.value) } type="text" placeholder="Youtube Link" />
           {this.renderAddButton(link)}
         </div>
         <div className="row">
           <ul className="collection links">
             {videos.map( v => this.renderLink(v, removeLink))}
           </ul>
+        </div>
+        <div className="row">
+          <form action="#">
+            <div className="file-field input-field">
+              <div className="btn">
+                <span>File</span>
+                <input type="file" onChange={ e => alert(e.target.value)}/>
+              </div>
+              <div className="file-path-wrapper">
+                <input className="file-path validate" type="text" />
+              </div>
+            </div>
+          </form>
         </div>
       </div>
     );
@@ -48,4 +62,4 @@ class NewHighlights extends Component{
 const mapStateToProps = ({ create, load }) => {
   return{ create, load } }
 
-export default connect(mapStateToProps, { changeLink, changeTitle, postHighlights, add_video, removeLink })(NewHighlights);
+export default connect(mapStateToProps, { changeLink, changeTitle, postHighlights, add_video, removeLink, changeDesciption })(NewHighlights);

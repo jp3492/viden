@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { selectHighlights, deleteHighlights, fetchHighlights, fetchUser, create, postHighlights, edit, changeTitle, changeLink, removeLink, removeVideo, addVideo
-, updateHighlights } from '../actions';
+, updateHighlights, setSearch, searchProject } from '../actions';
 
 import NewHighlights from './NewHighlights';
 
@@ -13,29 +13,45 @@ class Highlights extends Component{
   componentDidMount(){
     this.removeSelected();
   }
-  componentWillReceiveProps(nextProps){
-    console.log(nextProps);
-  }
   removeSelected(){
-    let items = document.getElementsByTagName("li");
+    let items = document.getElementsByClassName("projectsItem");
     for(let i = 0; i < items.length; i++){
       items[i].classList.remove("selected");
     }
   }
   renderHighlight(highlight){
-    const { title, _id }                = highlight;
+    const { title, _id, description }                = highlight;
     return(
-      <li id={_id} key={_id}
-        onDoubleClick={ () => this.props.selectHighlights( true, this.props.selectedHighlights, this.props.history ) }
-        onClick={ () => {
-          this.removeSelected();
-          document.getElementById(_id).classList.add("selected");
-          this.props.selectHighlights( false, highlight );
-        } }
-        className="collection-item projects">
-        <h4>{title}</h4>
-      </li>
+        <div className="col s4">
+          <div
+            onDoubleClick={ () => this.props.selectHighlights( true, this.props.selectedHighlights, this.props.history ) }
+            onClick={ () =>  {
+              this.removeSelected();
+              document.getElementById(_id).classList.add("selected");
+              this.props.selectHighlights( false, highlight ); }}
+            className="card projectsItem" id={_id}>
+            <div className="card-content white-text">
+              <span className="card-title">{title}</span>
+              <p>{description}</p>
+            </div>
+            <div className="card-action">
+              <a href="#" className="projOwner">Jan-Philipp Marks</a>
+            </div>
+          </div>
+        </div>
     )
+    // return(
+    //   <li id={_id} key={_id}
+    //     onDoubleClick={ () => this.props.selectHighlights( true, this.props.selectedHighlights, this.props.history ) }
+    //     onClick={ () => {
+    //       this.removeSelected();
+    //       document.getElementById(_id).classList.add("selected");
+    //       this.props.selectHighlights( false, highlight );
+    //     } }
+    //     className="collection-item projects">
+    //     <h4>{title}</h4>
+    //   </li>
+    // )
   }
   renderAddButton(link){
     const { load: { addLink }, addVideo } = this.props;
@@ -107,8 +123,6 @@ class Highlights extends Component{
       const vids = (!editing) ? selectedHighlights.videos: editedVideos;
       return (
         <div>
-          <p>ID:{_id}</p>
-          Videos:
           <div className="collection">
             {vids.map( (v, i) => this.renderVideos(v, i))}
             {this.renderAdd()}
@@ -121,17 +135,19 @@ class Highlights extends Component{
   }
   renderCardFooter(){
     const { selectedHighlights, creating, editing, auth, history, create,
-      title, videos, postHighlights, selectHighlights, deleteHighlights } = this.props;
+      title, videos, postHighlights, selectHighlights, deleteHighlights, description } = this.props;
     if (creating) {
-      return <a onClick={ () => postHighlights( title, videos ) } className="secondary-content btn-floating btn-large waves-effect waves-light orange new"><i className="material-icons">check</i></a>;
+      return <a onClick={ () => postHighlights( title, description, videos ) } className="secondary-content btn-floating btn-large waves-effect waves-light orange new"><i className="material-icons">check</i></a>;
     }
+    //
     if (selectedHighlights !== null && editing === false) {
       if (auth._id === selectedHighlights._uid) {
         return (
           <div>
-            <button className="btn projBtn" onClick={ () => selectHighlights( true, selectedHighlights, history )}>Select</button>
-            <button className="btn projBtn" onClick={ () => deleteHighlights(selectedHighlights._id)}>Delete</button>
-            <a onClick={ () => { this.removeSelected(); create(true); } } className="secondary-content btn-floating btn-large waves-effect waves-light orange new"><i className="material-icons">add</i></a>
+
+           <button className="btn projBtn" onClick={ () => selectHighlights( true, selectedHighlights, history )}>Select</button>
+           <button className="btn projBtn" onClick={ () => deleteHighlights(selectedHighlights._id)}>Delete</button>
+           <a onClick={ () => { this.removeSelected(); create(true); } } className="secondary-content btn-floating btn-large waves-effect waves-light orange new"><i className="material-icons">add</i></a>
           </div>
         )
       } else {
@@ -149,6 +165,11 @@ class Highlights extends Component{
       return <a onClick={ () => { this.removeSelected(); create(true); } } className="secondary-content btn-floating btn-large waves-effect waves-light orange new"><i className="material-icons">add</i></a>;
     }
   }
+  renderSearch(term){
+    const { setSearch, history, searchProject } = this.props;
+    setSearch(term);
+    searchProject(term, history);
+  }
   render(){
     const { list, search } = this.props;
     let listt = list;
@@ -157,33 +178,37 @@ class Highlights extends Component{
     }
     return(
       <div className="row">
-        <div className="col s4">
-          <div className="row">
-           <div className="col s12">
-             <div className="card blue-grey darken-1 infoCard">
-              <div className="card-content white-text">
-                {this.renderCardHeader()}
-                {this.renderCardBody()}
-              </div>
-              <div className="card-action infoCardFoot">
-                {this.renderCardFooter()}
-              </div>
-             </div>
+        <div className="row" id="mainW">
+          <div className="col s4" id="links">
+           <div className="card blue-grey darken-1 infoCard">
+           <div className="card-content white-text" id="profile">
+             <h1>Profile</h1>
            </div>
-         </div>
-        </div>
-        <div className="col s8">
-          <ul className="collection">
-            {listt.map( highlight => this.renderHighlight(highlight) )}
-          </ul>
+            <div className="card-content white-text">
+              {this.renderCardHeader()}
+              {this.renderCardBody()}
+            </div>
+            <div className="card-action infoCardFoot">
+              {this.renderCardFooter()}
+            </div>
+           </div>
+          </div>
+          <div className="col s8" id="rechts">
+            <div id="searchProjects" >
+              <input onChange={ e => this.renderSearch(e.target.value)} value={search.term} id="searchProj" placeholder="Search Projects and User..."/>
+            </div>
+            <ul className="row" id="projectsCollection">
+              {listt.map( highlight => this.renderHighlight(highlight) )}
+            </ul>
+          </div>
         </div>
       </div>
     )
   }
 }
 
-const mapStateToProps = ({ create: { creating, videos, title, editing, link, editedVideos, fuckOff }, load, auth, search, highlights: { list, selectedHighlights } }) => {
-  return{ auth, search, list, selectedHighlights, load, creating, title, videos, editing, link, editedVideos, fuckOff } }
+const mapStateToProps = ({ create: { creating, videos, title, description, editing, link, editedVideos, fuckOff }, load, auth, search, highlights: { list, selectedHighlights } }) => {
+  return{ auth, search, description, list, selectedHighlights, load, creating, title, videos, editing, link, editedVideos, fuckOff } }
 
 export default connect(mapStateToProps, { selectHighlights, deleteHighlights, fetchHighlights, fetchUser, create, postHighlights, edit, changeTitle,
-changeLink, removeLink, removeVideo, addVideo, updateHighlights })(Highlights);
+changeLink, removeLink, removeVideo, addVideo, updateHighlights, setSearch, searchProject })(Highlights);

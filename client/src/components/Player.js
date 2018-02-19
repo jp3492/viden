@@ -195,12 +195,13 @@ class VideoPlayer extends Component {
     const h                                       = window.innerHeight - 160;
     const opts                                    = { width: '100%', height: h, playerVars: { autoplay: 1, start: 0, controls: 0, rel: 0, showinfo: 0, modestbranding: 0 } };
     return (
-      <div className="row fullHeight">
+      <div>
         <div id="loadVideo" className="valign-wrapper">
-        <div>
-          <div className="center-align preloader-wrapper small active"><div className="spinner-layer spinner-green-only"><div className="circle-clipper left">
-          <div className="circle"></div></div><div className="gap-patch"><div className="circle"></div></div><div className="circle-clipper right">
-          <div className="circle"></div></div></div></div></div>
+          <div>
+            <div className="center-align preloader-wrapper small active"><div className="spinner-layer spinner-green-only"><div className="circle-clipper left">
+            <div className="circle"></div></div><div className="gap-patch"><div className="circle"></div></div><div className="circle-clipper right">
+            <div className="circle"></div></div></div></div>
+          </div>
         </div>
         <div id="cover"></div>
         {videos.map( (v, i) => this.renderVideo(v, i, opts))}

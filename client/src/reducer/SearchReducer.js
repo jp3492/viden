@@ -1,10 +1,12 @@
-import { SEARCH_PROJECT, MY_LIST, SET_SEARCH } from '../actions/types';
+import { SEARCH_PROJECT, MY_LIST, SET_SEARCH, FETCH_HIGHLIGHTS } from '../actions/types';
 
 const initialState = { term: "", active: false, list: [] }
 
 export default function ( state = initialState, action ){
   switch (action.type) {
-    case SET_SEARCH:              return { ...state, term: action.payload };
+    case FETCH_HIGHLIGHTS:        return initialState;
+    case SET_SEARCH:              if (action.payload === "") { return initialState }
+                                  return { ...state, term: action.payload, active: true };
     case MY_LIST:                 return { ...state, active: false, term: "" };
     case SEARCH_PROJECT:          return { list: action.payload, active: true };
     default:                      return state;

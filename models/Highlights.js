@@ -20,6 +20,7 @@ const HighlightsSchema = new Schema({
     ref: 'users'
   },
   title: String,
+  description: String,
   videos: [VideoSchema],
   highlights: [HighlightSchema]
 });

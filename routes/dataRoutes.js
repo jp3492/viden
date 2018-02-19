@@ -51,7 +51,6 @@ module.exports = app => {
                                                                               { "_id": _id, "highlights._id": id },
                                                                               { $set: { "highlights.$" : { start, stop, comment, videoId } } });
                                                                             const high = await Highlights.findById(_id);
-                                                                            console.log(high);
                                                                             res.send(high.highlights);
                                                                           });
   app.post('/api/highlights/:_id', async (req, res) => {                    const { _id } = req.params;
@@ -70,13 +69,13 @@ module.exports = app => {
   app.get('/api/highlights', async (req, res) => {                          const { id } = req.user;
                                                                             let highlights = await Highlights.find({ _uid: id });
                                                                             highlights = highlights.map( h => {
-                                                                              return { _id: h._id, title: h.title, videos: h.videos, _uid: h._uid };
+                                                                              return { _id: h._id, title: h.title, description: h.description, videos: h.videos, _uid: h._uid };
                                                                             });
                                                                             res.send(highlights);
                                                                           });
-  app.post('/api/highlights', async (req, res) => {                         const { title, videos } = req.body;
+  app.post('/api/highlights', async (req, res) => {                         const { title, description, videos } = req.body;
                                                                             const { id } = req.user;
-                                                                            const newHighlights = new Highlights({ title, videos, _uid: id });
+                                                                            const newHighlights = new Highlights({ title, description, videos, _uid: id });
                                                                             await newHighlights.save();
                                                                             res.send(newHighlights);
                                                                           });

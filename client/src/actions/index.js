@@ -3,13 +3,14 @@ import { FETCH_USER, POST_HIGHLIGHTS, CHANGE_LINK, CHANGE_TITLE, FETCH_HIGHLIGHT
 CHANGE_COMMENT, SUBMIT_HIGHLIGHT, SELECT_HIGHLIGHTS, PLAY_VIDEO, JUMP_TO, SET_ACTION, SET_STATE, SET_TIME, SELECT_HIGHLIGHT,
 CHANGE_SEARCH, SEARCH_PROJECT, MY_LIST, SET_SEARCH, ADD_VIDEO_ID, NAV_NEW, NAV_VIDEO, SET_VIDEO, FETCH_USERS,ADD_VIDEO_LINK,
 POSTING_HIGHLIGHTS, SELECTING_HIGHLIGHT, PLAYER_LOADED, REFRESH_PLAYER, SUBMITTING_HIGHLIGHT, EDIT_HIGHLIGHT, DELETING_HIGHLIGHT,
-DELETE_HIGHLIGHT, REMOVE_LINK, CREATE, EDIT, REMOVE_VIDEO, ADD_VIDEO, UPDATE_HIGHLIGHTS } from './types';
+DELETE_HIGHLIGHT, REMOVE_LINK, CREATE, EDIT, REMOVE_VIDEO, ADD_VIDEO, UPDATE_HIGHLIGHTS, CHANGE_DESCRIPTION } from './types';
 
 const ytKey = "AIzaSyDNjPIijQMBwx6H7ZO1bPZpv3bmL2ZhIq4";
 
+export const changeDesciption = text => dispatch => {                 dispatch({ type: CHANGE_DESCRIPTION, payload: text }) }
+
 export const updateHighlights = (id, videos, title) => async dispatch => {
                                                                       const res = await axios.post('/api/highlights/update', {id, videos, title} );
-                                                                      console.log(res.data);
                                                                       dispatch({ type: UPDATE_HIGHLIGHTS, payload: res.data }) }
 
 export const addVideo = link => async dispatch => {                   const videoId = link.split("v=")[1].split("&")[0];
@@ -109,9 +110,9 @@ export const fetchHighlights = (history) => async dispatch => {       let items 
                                                                       dispatch({ type: FETCH_HIGHLIGHTS, payload: res.data });
                                                                       history; }
 
-export const postHighlights = ( title, videos ) => async dispatch => {
+export const postHighlights = ( title, description, videos ) => async dispatch => {
                                                                       dispatch({ type: POSTING_HIGHLIGHTS });
-                                                                      const res = await axios.post(`/api/highlights`, { title, videos });
+                                                                      const res = await axios.post(`/api/highlights`, { title, description, videos });
                                                                       dispatch({ type: POST_HIGHLIGHTS, payload: res.data }); }
 
 export const fetchUser = () => async dispatch => {                    const response = await axios.get('/api/current_user');
