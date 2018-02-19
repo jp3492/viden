@@ -176,6 +176,9 @@ class Highlights extends Component{
     if (search.active === true) {
       listt = search.list;
     }
+    if (!this.props.auth) {
+      return <h4>Please Login or Register...</h4>
+    }
     return(
       <div className="row">
         <div className="row" id="mainW">
