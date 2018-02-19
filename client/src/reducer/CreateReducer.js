@@ -1,10 +1,11 @@
 import { CHANGE_TITLE, CHANGE_LINK, ADD_VIDEO_ID, POST_HIGHLIGHTS, REMOVE_LINK, NAV_NEW, CREATE, SELECT_HIGHLIGHTS, FETCH_HIGHLIGHTS,
-POSTING_HIGHLIGHTS, EDIT, EDIT_ADD_LINK, EDIT_REMOVE_LINK, REMOVE_VIDEO, ADD_VIDEO, UPDATE_HIGHLIGHTS,CHANGE_DESCRIPTION } from '../actions/types';
+POSTING_HIGHLIGHTS, EDIT, EDIT_ADD_LINK, EDIT_REMOVE_LINK, REMOVE_VIDEO, ADD_VIDEO, UPDATE_HIGHLIGHTS,CHANGE_DESCRIPTION, SET_DV } from '../actions/types';
 
-const initialState = { title: "", description: "", link: "", videos: [], editedVideos: [], creating: false, editing: false };
+const initialState = { title: "", description: "", link: "", videos: [], editedVideos: [], creating: false, editing: false, dv: null };
 
 export default function ( state = initialState, action ){
   switch (action.type) {
+    case SET_DV:                    return { ...state, dv: action.payload };
     case CHANGE_DESCRIPTION:        return { ...state, description: action.payload };
     case UPDATE_HIGHLIGHTS:         return { title: "", link: "", videos: [], editedVideos: [], creating: false, editing: false };
     case ADD_VIDEO:                 let plus = state.editedVideos;

@@ -41,19 +41,6 @@ class NewHighlights extends Component{
             {videos.map( v => this.renderLink(v, removeLink))}
           </ul>
         </div>
-        <div className="row">
-          <form action="#">
-            <div className="file-field input-field">
-              <div className="btn">
-                <span>File</span>
-                <input type="file" onChange={ e => alert(e.target.value)}/>
-              </div>
-              <div className="file-path-wrapper">
-                <input className="file-path validate" type="text" />
-              </div>
-            </div>
-          </form>
-        </div>
       </div>
     );
   }

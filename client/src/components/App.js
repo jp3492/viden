@@ -11,6 +11,7 @@ import Settings from './Settings';
 import Admin from './Admin';
 import MenuButton from './ButtonMenu';
 import Grid from './Grid';
+import DataVolley from './DataVolley';
 
 class App extends Component {
   componentWillMount(){
@@ -29,7 +30,7 @@ class App extends Component {
                 <Route exact path="/editor" component={VideoEditor} />
                 <Route exact path="/settings" component={Settings} />
                 <Route exact path="/admin" component={Admin} />
-
+                <Route exact path="/dv" component={DataVolley} />
               </div>
               <Route exact path="/grid" component={Grid} />
             </div>

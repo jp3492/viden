@@ -3,9 +3,14 @@ import { FETCH_USER, POST_HIGHLIGHTS, CHANGE_LINK, CHANGE_TITLE, FETCH_HIGHLIGHT
 CHANGE_COMMENT, SUBMIT_HIGHLIGHT, SELECT_HIGHLIGHTS, PLAY_VIDEO, JUMP_TO, SET_ACTION, SET_STATE, SET_TIME, SELECT_HIGHLIGHT,
 CHANGE_SEARCH, SEARCH_PROJECT, MY_LIST, SET_SEARCH, ADD_VIDEO_ID, NAV_NEW, NAV_VIDEO, SET_VIDEO, FETCH_USERS,ADD_VIDEO_LINK,
 POSTING_HIGHLIGHTS, SELECTING_HIGHLIGHT, PLAYER_LOADED, REFRESH_PLAYER, SUBMITTING_HIGHLIGHT, EDIT_HIGHLIGHT, DELETING_HIGHLIGHT,
-DELETE_HIGHLIGHT, REMOVE_LINK, CREATE, EDIT, REMOVE_VIDEO, ADD_VIDEO, UPDATE_HIGHLIGHTS, CHANGE_DESCRIPTION } from './types';
+DELETE_HIGHLIGHT, REMOVE_LINK, CREATE, EDIT, REMOVE_VIDEO, ADD_VIDEO, UPDATE_HIGHLIGHTS, CHANGE_DESCRIPTION, SET_DV, POST_DV } from './types';
 
 const ytKey = "AIzaSyDNjPIijQMBwx6H7ZO1bPZpv3bmL2ZhIq4";
+
+export const postDv = dv => async dispatch => {                       const res = await axios.post('/api/dv', dv);
+                                                                      dispatch({ type: POST_DV, payload: res.data }) }
+
+export const setDv = file => dispatch => {                            dispatch({ type: SET_DV, payload: file }) }
 
 export const changeDesciption = text => dispatch => {                 dispatch({ type: CHANGE_DESCRIPTION, payload: text }) }
 

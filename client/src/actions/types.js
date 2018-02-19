@@ -42,3 +42,5 @@ export const REMOVE_VIDEO = "remove_video";
 export const ADD_VIDEO = "add_video";
 export const UPDATE_HIGHLIGHTS = "update_highlight";
 export const CHANGE_DESCRIPTION = "change_description";
+export const SET_DV = "set_dv";
+export const POST_DV = "post_dv";

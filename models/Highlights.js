@@ -21,6 +21,7 @@ const HighlightsSchema = new Schema({
   },
   title: String,
   description: String,
+  type: String,
   videos: [VideoSchema],
   highlights: [HighlightSchema]
 });
