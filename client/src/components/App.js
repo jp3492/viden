@@ -16,7 +16,6 @@ import DataVolley from './DataVolley';
 class App extends Component {
   componentWillMount(){
     this.props.fetchUser();
-    // alert("need to edit delete");
   }
   render(){
     return(
