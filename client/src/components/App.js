@@ -16,7 +16,7 @@ import Loading from './Loading';
 
 class App extends Component {
   componentWillMount(){
-    alert("need to make search and arrow nav functioning!!! works when not iltered")
+    // alert("need to make search and arrow nav functioning!!! works when not iltered")
     this.props.fetchUser();
   }
   render(){
