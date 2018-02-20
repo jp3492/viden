@@ -12,6 +12,7 @@ import Admin from './Admin';
 import MenuButton from './ButtonMenu';
 import Grid from './Grid';
 import DataVolley from './DataVolley';
+import Loading from './Loading';
 
 class App extends Component {
   componentWillMount(){
@@ -25,11 +26,11 @@ class App extends Component {
               <Route path="/" component={Header} />
               <Route exact path="/" component={Highlights} />
               <div>
-                <Route exact path="/new" component={NewHighlights} />
                 <Route exact path="/editor" component={VideoEditor} />
                 <Route exact path="/settings" component={Settings} />
                 <Route exact path="/admin" component={Admin} />
                 <Route exact path="/dv" component={DataVolley} />
+                <Route path="/view/:id" component={Loading} />
               </div>
               <Route exact path="/grid" component={Grid} />
             </div>

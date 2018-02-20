@@ -1,11 +1,12 @@
 import { FETCH_HIGHLIGHTS, SELECT_HIGHLIGHTS, SUBMIT_HIGHLIGHT, CHANGE_SEARCH, POST_HIGHLIGHTS, SUBMITTING_HIGHLIGHT, EDIT_HIGHLIGHT,
-DELETING_HIGHLIGHT, DELETE_HIGHLIGHT, UPDATE_HIGHLIGHTS } from '../actions/types';
+DELETING_HIGHLIGHT, DELETE_HIGHLIGHT, UPDATE_HIGHLIGHTS, FETCH_HIGH } from '../actions/types';
 
 const initialState = { list: [], selectedHighlights: null, selectedHighlight: null, filteredHighlights: null }
 
 export default function ( state = initialState, action ){
   let highlights, selectedHighlights, filteredHighlights, selectedHighlight;
   switch (action.type) {
+    case FETCH_HIGH:                      return { ...state, selectedHighlights: action.payload, filteredHighlights: action.payload.highlights };
     case UPDATE_HIGHLIGHTS:               const nwLi = state.list.map( li => {
                                             if (li._id === action.payload._id) {
                                               return action.payload;

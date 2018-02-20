@@ -43,3 +43,4 @@ export const UPDATE_HIGHLIGHTS = "update_highlight";
 export const CHANGE_DESCRIPTION = "change_description";
 export const SET_DV = "set_dv";
 export const POST_DV = "post_dv";
+export const FETCH_HIGH = "fetch_high";

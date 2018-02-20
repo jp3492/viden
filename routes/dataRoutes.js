@@ -4,6 +4,9 @@ const User = mongoose.model('users');
 const Highlights = mongoose.model('highlights');
 
 module.exports = app => {
+  app.get('/api/view/:_id', async (req, res) => {                           const { _id } = req.params;
+                                                                            const high = await Highlights.findById(_id);
+                                                                            res.send(high); })
   app.post('/api/dv', async ( req, res ) => {                               const { title, description, videos, dv } = req.body;
                                                                             const { id } = req.user;
                                                                             const videoId = videos[0].videoId;
@@ -62,7 +65,6 @@ module.exports = app => {
 
                                                                             scout = clean_scout.map(stat => {
                                                                               setScores(stat[0]);
-                                                                              console.log(p_h, p_v);
                                                                               if (!stat[0].includes('p')) {
                                                                                 let isHome;
                                                                                 let quality;

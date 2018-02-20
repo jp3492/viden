@@ -44,7 +44,6 @@ class VideoPlayer extends Component {
       submitHighlight, changeComment, deleteHighlight, editHighlight, changeSearch, selectHighlight, video, navVideo, setVideo,
       load } = nextProps;
     if (load.player === 0) { document.getElementById("loadVideo").style.display = "none" }
-    console.log(video);
     document.getElementById(`v${this.props.video}`).style.display = "none";
     document.getElementById(`v${video}`).style.display = "block";
     if (videos[this.props.video] !== videos[video]) {

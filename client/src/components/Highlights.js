@@ -10,11 +10,6 @@ const load = (<div className="preloader-wrapper small active"><div className="sp
         <div className="circle"></div></div></div></div>);
 
 class Highlights extends Component{
-  // componentWillMount(){
-  //   if (!this.props.auth) {
-  //     this.props.fetchPublicHighs();
-  //   }
-  // }
   componentDidMount(){
     this.removeSelected();
   }
@@ -113,8 +108,11 @@ class Highlights extends Component{
     if (selectedHighlights !== null) {
       const { _id } = selectedHighlights;
       const vids = (!editing) ? selectedHighlights.videos: editedVideos;
+      const linkTo = (process.env.NODE_ENV === 'production') ? `https://serene-caverns-45409.herokuapp.com/view/${selectedHighlights._id}`: `http://localhost:3000/view/${selectedHighlights._id}`;
       return (
         <div>
+          <p><b>Link to Project:</b></p>
+          <p>{linkTo}</p><br/>
           <div className="collection">
             {vids.map( (v, i) => this.renderVideos(v, i))}
             {this.renderAdd()}
@@ -191,7 +189,7 @@ class Highlights extends Component{
                 <p>Upload DataVolley videos and scouting files</p>
               </div>
               <div className="card-action infoCardFoot">
-                <p>For access, please register with given authentication services (Google, Facebook...) and contact me (viden.adm@gmail.com) for approved access.</p>
+                <p>For access, please register with given authentication services (Google, Facebook...) and <a href="mailto:viden.adm@gmail.com">contact me </a> for approved access.</p>
               </div>
              </div>
             </div>
