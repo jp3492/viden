@@ -99,7 +99,7 @@ class Header extends React.Component {
         </Drawer>
       )
     }
-    if (auth.approved) {
+    if (auth.approved === true) {
       return (
         <Drawer id="drawer" anchor="right" open={this.state.right} onClose={() => this.toggleDrawer(false)}>
           <div className="collection">
