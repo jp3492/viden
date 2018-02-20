@@ -24,7 +24,6 @@ export const SEARCH_PROJECT = "search_project";
 export const MY_LIST = "my_list";
 export const SET_SEARCH = "set_search";
 export const ADD_VIDEO_ID = "add_video_id";
-export const NAV_NEW = "nav_new";
 export const NAV_VIDEO = "nav_video";
 export const SET_VIDEO = "set_video";
 export const FETCH_USERS = "fetch_users";

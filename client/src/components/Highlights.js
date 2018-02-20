@@ -10,6 +10,11 @@ const load = (<div className="preloader-wrapper small active"><div className="sp
         <div className="circle"></div></div></div></div>);
 
 class Highlights extends Component{
+  // componentWillMount(){
+  //   if (!this.props.auth) {
+  //     this.props.fetchPublicHighs();
+  //   }
+  // }
   componentDidMount(){
     this.removeSelected();
   }
@@ -40,18 +45,6 @@ class Highlights extends Component{
           </div>
         </div>
     )
-    // return(
-    //   <li id={_id} key={_id}
-    //     onDoubleClick={ () => this.props.selectHighlights( true, this.props.selectedHighlights, this.props.history ) }
-    //     onClick={ () => {
-    //       this.removeSelected();
-    //       document.getElementById(_id).classList.add("selected");
-    //       this.props.selectHighlights( false, highlight );
-    //     } }
-    //     className="collection-item projects">
-    //     <h4>{title}</h4>
-    //   </li>
-    // )
   }
   renderAddButton(link){
     const { load: { addLink }, addVideo } = this.props;
@@ -74,7 +67,6 @@ class Highlights extends Component{
               </i>
             </a>
           </div>
-
         </div>
       );
     }
@@ -139,7 +131,6 @@ class Highlights extends Component{
     if (creating) {
       return <a onClick={ () => postHighlights( title, description, videos ) } className="secondary-content btn-floating btn-large waves-effect waves-light orange new"><i className="material-icons">check</i></a>;
     }
-    //
     if (selectedHighlights !== null && editing === false) {
       if (auth._id === selectedHighlights._uid) {
         return (
@@ -177,7 +168,44 @@ class Highlights extends Component{
       listt = search.list;
     }
     if (!this.props.auth) {
-      return <h4>Please Login or Register...</h4>
+      if (!search.active) {
+        listt = [];
+      }
+      return (
+        <div className="row">
+          <div className="row" id="mainW">
+            <div className="col s4" id="links">
+             <div className="card blue-grey darken-1 infoCard">
+             <div className="card-content white-text" id="profile">
+               <h1>Viden</h1>
+               <p>A social and interactive cross-plattform Video Player</p>
+             </div>
+              <div className="card-content white-text">
+                <span className="card-title">What you can do...</span>
+                <p>Analyze Videos with an interactive video player</p>
+                <br />
+                <p>Share your projects with others</p>
+                <br />
+                <p>Provide instant reporting on live streams</p>
+                <br />
+                <p>Upload DataVolley videos and scouting files</p>
+              </div>
+              <div className="card-action infoCardFoot">
+                <p>For access, please register with given authentication services (Google, Facebook...) and contact me (viden.adm@gmail.com) for approved access.</p>
+              </div>
+             </div>
+            </div>
+            <div className="col s8" id="rechts">
+              <div id="searchProjects" >
+                <input onChange={ e => this.renderSearch(e.target.value)} value={search.term} id="searchProj" placeholder="Search Projects and User..."/>
+              </div>
+              <ul className="row" id="projectsCollection">
+                {listt.map( highlight => this.renderHighlight(highlight) )}
+              </ul>
+            </div>
+          </div>
+        </div>
+      )
     }
     return(
       <div className="row">

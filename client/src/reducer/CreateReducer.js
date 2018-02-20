@@ -21,7 +21,6 @@ export default function ( state = initialState, action ){
     case FETCH_HIGHLIGHTS:          return initialState;
     case SELECT_HIGHLIGHTS:         return { title: "", link: "", videos: [], editedVideos: [], creating: false, editing: false };
     case CREATE:                    return { ...initialState, creating: action.payload, videos: [] };
-    case NAV_NEW:                   return initialState;
     case REMOVE_LINK:               let vide = state.videos.filter( v => { return v.videoId !== action.payload });
                                     return { ...state, videos: vide };
     case POST_HIGHLIGHTS:           return initialState;

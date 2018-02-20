@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { FETCH_USER, POST_HIGHLIGHTS, CHANGE_LINK, CHANGE_TITLE, FETCH_HIGHLIGHTS,
 CHANGE_COMMENT, SUBMIT_HIGHLIGHT, SELECT_HIGHLIGHTS, PLAY_VIDEO, JUMP_TO, SET_ACTION, SET_STATE, SET_TIME, SELECT_HIGHLIGHT,
-CHANGE_SEARCH, SEARCH_PROJECT, MY_LIST, SET_SEARCH, ADD_VIDEO_ID, NAV_NEW, NAV_VIDEO, SET_VIDEO, FETCH_USERS,ADD_VIDEO_LINK,
+CHANGE_SEARCH, SEARCH_PROJECT, MY_LIST, SET_SEARCH, ADD_VIDEO_ID, NAV_VIDEO, SET_VIDEO, FETCH_USERS,ADD_VIDEO_LINK,
 POSTING_HIGHLIGHTS, SELECTING_HIGHLIGHT, PLAYER_LOADED, REFRESH_PLAYER, SUBMITTING_HIGHLIGHT, EDIT_HIGHLIGHT, DELETING_HIGHLIGHT,
 DELETE_HIGHLIGHT, REMOVE_LINK, CREATE, EDIT, REMOVE_VIDEO, ADD_VIDEO, UPDATE_HIGHLIGHTS, CHANGE_DESCRIPTION, SET_DV, POST_DV } from './types';
 
@@ -42,9 +42,6 @@ export const setVideo = index => dispatch => {                        dispatch({
 
 export const navVideo = (next, length) => dispatch => {               dispatch({ type: NAV_VIDEO, payload: { next, length } }) }
 
-export const navNew = (history) => dispatch => {                      dispatch({ type: NAV_NEW });
-                                                                      history.push("/new"); }
-
 export const add_video = link => async dispatch => {                  const videoId = link.split("v=")[1].split("&")[0];
                                                                       const info = await axios.get(`https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${videoId}&fields=items/snippet/title,items/snippet/description&key=${ytKey}`);
                                                                       dispatch({ type: ADD_VIDEO_ID, payload: { type: "youtube", videoId, title: info.data.items[0].snippet.title } }); }
@@ -57,7 +54,7 @@ export const selectMyList = callback => dispatch => {                 dispatch({
 export const searchProject = (search, history) => async dispatch => { const res = await axios.get(`/api/search/${search}`);
                                                                       if (res.data.length !== 0 && search.length > 2) {
                                                                         dispatch({ type: SEARCH_PROJECT, payload: res.data });
-                                                                        history.push('/list'); } }
+                                                                        history.push('/'); } }
 
 export const changeSearch = search => dispatch => {                   dispatch({ type: CHANGE_SEARCH, payload: search }) }
 
@@ -82,7 +79,7 @@ export const changeComment = comment => dispatch => {                 dispatch({
 
 export const changeTitle = title => dispatch => {                     dispatch({ type: CHANGE_TITLE, payload: title }) }
 
-export const changeLink = link => dispatch => {                       console.log(link);dispatch({ type: CHANGE_LINK, payload: link }) }
+export const changeLink = link => dispatch => {                       dispatch({ type: CHANGE_LINK, payload: link }) }
 
 export const deleteHighlight = ( _id, id, search ) => async dispatch => {
                                                                       dispatch({ type: DELETING_HIGHLIGHT, payload: id });

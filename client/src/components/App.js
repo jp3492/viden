@@ -24,9 +24,9 @@ class App extends Component {
           <BrowserRouter>
             <div>
               <Route path="/" component={Header} />
+              <Route exact path="/" component={Highlights} />
               <div>
                 <Route exact path="/new" component={NewHighlights} />
-                <Route exact path="/list" component={Highlights} />
                 <Route exact path="/editor" component={VideoEditor} />
                 <Route exact path="/settings" component={Settings} />
                 <Route exact path="/admin" component={Admin} />
