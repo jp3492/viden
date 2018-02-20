@@ -70,19 +70,19 @@ class VideoPlayer extends Component {
       case "up":            if (highlight.number !== 0) {
                               const lastIndex = highlight.number - 1;
                               let v = 0;
-                              videos.map( (v, i) => { if (v.videoId === this.props.selectedHighlights.highlights[lastIndex].videoId) {
+                              videos.map( (v, i) => { if (v.videoId === this.props.filteredHighlights[lastIndex].videoId) {
                                 v = i;
                               }});
-                              selectHighlight(this.props.selectedHighlights.highlights[lastIndex], lastIndex, v );
+                              selectHighlight(this.props.filteredHighlights[lastIndex], lastIndex, v );
                             }
                             return;
-      case "down":          if (highlight.number !== this.props.selectedHighlights.highlights.length - 1) {
+      case "down":          if (highlight.number !== this.props.filteredHighlights.length - 1) {
                               const nextIndex = highlight.number + 1;
                               let vi = 0;
-                              videos.map( (v, i) => { if (v.videoId === this.props.selectedHighlights.highlights[nextIndex].videoId) {
+                              videos.map( (v, i) => { if (v.videoId === this.props.filteredHighlights[nextIndex].videoId) {
                                 vi = i;
                               }});
-                              selectHighlight(this.props.selectedHighlights.highlights[nextIndex], nextIndex, vi );
+                              selectHighlight(this.props.filteredHighlights[nextIndex], nextIndex, vi );
                             }
                             return;
       case "mute":          if (player.isMuted()) { player.unMute() }
@@ -137,6 +137,7 @@ class VideoPlayer extends Component {
       case "jump":          this.state[`v${this.props.video}`].pauseVideo();
                             let rows = document.getElementsByTagName("tr");
                             for (var i = 0; i < rows.length; i++) { rows[i].classList.remove("selected") }
+                            console.log(highlight);
                             document.getElementById(highlight.id).classList.add("selected");
                             player.seekTo(start);
                             player.playVideo();
@@ -221,8 +222,8 @@ class VideoPlayer extends Component {
   }
 }
 
-const mapStateToProps = ({ load, auth, controls: { action, edit, start, stop, comment, highlight, searchKey, video }, highlights: { selectedHighlights } }) => {
-  return{ load, auth, start, stop, comment, action, edit, selectedHighlights, highlight, searchKey, video }
+const mapStateToProps = ({ load, auth, controls: { action, edit, start, stop, comment, highlight, searchKey, video }, highlights: { selectedHighlights, filteredHighlights } }) => {
+  return{ load, auth, start, stop, comment, action, edit, selectedHighlights,filteredHighlights, highlight, searchKey, video }
 }
 
 export default connect(mapStateToProps, { setTime, setAction, submitHighlight, changeComment, deleteHighlight,

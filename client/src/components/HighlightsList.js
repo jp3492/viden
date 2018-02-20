@@ -15,6 +15,7 @@ class HighlightsList extends Component{
     let videoIndex;
     videos.map( (v, i) => { if (v.videoId === videoId) { videoIndex = i } });
     const info = (highlight.deleting === true) ? "deleting...": null;
+  
     return(
       <tr onDoubleClick={ () => this.renderEdit(admin, setAction) } onClick={ () => selectHighlight(highlight, i, videoIndex) } id={_id} key={i} className="tableRow">
         <td className="col1">          {i}       </td>
