@@ -19,19 +19,28 @@ require('./services/passport');
 mongoose.connect(keys.mongoURI);
 
 const app = express()
+  .use(bodyParser.json({limit: '1mb' }))
+  .use(
+    cookieSession({
+        maxAge: 10 * 2 * 60 * 60 * 1000,
+        keys: [keys.cookieKey]
+    })
+  )
   .use((req, res) => res.sendFile(INDEX) )
+  .use(passport.initialize())
+  .use(passport.session())
   .listen(PORT, () => console.log(`Listening on ${ PORT }`));
 const io = require('socket.io')(app);
 
-app.use(bodyParser.json({limit: '1mb' }));
-app.use(
-  cookieSession({
-      maxAge: 10 * 2 * 60 * 60 * 1000,
-      keys: [keys.cookieKey]
-  })
-);
-app.use(passport.initialize());
-app.use(passport.session());
+// app.use(bodyParser.json({limit: '1mb' }));
+// app.use(
+//   cookieSession({
+//       maxAge: 10 * 2 * 60 * 60 * 1000,
+//       keys: [keys.cookieKey]
+//   })
+// );
+// app.use(passport.initialize());
+// app.use(passport.session());
 
 require('./routes/authRoutes')(app);
 require('./routes/dataRoutes')(app, io);
