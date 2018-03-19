@@ -18,6 +18,11 @@ require('./services/passport');
 
 mongoose.connect(keys.mongoURI);
 
+const app = express()
+  .use((req, res) => res.sendFile(INDEX) )
+  .listen(PORT, () => console.log(`Listening on ${ PORT }`));
+const io = require('socket.io')(app);
+
 app.use(bodyParser.json({limit: '1mb' }));
 app.use(
   cookieSession({
@@ -27,11 +32,6 @@ app.use(
 );
 app.use(passport.initialize());
 app.use(passport.session());
-
-const app = express()
-  .use((req, res) => res.sendFile(INDEX) )
-  .listen(PORT, () => console.log(`Listening on ${ PORT }`));
-const io = require('socket.io')(app);
 
 require('./routes/authRoutes')(app);
 require('./routes/dataRoutes')(app, io);
