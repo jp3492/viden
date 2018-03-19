@@ -5,7 +5,11 @@ const passport = require('passport');
 const bodyParser = require('body-parser');
 const axios = require('axios');
 
+
 const keys = require('./config/keys');
+
+const PORT = process.env.PORT || 5000;
+const port = 8000;
 
 require('./models/User');
 require('./models/Highlights');
@@ -14,10 +18,7 @@ require('./services/passport');
 mongoose.connect(keys.mongoURI);
 
 const app = express();
-const io = require('socket.io')();
-
-io.set('transports', ['xhr-polling']);
-io.set('polling duration', 10);
+const io = require('socket.io')(app);
 
 app.use(bodyParser.json({limit: '1mb' }));
 app.use(
@@ -40,7 +41,6 @@ if (process.env.NODE_ENV === 'production') {
   });
 }
 
-const PORT = process.env.PORT || 5000;
-const port = 8000;
+
 io.listen(port);
 app.listen(PORT);
