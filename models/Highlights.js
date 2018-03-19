@@ -1,18 +1,29 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
+const AccessSchema = new Schema({
+  user: {
+    type: Schema.Types.ObjectId,
+    ref: 'users'
+  },
+  status: String
+});
+
+const CommentSchema = new Schema({
+  comment: String,
+  _uid: {
+    type: Schema.Types.ObjectId,
+    ref: 'users'
+  }
+});
+
 const HighlightSchema = new Schema({
   start: Number,
   stop: Number,
   comment: String,
-  videoId: String
+  video: Number,
+  comments: [CommentSchema]
 });
-
-const VideoSchema = new Schema({
-  type: String,
-  videoId: String,
-  title: String
-})
 
 const HighlightsSchema = new Schema({
   _uid: {
@@ -21,10 +32,13 @@ const HighlightsSchema = new Schema({
   },
   title: String,
   description: String,
+  privacy: String,
+  parent: String,
   type: String,
-  videos: [VideoSchema],
-  highlights: [HighlightSchema]
-});
+  videos: [String],
+  highlights: [HighlightSchema],
+  access: [AccessSchema]
+}, { timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } });
 
 const Highlights = mongoose.model('highlights', HighlightsSchema);
 module.exports = Highlights;

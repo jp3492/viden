@@ -1,39 +1,29 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { BrowserRouter, Route } from 'react-router-dom';
+
 import { fetchUser } from '../actions';
 
 import Header from './Header';
-import NewHighlights from './NewHighlights';
-import Highlights from './Highlights';
-import VideoEditor from './VideoEditor';
-import Settings from './Settings';
-import Admin from './Admin';
-import MenuButton from './ButtonMenu';
-import Grid from './Grid';
-import DataVolley from './DataVolley';
-import Loading from './Loading';
+import Body from './Body';
+import Create from './Create';
+import Player from './Player';
 
 class App extends Component {
   componentWillMount(){
-    // alert("need to make search and arrow nav functioning!!! works when not iltered")
     this.props.fetchUser();
+    // alert("Projects are showing double when acces right given");
   }
   render(){
     return(
         <div>
           <BrowserRouter>
             <div>
-              <Route path="/" component={Header} />
-              <Route exact path="/" component={Highlights} />
+              <Route exact path="/" component={Header} />
+              <Route exact path="/" component={Body} />
               <div>
-                <Route exact path="/editor" component={VideoEditor} />
-                <Route exact path="/settings" component={Settings} />
-                <Route exact path="/admin" component={Admin} />
-                <Route exact path="/dv" component={DataVolley} />
-                <Route path="/view/:id" component={Loading} />
+                <Route exact path="/player" component={Player} />
               </div>
-              <Route exact path="/grid" component={Grid} />
             </div>
           </BrowserRouter>
         </div>
@@ -41,8 +31,8 @@ class App extends Component {
   }
 }
 
-const mapStateToProps = ({ auth, highlights }) => {
-  return { auth, highlights }
+const mapStateToProps = ({ auth, main }) => {
+  return { auth, main }
 }
 
 export default connect(mapStateToProps, {fetchUser})(App);

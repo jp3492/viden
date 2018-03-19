@@ -3,173 +3,158 @@ const mongoose = require('mongoose');
 const User = mongoose.model('users');
 const Highlights = mongoose.model('highlights');
 
-module.exports = app => {
-  app.get('/api/view/:_id', async (req, res) => {                           const { _id } = req.params;
-                                                                            const high = await Highlights.findById(_id);
-                                                                            res.send(high); })
-  app.post('/api/dv', async ( req, res ) => {                               const { title, description, videos, dv } = req.body;
-                                                                            const { id } = req.user;
-                                                                            const videoId = videos[0].videoId;
-                                                                            let actions = dv.split("[3SCOUT]")[1].split("\n");
-                                                                            let teams = dv.split("[3TEAMS]")[1].split("[3MORE]")[0].split('\n'); teams.shift(); teams.pop();
-                                                                            let team_home = teams[0].split(';');
-                                                                            let team_visit = teams[1].split(';');
-                                                                            teams = { home: { id: team_home[0], name: team_home[1], coach: team_home[3], staff: team_home[4] },
-                                                                                      visit: { id: team_visit[0], name: team_visit[1], coach: team_visit[3], staff: team_visit[4] } }
-                                                                            actions.shift();
-                                                                            actions.pop();
-                                                                            scout = actions.map(stat => stat.split(';'));
-                                                                            let clean_scout = [];
-                                                                            let left_scout = [];
-                                                                            scout.map(stat => {
-                                                                              if (stat[0].includes('>') || stat[0].includes('$$') || stat[0].includes('z') || stat[0][1] === 'T' || stat[0].includes('c') || stat[0][1] === 'P' || stat[0].includes('s')) {
-                                                                                left_scout.push(stat) } else {
-                                                                                clean_scout.push(stat) } return null } );
+module.exports = (app, io) => {
+  io.on('connection', (client) => {
+    let res, regex;
+    client.on('answerRequest', async data => {
+      const { me, type, target, user, confirm } = data;
+      if (type === "friend") {
+        if (confirm === true) {
+          await User.update({ _id: me, "friends._id": user }, { $set: { "friends.$.status": "confirmed" } });
+          await User.update({ _id: user, "friends._id": me }, { $set: { "friends.$.status": "confirmed" } });
+        } else {
+          await User.update({ _id: me }, { $pull: { friends: { _id: user } } });
+          await User.update({ _id: user }, { $pull: { friends: { _id: me } } });
+        }
+      } else {
+        if (confirm === true) {
+          await User.update({ _id: me, "access.target": target }, { $set: { "access.$.status": "confirmed" } });
+          await User.update({ _id: user, "access.target": target }, { $set: { "access.$.status": "confirmed" } });
+        } else {
+          await User.update({ _id: me }, { $pull: { access: { target, user } } });
+          await User.update({ _id: user }, { $pull: { access: { target, user: me } } });
+        }
+      }
+      io.emit('answerRequest', data);
+    });
 
-                                                                            function alterQuality(quality) {
-                                                                              switch (quality) {
-                                                                                case "#": return 5; case "+": return 4; case "!": return 3; case "/": return 2; case "-": return 1; case "=": return 0; default: return null;
-                                                                              }
-                                                                            }
-                                                                            function alterHome(home){
-                                                                              if (home === "*") {
-                                                                                return teams.home.name.substr(0,3).toLowerCase();
-                                                                              }
-                                                                              return teams.visit.name.substr(0,3).toLowerCase();
-                                                                            }
-                                                                            let s_h = 0, s_v = 0, p_h = 0, p_v = 0, s = 1, reset = false;
-                                                                            function setScores(stat){
-                                                                              if (reset === true) {
-                                                                                p_h = 0;
-                                                                                p_v = 0;
-                                                                                reset = false;
-                                                                              }
-                                                                              if (stat.includes('*p')) {
-                                                                                p_h++;
-                                                                                const diff = p_h - p_v;
-                                                                                if (p_h >= 25 && diff > 1) {
-                                                                                  s_h++;
-                                                                                  s++;
-                                                                                  reset = true;
-                                                                                }
-                                                                              } else if (stat.includes('ap')) {
-                                                                                p_v++;
-                                                                                const diff = p_v - p_h;
-                                                                                if (p_v >= 25 && diff > 1) {
-                                                                                  s_v++;
-                                                                                  s++;
-                                                                                  reset = true;
-                                                                                }
-                                                                              }
-                                                                            }
+    client.on('request', async data => {
+      const { me, type, target, user } = data;
+      if (type === "friend") {
+        const newFriend = { _id: user, status: "requestSent", parent: null };
+        const newRequest = { _id: me, status: "requested", parent: null };
+        await User.update({ _id: me }, { $push: { friends: newFriend } });
+        await User.update({ _id: user }, { $push: { friends: newRequest } });
+      } else {
+        const newAccess = { user: user, status: "requestSent", type, target };
+        const newInvite = { user: me, status: "requested", type, target };
+        await User.update({ _id: me }, { $push: {access: newAccess } });
+        await User.update({ _id: user }, { $push: { access: newInvite } });
+      }
+      io.emit('request', data);
+    });
 
-                                                                            scout = clean_scout.map(stat => {
-                                                                              setScores(stat[0]);
-                                                                              if (!stat[0].includes('p')) {
-                                                                                let isHome;
-                                                                                let quality;
-                                                                                isHome = alterHome(stat[0][0]);
-                                                                                quality = alterQuality(stat[0][5]);
-                                                                                return { time: stat[12], home: isHome, player: Number(stat[0].substr(1,2)), action: stat[0][3], type: stat[0][4], quality, s, s_h, s_v, p_h, p_v };
-                                                                              }
-                                                                            });
-                                                                            scout.map((stat, i) => {
-                                                                              if (stat === undefined) {
-                                                                                scout.splice(i, 1);
-                                                                              }
-                                                                            });
-                                                                            scout = scout.map((stat, i) => {
-                                                                              stat.index = i+1;
-                                                                              return stat;
-                                                                            });
-                                                                            scout = scout.map( stat => {
-                                                                              const stop = Number(stat.time) + 15;
-                                                                              const comment = `${stat.home} - ${stat.player}: ${stat.action}, ${stat.type} -> ${stat.quality}. ${stat.s_h}:${stat.s_v}, ${stat.p_h}:${stat.p_v}`;
-                                                                              return { start: Number(stat.time), stop, comment, videoId }
-                                                                            })
-                                                                            const newHighlights = new Highlights({ title, description, videos, _uid: id });
-                                                                            await newHighlights.save();
-                                                                            const _id = newHighlights._id;
-                                                                            scout.map( async (highlight) => {
-                                                                              await Highlights.findOneAndUpdate({ _id }, { $push: { highlights: highlight } } );
-                                                                            });
-                                                                            res.send(newHighlights);
-                                                                          })
-  app.post('/api/highlights/update', async (req, res) => {                  const { id, videos, title } = req.body;
-                                                                            const ids = videos.map( v => { return v.videoId } );
-                                                                            const oldHigh = await Highlights.findById(id);
-                                                                            highs = oldHigh.highlights.filter( h => {
-                                                                              if (ids.includes(h.videoId)) {
-                                                                                return true;
-                                                                              }
-                                                                              return false;
-                                                                            });
-                                                                            await Highlights.findOneAndUpdate({ _id: id}, { videos, title, highlights: highs });
-                                                                            const highlights = await Highlights.findById(id);
-                                                                            res.send(highlights);
-                                                                          });
-  app.get('/api/highlights/videos/:_id', async (req, res) => {              const { _id } = req.params;
-                                                                            const highlight = await Highlights.find({ _id });
-                                                                            res.send(highlight[0].videos);
-                                                                          });
-  app.get('/api/users', async (req, res) => {                               const users = await User.find({});
-                                                                            res.send(users);
-                                                                          });
-  app.get(`/api/search/:term`, async(req, res) => {                         const { term } = req.params;
-                                                                            const byName = await Highlights.find({ "title": { "$regex": term, "$options": "i" } });
-                                                                            res.send(byName);
-                                                                          });
-  app.get(`/api/view/:_id`, async (req, res) => {                           const { _id } = req.params;
-                                                                            const highlight = await Highlights.find({_id});
+    client.on('deleteHighlight', async data => {
+      const { project, highlight } = data;
+      await Highlights.update(
+        { _id: project }, { $pull: { highlights: { _id: highlight } } });
+      io.emit('deleteHighlight', data);
+    });
 
-                                                                            res.send(highlight[0]);
-                                                                          });
-  app.delete('/api/highlights/highlight/:_id/:id', async (req, res) => {    const { _id, id } = req.params;
-                                                                            await Highlights.findOneAndUpdate(
-                                                                              { _id }, { $pull: { highlights: { _id: id } } });
-                                                                            res.send(id);
-                                                                          });
-  app.delete('/api/highlights/:_id', async (req, res) => {                  const { _id } = req.params;
-                                                                            await Highlights.findByIdAndRemove( _id );
-                                                                            let highlights = await Highlights.find({ _uid: req.user.id });
-                                                                            highlights = highlights.map( h => {
-                                                                              return { _id: h._id, title: h.title, videos: h.videos, _uid: h._uid };
-                                                                            });
-                                                                            res.send(highlights);
-                                                                          });
-  app.post('/api/highlights/highlight/:_id/:id', async (req, res) => {      const { _id, id } = req.params;
-                                                                            const { start, stop, comment, videoId } = req.body;
-                                                                            await Highlights.update(
-                                                                              { "_id": _id, "highlights._id": id },
-                                                                              { $set: { "highlights.$" : { start, stop, comment, videoId } } });
-                                                                            const high = await Highlights.findById(_id);
-                                                                            res.send(high.highlights);
-                                                                          });
-  app.post('/api/highlights/:_id', async (req, res) => {                    const { _id } = req.params;
-                                                                            const { start, stop, comment, videoId } = req.body;
-                                                                            await Highlights.findOneAndUpdate({ _id }, { $push: { highlights: req.body } } );
-                                                                            const highlights = await Highlights.findOne({ _id });
-                                                                            const highlight = highlights.highlights.filter( h => {
-                                                                              return (Number(h.start) === Number(start) && Number(h.stop) === Number(stop) && h.comment === comment && h.videoId === videoId);
-                                                                            });
-                                                                            res.send(highlight[0]);
-                                                                          });
-  app.get('/api/highlights/:_id', async (req, res) => {                     const { _id } = req.params;
-                                                                            const high = await Highlights.findById(_id);
-                                                                            res.send(high.highlights);
-                                                                          });
-  app.get('/api/highlights', async (req, res) => {                          const { id } = req.user;
-                                                                            let highlights = await Highlights.find({ _uid: id });
-                                                                            highlights = highlights.map( h => {
-                                                                              return { _id: h._id, title: h.title, description: h.description, videos: h.videos, _uid: h._uid };
-                                                                            });
-                                                                            res.send(highlights);
-                                                                          });
-  app.post('/api/highlights', async (req, res) => {                         const { title, description, videos } = req.body;
-                                                                            const { id } = req.user;
-                                                                            const newHighlights = new Highlights({ title, description, videos, _uid: id });
-                                                                            await newHighlights.save();
+    client.on('updateHighlight', async data => {
+      const { project, highlight, start, stop, comment } = data;
+      await Highlights.update(
+        { "_id": project, "highlights._id": highlight },
+        { $set: { "highlights.$.start" : start, "highlights.$.stop": stop, "highlights.$.comment": comment } });
+      io.emit('updateHighlight', data);
+    });
 
-                                                                            res.send(newHighlights);
-                                                                          });
+    client.on('submitHighlight', async data => {
+      const { project, video, start, stop, comment } = data;
+      const highlight = { start, stop, comment, video };
+      await Highlights.update({ _id: project }, { $push: { highlights: highlight } } );
+      const highlights = await Highlights.findOne({ _id: project });
+      res = highlights.highlights.filter( h => {
+        return (Number(h.start) === Number(start) && Number(h.stop) === Number(stop) && h.comment === comment && h.video === video);
+      });
+      io.emit('submitHighlight', res[0]);
+    });
+
+    client.on('search', async data => {
+      const { type, term, _id } = data;
+      regex = new RegExp("^" + term.toLowerCase(), "i");
+      switch (type) {
+        case "projects":
+          res = await Highlights.find({ title: regex });
+          break;
+        case "people":
+          const usersF = await User.find({ firstName: regex });
+          const usersL = await User.find({ lastName: regex });
+          const usersE = await User.find({ email: regex });
+          let users = usersF.concat(usersL, usersE);
+          res = _.uniqBy(users, 'email');
+          res = res.filter( u => { return u._id.toString() !== _id.toString()});
+          break;
+      }
+      io.emit('search', res);
+    });
+
+    client.on('remove', async data => {
+      const { _id, obj } = data;
+      switch (obj.type) {
+        case "folder":  await User.update({ _id }, { $pull: { folders: { _id: obj._id } } }); break;
+        case "group":   await User.update({ _id }, { $pull: { groups: { _id: obj._id } } }); break;
+        case "project":
+          if (obj._uid === _id) {
+            await Highlights.remove({ _id: obj._id });
+          } else {
+            await User.update({ _id }, { $pull: { access: { target: obj._id } } });
+            const project = await Highlights.findById(obj._id);
+            await User.update({ _id: project._uid }, { $pull: { access: { target: obj._id } } });
+          }
+          break;
+        case "user":
+          await User.update({ _id: obj._id }, { $pull: { friends: { _id } } });
+          await User.update({ _id }, { $pull: { friends: { _id: obj._id } } }); break;
+      }
+      io.emit('remove', obj._id);
+    });
+
+    client.on('post', async data => {
+      const { update, create, _id } = data;
+      if (update) {
+        switch (create.type) {
+          case "folder":
+            await User.update({ _id, "folders._id": create._id }, { $set: { "folders.$": create }});
+            res = { type: "folder", data: create };
+            break;
+          case "group":
+            await User.update({ _id, "groups._id": create._id }, { $set: { "groups.$": create }});
+            res = { type: "group", data: create };
+            break;
+          case "project":
+            await Highlights.update({ _id: create._id }, { $set: { title: create.title, description: create.description, videos: create.videos, privacy: create.privacy, parent: create.parent }});
+            res = { type: "project", data: create };
+            break;
+          case "user":
+            await User.update({ _id, "friends._id": create._id }, { $set: { "friends.$.parent": create.parent } });
+            res = { type: "user", data: create };
+            break;
+        }
+      } else {
+        switch (create.type) {
+          case "project":
+            const newProject = new Highlights({ title: create.title, description: create.description, videos: create.videos, parent: create.parent, privacy: create.privacy, _uid: _id });
+            await newProject.save();
+            res = { type: "project", data: newProject };
+            break;
+          case "folder":
+            const folder = { name: create.name, description: create.description, privacy: create.privacy, parent: create.parent };
+            await User.update({ _id }, { $push: { folders: folder } } );
+            user = await User.findById(_id);
+            const newFolder = user.folders.filter( f => { return f.name === create.name && f.parent === create.parent });
+            res = { type: "folder", data: newFolder[0] };
+            break;
+          case "group":
+            const group = { name: create.name, description: create.description, privacy: create.privacy, parent: create.parent };
+            await User.update({ _id }, { $push: { groups: group } } );
+            user = await User.findById(_id);
+            const newGroup = user.groups.filter( g => { return g.name === create.name && g.parent === create.parent });
+            res =  { type: "group", data: newGroup[0] };
+            break;
+        }
+      }
+      io.emit('post', res);
+    });
+  });
 };

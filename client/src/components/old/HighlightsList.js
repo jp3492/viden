@@ -15,7 +15,12 @@ class HighlightsList extends Component{
     let videoIndex;
     videos.map( (v, i) => { if (v.videoId === videoId) { videoIndex = i } });
     const info = (highlight.deleting === true) ? "deleting...": null;
-  
+    // return(
+    //    <li onDoubleClick={ () => this.renderEdit(admin, setAction) } onClick={ () => selectHighlight(highlight, i, videoIndex) } id={_id} key={i}>
+    //      <div className="collapsible-header">{comment}</div>
+    //      <div className="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
+    //    </li>
+    // )
     return(
       <tr onDoubleClick={ () => this.renderEdit(admin, setAction) } onClick={ () => selectHighlight(highlight, i, videoIndex) } id={_id} key={i} className="tableRow">
         <td className="col1">          {i}       </td>
@@ -51,9 +56,13 @@ class HighlightsList extends Component{
               </tr>
             </thead>
             <tbody id="tableHigh">
-              {list.map( (h, i) => this.renderHighlight(h, _id, i, admin))}
+
             </tbody>
+
           </table>
+          <ul className="col s12" id="collHigh">
+            {list.map( (h, i) => this.renderHighlight(h, _id, i, admin))}
+          </ul>
         </div>
       </div>
     );

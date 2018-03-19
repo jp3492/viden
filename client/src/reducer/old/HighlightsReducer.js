@@ -1,11 +1,19 @@
 import { FETCH_HIGHLIGHTS, SELECT_HIGHLIGHTS, SUBMIT_HIGHLIGHT, CHANGE_SEARCH, POST_HIGHLIGHTS, SUBMITTING_HIGHLIGHT, EDIT_HIGHLIGHT,
-DELETING_HIGHLIGHT, DELETE_HIGHLIGHT, UPDATE_HIGHLIGHTS, FETCH_HIGH } from '../actions/types';
+DELETING_HIGHLIGHT, DELETE_HIGHLIGHT, UPDATE_HIGHLIGHTS, FETCH_HIGH, CHANGE_FOLDER_OF_PROJECT } from '../actions/types';
 
 const initialState = { list: [], selectedHighlights: null, selectedHighlight: null, filteredHighlights: null }
 
 export default function ( state = initialState, action ){
   let highlights, selectedHighlights, filteredHighlights, selectedHighlight;
   switch (action.type) {
+    case CHANGE_FOLDER_OF_PROJECT:        const { pid, fid } = action.payload;
+                                          const list = state.list.map( p => {
+                                            if (p._id === pid) {
+                                              return { ...p, folder: fid };
+                                            }
+                                            return p;
+                                          });
+                                          return { ...state, list };
     case FETCH_HIGH:                      return { ...state, selectedHighlights: action.payload, filteredHighlights: action.payload.highlights };
     case UPDATE_HIGHLIGHTS:               const nwLi = state.list.map( li => {
                                             if (li._id === action.payload._id) {
@@ -64,7 +72,7 @@ export default function ( state = initialState, action ){
                                           });
                                           selectedHighlights = { ...state.selectedHighlights, highlights };
                                           return { ...state, selectedHighlights, filteredHighlights };
-    case FETCH_HIGHLIGHTS:                return { ...state, list: action.payload, selectedHighlights: null };
+    case FETCH_HIGHLIGHTS:                return { ...state, list: action.payload };
     case SELECT_HIGHLIGHTS:               return { ...state, selectedHighlights: action.payload, filteredHighlights: action.payload.highlights };
     case CHANGE_SEARCH:                   filteredHighlights = state.selectedHighlights.highlights.filter( h => {
                                             if (h.comment.includes(action.payload)) { return true }

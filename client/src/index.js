@@ -1,12 +1,12 @@
 import 'materialize-css/dist/css/materialize.min.css';
 import 'materialize-css';
-import React from 'react';
+import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware, compose } from 'redux';
 import ReduxThunk from 'redux-thunk';
 import { PersistGate } from 'redux-persist/integration/react';
-import { persistStore, persistReducer } from 'redux-persist';
+import { persistStore, persistReducer, autoRehydrate } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import hardSet from 'redux-persist/lib/stateReconciler/hardSet';
 import logger from 'redux-logger';
@@ -22,10 +22,35 @@ const store = createStore(persistedReducer, {}, applyMiddleware(ReduxThunk, logg
 const persistor = persistStore(store);
 // persistor.purge();
 // persistor.flush();
+
+export default class Preloader extends Component {
+  constructor() {
+    super()
+    this.state = { rehydrated: false }
+  }
+  componentWillMount(){
+    persistStore(this.props.store, {}, () => {
+      this.setState({ rehydrated: true });
+    })
+  }
+  render() {
+    if(!this.state.rehydrated){
+      return <div>Loading...</div>;
+    }
+    return (
+      <Provider store={store}>
+        <PersistGate loading={null} persistor={persistor}>
+          <App />
+        </PersistGate>
+      </Provider>
+    );
+  }
+}
+
 ReactDOM.render(
-    <Provider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
-        <App />
-      </PersistGate>
-    </Provider>,
+  <Provider store={store}>
+    <PersistGate loading={null} persistor={persistor}>
+      <App />
+    </PersistGate>
+  </Provider>,
     document.querySelector('#root'));

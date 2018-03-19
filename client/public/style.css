@@ -1,320 +1,361 @@
-/* Your styles here */
-html, body {
-  height: 100%;
-  overflow: hidden !important;
+html{
+  height: 100% !important;
+  background-color:  #f2f2f2 !important;
 }
-td, th {
-  padding: 0 !important;
+body {
+  height: 100% !important;
 }
-textarea {
-  resize: none;
-}
-table {
-  border-collapse: collapse !important;
-  table-layout: fixed !important;
-}
-#newBtn {
-  position: absolute;
-  bottom: 16px !important;
-}
-.fixed-action-btn ul {
-  left: auto !important;
-}
-.card-title, #editTitle {
-  font-size: 34px !important;
-  line-height: 40px !important;
-}
-#links {
-    background-color: #546e7a !important;
-}
-#highlightsList {
-  overflow-y: scroll !important;
-  overflow-x: hidden !important;
-  height: calc(100% - 96px - 75px) !important;
-  position: absolute !important;
-  top: 75px !important;
-  width: 33.3333333% !important;
-}
-.projectsItem:hover {
+i {
   cursor: pointer !important;
+  color: #585858 !important;
 }
-.projectsItem {
-  margin: 5px !important;
-  background-color: #546e7a !important;
+img {
+  padding-top: 10px !important;
 }
-#profile {
-border-bottom: 1px solid orange !important;
-}
-#projectsCollection {
-  padding: 10px !important;
-  margin-top: 0 !important;
-}
-#searchProj{
-  margin: 0 !important;
-  border: none !important;
-  height: 78px !important;
-  font-size: 28px !important;
-}
-#searchProjects{
-  padding-left: 20px !important;
-  padding-right: 20px !important;
-  margin: none !important;
-  height: 78px !important;
-  font-size: 24px !important;
-  box-shadow: 0 0 0 0 rgba(0,0,0,0.14), 0 0 0 0 rgba(0,0,0,0.12), 0 3px 3px -2px rgba(0,0,0,0.2);
-}
-#highlightsSearch{
-  position: absolute !important;
-  top: 0px !important;
-}
-#highSearch{
-  margin: 0 !important;
-  padding: 10px !important;
-  height: 75px !important;
-  font-size: 24px !important;
-}
-#pic {
-  height: 100% !important;
-  background-color: orange !important;
-}
-#name {
-  height: 100% !important;
-  background-color: blue !important;
-}
-#set {
-  height: 100% !important;
-  background-color: green !important;
-}
-#grid {
-  height: 100% !important;
-}
-.projOwner {
-  text-transform: none !important;
-}
-#left {
-  height: 100% !important;
-  background-color: grey !important;
-}
-#right {
-  height: 100% !important;
-}
-#leftTop {
-  height: 10% !important;
-  background-color: white !important;
-  box-shadow: 0 0 0 0 rgba(0,0,0,0.14), 0 0 0 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.2);
-}
-#leftBot {
-  height: 100px !important;
-  bottom: 0 !important;
-  background-color: orange !important;
-}
-#rightTop {
-  height: 10% !important;
-  background-color: grey !important;
-  box-shadow: 0 0 0 0 rgba(0,0,0,0.14), 0 0 0 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.2);
-}
-.noMargin {
-  border: none !important;
-}
-.menuItem {
-  border: none !important;
-  font-size: 24px !important;
-}
-.menuItem:hover {
-  background-color: orange !important;
-  color: white !important;
-}
-#searchField {
+.materialize-textarea {
   margin: 0 !important;
 }
-
-#drawer>div:nth-child(2){
-  width: auto !important;
-  top: 78px !important;
-  height: auto !important;
-  right: 15px !important;
-  padding: 20px !important;
+.btn {
+  background-color: orange !important;
 }
-#btnMenu {
-  z-index: 2000 !important;
+.localOff {
+  color: grey !important;
+}
+.localOn > i {
+  color: #5E7CE2 !important;
+}
+#playerLoad {
   position: fixed !important;
-  top: 15px !important;
-  right: 15px !important;
-  background-color: #546e7a !important;
-  height: 50px !important;
-  width: 60px !important;
-  padding: 0px !important;
-  padding-top: 7px !important;
-}
-.searchedMenu {
-  width: 800px !important;
-}
-.focusedSearch {
-  position: fixed !important;
-  width: 700px !important;
-  right: 95px !important;
-}
-.projects {
-  border-bottom:  1px solid #546e7a !important;
-}
-.card-title{
-  height: 60px !important;
-}
-.addingLink {
-  margin-top: 50px !important;
-}
-.ctrl {
-  font-size: 3rem !important;
-}
-.link {
-  border-bottom:  1px solid orange !important;
-  background-color: #546e7a !important;
-
-}
-#editTitle {
-  width: 80% !important;
-}
-.editLinks {
-  border-bottom:  1px solid orange !important;
-  background-color: #546e7a !important;
-}
-.links {
-  border: none !important;
-}
-#loadVideo{
-  position: absolute;
-  background-color: white;
-  opacity: 0.9;
-  z-index: 1000;
-  padding-left: 45%;
-  width: 100%;
-  height: 100%;
-}
-#controls {
-  position: absolute !important;
-  bottom: 0 !important;
-  width: 66.6666666667% !important;
-}
-#editorEdit{
-  position: absolute !important;
-  bottom: 0 !important;
-  width: 33.33333333% !important;
-}
-.projBtn {
-  line-height: 56px !important;
-  height: 56px !important;
-  margin-left: 5px !important;
-}
-.editProj {
-  line-height: 56px !important;
-}
-.create {
-  margin-top: 20px !important;
-}
-.addLink {
-  margin-top: 8px !important;
-}
-.collection {
-  margin: 0 !important;
-  border: none !important;
-}
-#searchBar {
-  width: 50%;
-  margin: 0 !important;
-  font-size: 1.5rem !important;
-}
-.col4 {
-  word-wrap: break-word !important;
-  width: 60% !important;
-}
-.col1 {
-  width: 5% !important;
-}
-.col2, .col3 {
-  width: 12.5% !important;
-  overflow: hidden !important;
-}
-.col6 {
-  width: 10% !important;
-}
-.infoCardFoot {
-  position: absolute !important;
-  bottom: 0px !important;
+  height: 100% !important;
   width: 100% !important;
+  z-index: 1000 !important;
+  background-color: white !important;
 }
-.infoCard {
+#playerFilter {
   margin: 0 !important;
-  position: fixed !important;
-  height: 100% !important;
-  width: 33.3333334% !important;
 }
-.videoBox {
-  position: absolute;
-  width: 66.6666666667%;
-  display: none;
-  height: calc(100% - 96px) !important;
-}
-iframe {
-  height: 100% !important;
-}
-#cover {
-  position: absolute;
-  width: 66.6666666667%;
-  background-color: green;
-  opacity: 0;
-  z-index: 1000;
-}
-#search {
+#playerFilter > .row > input {
   margin: 0 !important;
-  height: 2rem;
 }
-
-.collection-item:hover {
-  cursor: pointer !important;
+#playerFilter > .row > i {
+  line-height: 1.5 !important;
+  font-size: 36px !important;
 }
-.selected {
-  background-color: orange !important;
-  color: white !important;
-  border: none !important;
+#playerFilter > .row > div > i {
+  line-height: 1.5 !important;
+  font-size: 30px !important;
 }
-#commentText {
-  height: 96px !important;
+#playerFilter > .row {
+  margin: 0 !important;
 }
-.editTime {
+#playerList {
+  margin: 0 !important;
+}
+.selectedHighlight {
   background-color: orange !important;
   color: white !important;
 }
-#start, #stop {
-  height: 48px !important;
+#profile-body > ul > li > div > a {
+  line-height: 30px !important;
+}
+#profile-body > ul {
   margin: 0 !important;
-  line-height: 48px !important;
-  padding-left: 5px !important;
+  border-left: 0 !important;
+  border-right: 0 !important;
+  border-bottom: 0 !important;
 }
-#start:hover, #stop:hover{
-  cursor: pointer !important;
-}
-.smallBtn{
-  line-height: 48px !important;
-  height: 48px !important;
-  background-color: #546e7a !important;
-}
-.controlsBtn {
-  border-radius: 0 !important;
-  line-height: 97px !important;
-  height: 97px !important;
-  background-color: #546e7a !important;
-}
-
-.row {
-  margin-left: 0 !important;
-  margin-right: 0 !important;
+#profile-head > span {
+  padding-top: 10px !important;
   margin-bottom: 0 !important;
 }
-
-.row, .col {
+#profile-head > a {
+  padding-top: 10px !important;
+}
+#playerEdit > .row {
+  margin: 0 !important;
+}
+#playerEdit > textarea {
+  height: 77px;
+}
+#playerLeft {
+  position: absolute;
+  left: 0;
+  height: 100%;
   padding: 0 !important;
 }
+#playerRight {
+  right: 0;
+  position: absolute;
+  height: 100%;
+  padding: 0 !important;
+}
+#playerRight > .row {
+  margin: 0 !important;
+  height: 100% !important;
+}
+#playerRight > .row > div {
+  padding: 0 !important;
+  height: 100% !important;
+}
+#playerRight > .row > div > .card {
+  margin: 0 !important;
+  height: 100% !important;
+}
+#playerRight > .row > div > .card > .card-content {
+  padding: 0 !important;
+  height: calc(100% - 100px) !important;
+}
+#playerRight > .row > div > .card > .card-action {
+  padding: 0 !important;
+  height: 100px !important;
+    bottom: 0 !important;
+}
+#playerEdit {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  padding: 0 !important;
+  margin: 0 !important;
+  height: 100px !important;
+}
+#playerControls {
+  position: absolute;
+  bottom: 0;
+  height: 70px;
+  margin: 0 !important;
+  width: 100% !important;
+}
+.playList {
+  color: #5E7CE2 !important;
+}
+#playerControls > a > i {
+  line-height: 1;
+  font-size: 38px !important;
+}
 
-li:hover, tr:hover {
+.progress {
+  margin: 0 !important;
+  height: 10px !important;
+  width: 100% !important;
+  margin-bottom: 5px !important;
+}
+.player {
+  position: absolute !important;
+  top: 0;
+  left: 0;
+  height: calc(100% - 70px) !important;
+  width: 100% !important;
+}
+#root > div {
+  height: 100% !important;
+}
+#root > div > div {
+  height: 100% !important;
+}
+#body {
+  height: auto !important;
+  height: calc(100% - 76px) !important;
+  margin-bottom: 0 !important;
+  position: relative;
+}
+#bodyLeft > .card {
+  height: 100% !important;
+  margin-bottom: 0 !important;
+}
+#bodyLeft > .row > div > .card > .card-content {
+  padding: 0 !important;
+}
+#bodyLeft > .row > div {
+  padding: 0 !important;
+}
+#selectedUser, #selectedProject {
+  padding: 24px !important;
+
+}
+#search, #menu {
+  background-color: white !important;
+}
+#clearSearch {
+  height: 66px !important;
+}
+#clearSearch > a > i {
+  line-height: 66px !important;
+  font-size: 34px !important;
+  color: orange !important;
+}
+#clearSearch > .row > a {
+  left: -20px !important;
+}
+#clearSearch > .row {
+  height: 100% !important;
+  line-height: 80px !important;
+}
+#clearSearch > .row > a > i {
+  font-size: 30px !important;
+}
+#bodyLeft {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  height: 100% !important;
+}
+#notification {
+  box-shadow: none !important;
+}
+#bodyCreate {
+  padding: 0 !important;
+  padding-right: 10px !important;
+  margin-top: 10px !important;
+}
+#directory, #groups {
+  padding: 0 !important;
+  height: 100% !important;
+}
+#bodyRight {
+  border: none !important;
+  margin-top: 10px !important;
+}
+#bodyRight > li {
+  margin-bottom: 0px !important;
+  border: 1px solid #e0e0e0 !important;
+  box-shadow: 0 0px 0px 0 rgba(0,0,0,0.14), 0 0px 1px 0 rgba(0,0,0,0.12), 0 3px 0px -2px rgba(0,0,0,0.2) !important;
   cursor: pointer;
+}
+#dropdown2 {
+  top: 55px !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
+  padding-right: 0 !important;
+}
+#dropdown2 > li {
+  background-color: none !important;
+}
+#dropdown2 > li > a {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+#dropdown2 > li > a > i {
+  margin: 0 !important;
+}
+#directory, #groups {
+  margin-bottom: 0 !important;
+  margin-top: 10px !important;
+  max-height: calc(100% - 66px) !important;
+  background-color: white !important;
+  box-shadow: 0 0px 0px 0 rgba(0,0,0,0.14), 0 0px 0px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.2) !important;
+  border-right: none !important;
+}
+#root{
+  height: 100% !important;
+  bottom: 0 !important;
+}
+#header {
+  box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.2);
+  margin-bottom: 0 !important;
+  z-index: 20 !important;
+}
+#bodyLeft > .card {
+  border: none !important;
+}
+#menu {
+  padding: 0 !important;
+}
+#search {
+  padding-left: 0 !important;
+}
+#searchOption{
+  height: 66px !important;
+  line-height: 62px !important;
+}
+#searchField {
+  padding-left: 0 !important;
+}
+#searchField > input {
+  margin: 10px !important;
+  padding-left: 10px !important;
+  border: none !important;
+  border-radius: 5px;
+  background-color: #f2f2f2 !important;
+  color: black !important;
+}
+#searchField > input:focus {
+  border-bottom: none !important;
+  box-shadow: 0 0 0 0 red !important
+}
+.fixed-action-btn {
+  position: absolute !important;
+  bottom: auto !important;
+  right: auto !important;
+}
+.userCard {
+  height: 250px !important;
+}
+.userCard > .card-content {
+  height: 175px !important;
+}
+.userCard > .card-content > .card-title {
+  font-size: 18px !important;
+}
+.userCard > .card-content > ul {
+  border: none !important;
+}
+.userCard > .card-content > ul > li{
+  height: 50px !important;
+  min-height: 50px !important;
+  border: none !important;
+}
+.userCard > .card-content > ul > li > i{
+  top: 5px !important;
+  left: 0 !important;
+}
+.tabs {
+  height: 66px !important;
+}
+.tab {
+  line-height: 90px !important;
+}
+.tabs > li{
+  height: 66px !important;
+}
+.tabs > li > i {
+  font-size: 34px !important;
+}
+.modal {
+  width: 30% !important;
+  max-height: 90% !important;
+}
+.modal > .modal-footer {
+  padding: 24px !important;
+  height: auto !important;
+}
+.modal-content {
+  padding-bottom: 0 !important;
+}
+.modal-content > .row {
+  margin-bottom: 0 !important;
+}
+.collapsible-header {
+  border-bottom: 0 !important;
+}
+.collapsible-body {
+  padding-right: 0 !important;
+  padding-bottom: 0 !important;
+  padding-top: 0 !important;
+  padding-left: 10px !important;
+  border-bottom: 0 !important;
+}
+
+.tabSelected > i {
+  color: orange !important;
+}
+.folderSelected, .groupSelected, .projectSelected, .userSelected {
+  background-color: orange !important;
+  color: white !important;
+}
+.card {
+  cursor: pointer !important;
+  margin-top: 10px !important;
+}
+.invisible{
+  display: none !important;
 }

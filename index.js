@@ -6,14 +6,15 @@ const bodyParser = require('body-parser');
 const axios = require('axios');
 
 const keys = require('./config/keys');
+
 require('./models/User');
 require('./models/Highlights');
-// reqire mongoDb models here
 require('./services/passport');
 
 mongoose.connect(keys.mongoURI);
 
 const app = express();
+const io = require('socket.io')();
 
 app.use(bodyParser.json({limit: '1mb' }));
 app.use(
@@ -26,7 +27,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 require('./routes/authRoutes')(app);
-require('./routes/dataRoutes')(app);
+require('./routes/dataRoutes')(app, io);
 
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static('client/build'));
@@ -37,4 +38,6 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 const PORT = process.env.PORT || 5000;
+const port = 8000;
+io.listen(port);
 app.listen(PORT);

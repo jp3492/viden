@@ -1,65 +1,57 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
+import { bindActionCreators } from 'redux';
+import $ from 'jquery';
 
-import { setAction, changeComment } from '../actions';
+import { request } from '../actions';
+import { UPDATE, LOGOUT, CHANGE_PAGE } from '../actions/types';
 
 class Edit extends Component{
-  componentDidMount(){
-    const { setAction }             = this.props;
-    const save                      = document.getElementById("save");
-    const del                       = document.getElementById("delete");
-    if (save !== null && del !== null) {
-      save.addEventListener("click", () => {      setAction("save")   });
-      del.addEventListener("click", () => {       setAction("delete") });
-    }
-    if (save !== null) {
-      save.disabled = true;
-      del.disabled = true;
-    }
-  }
-  selectTime(isStart){
-    const start                     = document.getElementById("start");
-    const stop                      = document.getElementById("stop");
-    const { setAction, edit }       = this.props;
-    if (edit === "selected" || edit === "editStart" || edit === "editStop") {
-    if (isStart) {                  start.classList.toggle("editTime");
-                                    stop.classList.remove("editTime");
-                                    if (start.classList.contains("editTime")) { setAction("editStart") }
-                                    else                                      { setAction(null)        } }
-      else {                        stop.classList.toggle("editTime");
-                                    start.classList.remove("editTime");
-                                    if (stop.classList.contains("editTime"))  { setAction("editStop")  }
-                                    else                                      { setAction(null)        } } }
+  logout(dispatch){
+    dispatch({ type: LOGOUT });
+    window.location.href = "/api/logout";
   }
   render(){
-    const { start, stop, comment, changeComment, _uid, _id } = this.props;
-    if (_uid === _id) {
-      return (
-        <div className="col s12" id="editArea">
-          <div className="col s2">
-            <div className="col s12" id="start" onClick={ () => this.selectTime(true) }>    <b>{start}</b>    </div>
-            <div className="col s12" id="stop"  onClick={ () => this.selectTime(false)}>    <b>{stop}</b>      </div>
-          </div>
-          <div className="col s9">
-            <textarea value={comment} readOnly id="commentText" onChange={ e => changeComment(e.target.value) } className="col s12">
-            </textarea>
-          </div>
-          <div className="col s1">
-            <div>
-              <button id="save" className="col s12 btn smallBtn" >         <i className="material-icons ctrl">check</i>        </button>
-              <button id="delete" className="col s12 btn smallBtn" >       <i className="material-icons ctrl">close</i>      </button>
-            </div>
-          </div>
-        </div>
-      )
-    } else {
-      return null;
+    const { auth, history, dispatch, view, selectedGroup, selectedFolder, selectedUser, selectedProject, friends, projects, access, filteredProjects, action: { request } } = this.props;
+    const what = (view === "directory") ? "Folder": "Group";
+    const type = (selectedUser !== null) ? "user": (selectedProject !== null) ? "project": (selectedGroup !== null) ? "group": "folder";
+    const edit = <a onClick={ () => { dispatch({ type: UPDATE, payload: type }); $('.modal').modal('open'); } } className="btn">Edit</a>;
+    const viewing = <a onClick={ () => { dispatch({ type: CHANGE_PAGE, payload: "player" }); history.push('/player'); } } className="btn">View</a>;
+    let buttons = <a>Select Directory</a>;
+    if ((selectedFolder !== null && selectedProject === null) || (selectedGroup !== null && selectedUser === null)) {
+      buttons = <div>{edit}</div>;
+    } else if (selectedProject !== null) {
+      const selPro = projects.filter( p => { return p._id === selectedProject });
+      if (selPro.length !== 0) {
+        buttons = <div>{viewing}{edit}</div>
+      } else {
+        const requestedProject = access.filter( a => { return a.target === selectedProject });
+        if (requestedProject.length === 0) {
+          buttons = <a onClick={ () => { request(auth._id, "project", selectedProject, selectedProject) }} className="btn">Request</a>;
+        } else {
+          buttons = <a>Request sent</a>;
+        }
+      }
+    } else if (selectedUser !== null) {
+      const selFri = friends.filter( f => { return f._id === selectedUser });
+      buttons = (selFri[0].status === "confirmed") ? edit:
+                (selFri[0].status === "requested") ? <a>Confirm Request in Notifications</a>:
+                (selFri[0].status === "requestSent") ? <a>Request Sent</a>:
+                <a onClick={ () => { request(auth._id, "friend", null, selectedUser) }} className="btn">Request</a>;
     }
+    buttons = (view === "profile") ? <a onClick={ () => this.logout(dispatch)} className="btn">Logout</a>: buttons;
+    return (
+      <div id="edit" className="card-action right-align">
+        {buttons}
+      </div>
+    )
   }
 }
-
-const mapStateToProps = ({ auth: { _id }, highlights: { selectedHighlights: { _uid } }, controls: { start, stop, comment, edit }}) => {
-  return { _id, _uid, start, stop, comment, edit }
+const mapStateToProps = ({ auth, main: { view, selectedGroup, selectedFolder, selectedUser, selectedProject, friends, projects, filteredProjects, access } }) => {
+  return { auth, view, selectedGroup, selectedFolder, selectedUser, selectedProject, friends, projects, filteredProjects, access };
 }
-
-export default connect(mapStateToProps, { changeComment, setAction })(Edit);
+const mapDispatchToProps = (dispatch) => {
+  return { action: bindActionCreators({ request }, dispatch), dispatch };
+}
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Edit));
