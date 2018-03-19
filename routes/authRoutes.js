@@ -51,7 +51,6 @@ module.exports = app => {
       return { ...a._doc, firstName: reqUser.firstName, lastName: reqUser.lastName, name: reqTarget };
     }));
     user = { ...user, friends, access };
-    console.log(user);
     res.send(user);
   });
 };

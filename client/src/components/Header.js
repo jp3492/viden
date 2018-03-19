@@ -11,7 +11,7 @@ class Header extends Component{
       return <a href="/auth/google">Google OAuth</a>;
     }
     if (auth.approved === false) {
-      return <h4>Waiting for Admins approval</h4>
+      return <div><h4>Waiting for Admins approval</h4><a href="/auth/google">Switch Account</a></div>;
     }
     return(
       <div id="header" className="row">
