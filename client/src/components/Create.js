@@ -30,6 +30,7 @@ class Create extends Component{
   }
   submitCreate(update){
     const { action, create, auth } = this.props;
+    console.log("creating");
     action.create_update(update, create, auth._id);
     $('.modal').modal('close');
   }

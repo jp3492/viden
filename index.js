@@ -40,4 +40,6 @@ if (process.env.NODE_ENV === 'production') {
 const PORT = process.env.PORT || 5000;
 const port = 8000;
 io.listen(port);
+io.set('transports', ['xhr-polling']);
+io.set('polling duration', 10);
 app.listen(PORT);
