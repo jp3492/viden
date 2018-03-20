@@ -17,14 +17,6 @@ require('./services/passport');
 mongoose.connect(keys.mongoURI);
 
 const server = express()
-  .use(bodyParser.json({limit: '1mb' }))
-  .use(
-    cookieSession({
-        maxAge: 10 * 2 * 60 * 60 * 1000,
-        keys: [keys.cookieKey]
-    })
-  .use(passport.initialize())
-  .use(passport.session())
   .use((req, res) => res.sendFile(INDEX) )
   .listen(PORT, () => console.log(`Listening on ${ PORT }`));
 
