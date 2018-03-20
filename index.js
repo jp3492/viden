@@ -17,26 +17,26 @@ const app = express();
 const server = require('http').createServer(app);
 const io = require('socket.io').listen(server);
 
-app.use(bodyParser.json({limit: '1mb' }));
-app.use(
+server.use(bodyParser.json({limit: '1mb' }));
+server.use(
   cookieSession({
       maxAge: 10 * 2 * 60 * 60 * 1000,
       keys: [keys.cookieKey]
   })
 );
-app.use(passport.initialize());
-app.use(passport.session());
+server.use(passport.initialize());
+server.use(passport.session());
 
 if (process.env.NODE_ENV === 'production') {
-  app.use(express.static('client/build'));
+  server.use(express.static('client/build'));
   const path = require('path');
-  app.get('*', (req, res) => {
+  server.get('*', (req, res) => {
     res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
   });
 }
 
 io.set("transports", ["xhr-polling"]);
-io.set("polling duration", 10); 
+io.set("polling duration", 10);
 
 require('./routes/authRoutes')(app);
 require('./routes/dataRoutes')(app, io);
