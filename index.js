@@ -27,12 +27,7 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-if (process.env.NODE_ENV === 'development') {
-  app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
-};
-
 if (process.env.NODE_ENV === 'production') {
-  app.use(express.errorHandler());
   app.use(express.static('client/build'));
   const path = require('path');
   app.get('*', (req, res) => {
