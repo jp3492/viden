@@ -13,7 +13,7 @@ require('./services/passport');
 
 mongoose.connect(keys.mongoURI);
 
-const app = express.createServer(express.logger());
+const app = express();
 const io = require('socket.io').listen(app);
 
 app.configure( () => {
