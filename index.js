@@ -38,7 +38,10 @@ if (process.env.NODE_ENV === 'production') {
 const server = require('http').createServer(app);
 const io = require('socket.io').listen(server);
 
-server.listen(PORT);
+io.configure(function () {
+  io.set("transports", ["xhr-polling"]);
+  io.set("polling duration", 10);
+});
 
 io.on('connection', (socket) => {
   console.log('Client connected');
@@ -47,3 +50,5 @@ io.on('connection', (socket) => {
 
 require('./routes/authRoutes')(app);
 require('./routes/dataRoutes')(app, io);
+
+server.listen(PORT);
