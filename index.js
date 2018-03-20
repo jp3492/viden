@@ -4,7 +4,6 @@ const cookieSession = require('cookie-session');
 const passport = require('passport');
 const bodyParser = require('body-parser');
 const axios = require('axios');
-
 const keys = require('./config/keys');
 
 require('./models/User');
@@ -16,9 +15,9 @@ mongoose.connect(keys.mongoURI);
 const User = mongoose.model('users');
 const Highlights = mongoose.model('highlights');
 
-const http = require('http');
 const app = express();
-const socketIo = require('socket.io');
+const server = require('http').createServer(app);
+const io = require('socket.io')(server);
 
 const PORT = process.env.PORT || 5000;
 
@@ -39,11 +38,6 @@ if (process.env.NODE_ENV === 'production') {
     res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
   });
 }
-
-const server = http.createServer(app);
-const io = socketIo()(server);
-
-server.listen(PORT);
 
 io.on('connection', socket => {
   console.log("client connected");
@@ -100,7 +94,7 @@ app.get('/api/current_user', async (req, res) => {
   res.send(false);
 });
 
-
+app.listen(PORT);
 
 // require('./routes/authRoutes')(app);
 // require('./routes/dataRoutes')(app, io);
