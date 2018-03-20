@@ -35,6 +35,9 @@ if (process.env.NODE_ENV === 'production') {
   });
 }
 
+io.set("transports", ["xhr-polling"]);
+io.set("polling duration", 10); 
+
 require('./routes/authRoutes')(app);
 require('./routes/dataRoutes')(app, io);
 
