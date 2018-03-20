@@ -13,6 +13,9 @@ require('./services/passport');
 
 mongoose.connect(keys.mongoURI);
 
+const User = mongoose.model('users');
+const Highlights = mongoose.model('highlights');
+
 const http = require('http');
 const app = express();
 const socketIo = require('socket.io');
