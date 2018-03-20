@@ -4,7 +4,7 @@ const cookieSession = require('cookie-session');
 const passport = require('passport');
 const bodyParser = require('body-parser');
 const axios = require('axios');
-
+const path = require('path');
 const keys = require('./config/keys');
 
 const PORT = process.env.PORT || 5000;
