@@ -22,9 +22,6 @@ const socketIo = require('socket.io');
 
 const PORT = process.env.PORT || 5000;
 
-const server = http.createServer(app);
-const io = socketIo().listen(server);
-
 app.use(bodyParser.json({limit: '1mb' }));
 app.use(
   cookieSession({
@@ -34,6 +31,17 @@ app.use(
 );
 app.use(passport.initialize());
 app.use(passport.session());
+
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static('client/build'));
+  const path = require('path');
+  app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+  });
+}
+
+const server = http.createServer(app);
+const io = socketIo()(server);
 
 server.listen(PORT);
 
@@ -88,16 +96,11 @@ app.get('/api/current_user', async (req, res) => {
     return { ...a._doc, firstName: reqUser.firstName, lastName: reqUser.lastName, name: reqTarget };
   }));
   user = { ...user, friends, access };
-  res.send(user);
+  console.log(user);
+  res.send(false);
 });
 
-if (process.env.NODE_ENV === 'production') {
-  app.use(express.static('client/build'));
-  const path = require('path');
-  app.get('*', (req, res) => {
-    res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
-  });
-}
+
 
 // require('./routes/authRoutes')(app);
 // require('./routes/dataRoutes')(app, io);
