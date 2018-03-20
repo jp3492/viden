@@ -1,5 +1,5 @@
 import { PP, MUTE, SU, SD, VU, VD, CV, HP, HN, SET_PLAYER, SET_TIME, MARK, SUBMIT_HIGHLIGHT, CHANGE_COMMENT, SELECT_HIGHLIGHT, EDIT, UPDATE_HIGHLIGHT, LOGOUT,
-PROGRESS, CHANGE_TIME, DELETE_HIGHLIGHT, PLAY_LIST, INITIATE, CHANGE_SEARCH_TERM, COPY } from '../actions/types';
+PROGRESS, CHANGE_TIME, DELETE_HIGHLIGHT, PLAY_LIST, INITIATE, CHANGE_SEARCH_TERM, COPY, COPY_ADD } from '../actions/types';
 const initialState = {
   playing: true,
   playList: true,
@@ -21,10 +21,16 @@ const initialState = {
 }
 
 export default function ( state = initialState, action ){
-  let volume, speed, players, highlight, initiated, playing;
+  let volume, speed, players, highlight, initiated, playing, copy;
   switch (action.type) {
+    case COPY_ADD:
+      const inCopy = state.copy.highlights.filter( h => { return h._id === action.payload._id });
+      if (inCopy.length === 1) {
+        return { ...state, copy: { ...state.copy, highlights: state.copy.highlights.filter( h => { return h._id !== action.payload._id })}}
+      }
+      return { ...state, copy: { ...state.copy, highlights: [ ...state.copy.highlights, action.payload ] } };
     case COPY:
-      const copy = (state.copy === false) ? { title: "", description: "", parent: null, highlights: [], videos: [] } : false;
+      copy = (state.copy === false) ? { title: "", description: "", parent: null, highlights: [], videos: [] } : false;
       return { ...state, copy };
     case CHANGE_SEARCH_TERM: return state;
     case PLAY_LIST: return { ...state, playList: !state.playList };

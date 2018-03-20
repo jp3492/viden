@@ -43,3 +43,4 @@ export const DELETE_HIGHLIGHT = "delete_highlight";
 export const REQUEST = "request";
 export const ANSWER_REQUEST = "answer_request";
 export const COPY = "copy";
+export const COPY_ADD = "copy_add";
