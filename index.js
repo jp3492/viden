@@ -14,7 +14,8 @@ require('./services/passport');
 mongoose.connect(keys.mongoURI);
 
 const app = express();
-const io = require('socket.io').listen(app);
+const server = requier('http').createServer(app);
+const io = require('socket.io').listen(server);
 
 app.configure( () => {
   app.use(bodyParser.json({limit: '1mb' }));
@@ -51,5 +52,7 @@ require('./routes/dataRoutes')(app, io);
 
 const PORT = process.env.PORT || 5000;
 const port = 8000;
+const PORT_S = 4000;
 io.listen(port);
 app.listen(PORT);
+server.listen(PORT_S);
