@@ -14,7 +14,7 @@ require('./services/passport');
 mongoose.connect(keys.mongoURI);
 
 const app = express();
-const server = requier('http').createServer(app);
+const server = require('http').createServer(app);
 const io = require('socket.io').listen(server);
 
 app.configure( () => {
