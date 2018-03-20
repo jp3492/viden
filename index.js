@@ -52,7 +52,7 @@ io.on('connection', (socket) => {
 //   });
 // }
 
-require('./routes/authRoutes')(app);
-require('./routes/dataRoutes')(app, io);
+require('./routes/authRoutes')(server);
+require('./routes/dataRoutes')(server, io);
 //
 // server.listen(PORT);
