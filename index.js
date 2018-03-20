@@ -13,46 +13,36 @@ require('./services/passport');
 
 mongoose.connect(keys.mongoURI);
 
+const express = require('express');
 const app = express();
 const server = require('http').createServer(app);
 const io = require('socket.io').listen(server);
 
-app.configure( () => {
-  app.use(bodyParser.json({limit: '1mb' }));
-  app.use(
-    cookieSession({
-        maxAge: 10 * 2 * 60 * 60 * 1000,
-        keys: [keys.cookieKey]
-    })
-  );
-  app.use(passport.initialize());
-  app.use(passport.session());
-});
+app.use(bodyParser.json({limit: '1mb' }));
+app.use(
+  cookieSession({
+      maxAge: 10 * 2 * 60 * 60 * 1000,
+      keys: [keys.cookieKey]
+  })
+);
+app.use(passport.initialize());
+app.use(passport.session());
 
-app.configure('development', () => {
+if (process.env.NODE_ENV === 'development') {
   app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
-});
+};
 
-app.configure('production', () => {
+if (process.env.NODE_ENV === 'production') {
   app.use(express.errorHandler());
   app.use(express.static('client/build'));
   const path = require('path');
   app.get('*', (req, res) => {
     res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
   });
-});
-
-io.configure(function () {
-  io.set("transports", ["xhr-polling"]);
-  io.set("polling duration", 10);
-});
+}
 
 require('./routes/authRoutes')(app);
 require('./routes/dataRoutes')(app, io);
 
 const PORT = process.env.PORT || 5000;
-const port = 8000;
-const PORT_S = 4000;
-io.listen(port);
-app.listen(PORT);
-server.listen(PORT_S);
+server.listen(PORT);
