@@ -24,6 +24,23 @@ img {
 .localOn > i {
   color: #5E7CE2 !important;
 }
+.iconSelected {
+  color: orange !important;
+}
+#playerCopy  {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+#playerCopy > .s2 {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+#playerCopy > button {
+margin: 0 !important;
+padding: 0 !important;
+position: absolute !important;
+width: 100% !important;
+}
 #playerLoad {
   position: fixed !important;
   height: 100% !important;
@@ -50,6 +67,9 @@ img {
 }
 #playerList {
   margin: 0 !important;
+}
+#playerList > li {
+  padding-right: 0 !important;
 }
 .selectedHighlight {
   background-color: orange !important;

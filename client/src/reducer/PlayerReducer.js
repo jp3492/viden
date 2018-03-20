@@ -1,5 +1,5 @@
 import { PP, MUTE, SU, SD, VU, VD, CV, HP, HN, SET_PLAYER, SET_TIME, MARK, SUBMIT_HIGHLIGHT, CHANGE_COMMENT, SELECT_HIGHLIGHT, EDIT, UPDATE_HIGHLIGHT, LOGOUT,
-PROGRESS, CHANGE_TIME, DELETE_HIGHLIGHT, PLAY_LIST, INITIATE } from '../actions/types';
+PROGRESS, CHANGE_TIME, DELETE_HIGHLIGHT, PLAY_LIST, INITIATE, CHANGE_SEARCH_TERM, COPY } from '../actions/types';
 const initialState = {
   playing: true,
   playList: true,
@@ -16,12 +16,17 @@ const initialState = {
   highlight: 0,
   initiated: false,
   counter: 0,
-  edit: false
+  edit: false,
+  copy: false
 }
 
 export default function ( state = initialState, action ){
   let volume, speed, players, highlight, initiated, playing;
   switch (action.type) {
+    case COPY:
+      const copy = (state.copy === false) ? { title: "", description: "", parent: null, highlights: [], videos: [] } : false;
+      return { ...state, copy };
+    case CHANGE_SEARCH_TERM: return state;
     case PLAY_LIST: return { ...state, playList: !state.playList };
     case DELETE_HIGHLIGHT:
       highlight = (state.highlight === 0) ? 0: state.highlight-1;

@@ -2,14 +2,15 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 
-import { CHANGE_SEARCH_TERM } from '../actions/types';
+import { CHANGE_SEARCH_TERM, COPY } from '../actions/types';
 
 class PlayerFilter extends Component{
 
   render(){
-    const { history, dispatch, searchTerm, projects, selectedProject } = this.props;
+    const { history, dispatch, searchTerm, projects, selectedProject, copy } = this.props;
     const project = projects.filter( p => { return p._id === selectedProject });
     const { title, highlights, videos } = project[0];
+    const copyClass = (copy === false) ? "col s2 center-align material-icons": "col s2 center-align material-icons iconSelected";
     return (
       <div className="row" id="playerFilter">
         <div className="row">
@@ -24,15 +25,16 @@ class PlayerFilter extends Component{
           </div>
         </div>
         <div className="row">
-          <input className="col s10" onChange={ e => dispatch({type: CHANGE_SEARCH_TERM, payload: e.target.value }) } placeholder="Filter for..." />
+          <input className="col s8" onChange={ e => dispatch({type: CHANGE_SEARCH_TERM, payload: e.target.value }) } placeholder="Filter for..." />
           <i className="col s2 center-align material-icons">filter_list</i>
+          <i className={copyClass} onClick={ () => dispatch({ type: COPY })}>playlist_add</i>
         </div>
       </div>
     );
   }
 }
-const mapStateToProps = ({ main: { searchTerm, projects, selectedProject } }) => {
-  return { searchTerm, projects, selectedProject };
+const mapStateToProps = ({ main: { searchTerm, projects, selectedProject }, player: { copy } }) => {
+  return { searchTerm, projects, selectedProject, copy };
 }
 
 export default withRouter(connect(mapStateToProps)(PlayerFilter));

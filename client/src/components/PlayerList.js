@@ -12,13 +12,18 @@ class PlayerList extends Component{
   }
   renderHighlights(h, i){
     const { start, stop, comment, _id, video } = h;
-    const { dispatch, highlight, players, filteredHighlights } = this.props;
+    const { dispatch, highlight, players, filteredHighlights, copy } = this.props;
     const selectedHighlight = filteredHighlights[highlight];
     const className = (highlight === i) ? "collection-item selectedHighlight": "collection-item";
+    const copying = (copy !== false) ?
+      <a className="secondary-content"><p>
+        <input type="checkbox" className="filled-in" id={`check${i}`} defaultChecked="checked" />
+        <label htmlFor={`check${i}`}></label>
+      </p></a>: null;
     return <li
       onClick={ () => this.selectHighlight(video, i, start, stop, comment)}
       onDoubleClick={ () => dispatch({ type: EDIT, payload: { comment: selectedHighlight.comment, start: selectedHighlight.start, stop: selectedHighlight.stop } })}
-      id={i} className={className}>{start+" "+stop+" "+comment}</li>;
+      id={i} className={className}>{start+" "+stop+" "+comment}{copying}</li>;
   }
   render(){
     const { projects, selectedProject, filteredHighlights } = this.props;
@@ -32,8 +37,8 @@ class PlayerList extends Component{
   }
 }
 
-const mapStateToProps = ({ main: { selectedProject, projects, filteredHighlights }, player: { highlight, players, video } }) => {
-  return { selectedProject, projects, highlight, players, video, filteredHighlights };
+const mapStateToProps = ({ main: { selectedProject, projects, filteredHighlights }, player: { highlight, players, video, copy } }) => {
+  return { selectedProject, projects, highlight, players, video, filteredHighlights, copy };
 }
 
 export default connect(mapStateToProps)(PlayerList);

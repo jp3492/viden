@@ -14,8 +14,15 @@ class PlayerEdit extends Component{
     return "DbClick->Edit"
   }
   render(){
-    const { dispatch, comment, start, stop, filteredHighlights, highlight, selectedProject } = this.props;
+    const { dispatch, comment, start, stop, filteredHighlights, highlight, selectedProject, copy } = this.props;
     const high = filteredHighlights[highlight];
+    if (copy !== false) {
+      return (
+        <div id="playerCopy" className="col 12 row">
+          <button className="btn col s12">Save</button>
+        </div>
+      );
+    }
     return(
       <div id="playerEdit" className="col 12">
         <div className="row">
@@ -36,8 +43,8 @@ class PlayerEdit extends Component{
   }
 }
 
-const mapStateToProps = ({ player: { start, stop, comment, highlight, edit }, main: { filteredHighlights, selectedProject } }) => {
-  return { start, stop, comment, highlight, filteredHighlights, selectedProject, edit };
+const mapStateToProps = ({ player: { start, stop, comment, highlight, edit, copy }, main: { filteredHighlights, selectedProject } }) => {
+  return { start, stop, comment, highlight, filteredHighlights, selectedProject, edit, copy };
 }
 
 const mapDispatchToProps = (dispatch) => {

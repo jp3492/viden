@@ -42,3 +42,4 @@ export const CHANGE_TIME = "change_time";
 export const DELETE_HIGHLIGHT = "delete_highlight";
 export const REQUEST = "request";
 export const ANSWER_REQUEST = "answer_request";
+export const COPY = "copy";
