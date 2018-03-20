@@ -7,6 +7,8 @@ const axios = require('axios');
 
 const keys = require('./config/keys');
 
+const PORT = process.env.PORT || 5000;
+
 require('./models/User');
 require('./models/Highlights');
 require('./services/passport');
@@ -14,32 +16,37 @@ require('./services/passport');
 mongoose.connect(keys.mongoURI);
 
 const app = express();
-const server = require('http').createServer(app);
-const io = require('socket.io').listen(server);
 
-server.use(bodyParser.json({limit: '1mb' }));
-server.use(
+app.use(bodyParser.json({limit: '1mb' }));
+app.use(
   cookieSession({
       maxAge: 10 * 2 * 60 * 60 * 1000,
       keys: [keys.cookieKey]
   })
 );
-server.use(passport.initialize());
-server.use(passport.session());
+app.use(passport.initialize());
+app.use(passport.session());
 
 if (process.env.NODE_ENV === 'production') {
-  server.use(express.static('client/build'));
+  app.use(express.static('client/build'));
   const path = require('path');
-  server.get('*', (req, res) => {
+  app.get('*', (req, res) => {
     res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
   });
 }
 
+const server = require('http').createServer(app);
+const io = require('socket.io').listen(server);
+
+server.listen(PORT);
+
 io.set("transports", ["xhr-polling"]);
-io.set("polling duration", 10);
+io.set("polling duration", 10); 
+
+io.on('connection', (socket) => {
+  console.log('Client connected');
+  socket.on('disconnect', () => console.log('Client disconnected'));
+});
 
 require('./routes/authRoutes')(app);
 require('./routes/dataRoutes')(app, io);
-
-const PORT = process.env.PORT || 5000;
-server.listen(PORT);
