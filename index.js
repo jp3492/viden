@@ -28,13 +28,6 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-io.set("transports", ['websocket',
-              'flashsocket',
-              'htmlfile',
-              'xhr-polling',
-              'jsonp-polling',
-              'polling']);
-
 require('./routes/authRoutes')(app);
 require('./routes/dataRoutes')(app, io);
 
