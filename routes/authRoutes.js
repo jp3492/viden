@@ -23,9 +23,8 @@ module.exports = app => {
   });
 
   app.get('/api/current_user', async (req, res) => {
-    const { _id } = req.user;
-    let projects = await Highlights.find({ _uid: _id });
     let user = req.user._doc;
+    let projects = await Highlights.find({ _uid: user._id });
     let foreignProjects = user.access.filter( a => { return (a.type === "project" && a.status === "confirmed") });
     foreignProjects = await Promise.all(foreignProjects.map( async p => {
       const project = await Highlights.findById(p.target);
