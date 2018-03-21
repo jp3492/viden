@@ -5,6 +5,9 @@ const Highlights = mongoose.model('highlights');
 
 module.exports = (app, io) => {
   io.on('connection', (client) => {
+    io.set("transports", ["xhr-polling"]);
+    io.set("polling duration", 10);
+    console.log("connected and set");
     let res, regex;
     client.on('answerRequest', async data => {
       const { me, type, target, user, confirm } = data;
