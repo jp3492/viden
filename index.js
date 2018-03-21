@@ -1,4 +1,5 @@
 const express = require('express');
+const http = require('http');
 const mongoose = require('mongoose');
 const cookieSession = require('cookie-session');
 const passport = require('passport');
@@ -14,7 +15,8 @@ require('./services/passport');
 mongoose.connect(keys.mongoURI);
 
 const app = express();
-const io = require('socket.io')();
+const server = http.Server(app);
+const io = require('socket.io')(server);
 
 app.use(bodyParser.json({limit: '1mb' }));
 app.use(
@@ -26,9 +28,6 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-require('./routes/authRoutes')(app);
-require('./routes/dataRoutes')(app, io);
-
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static('client/build'));
   const path = require('path');
@@ -37,7 +36,8 @@ if (process.env.NODE_ENV === 'production') {
   });
 }
 
+require('./routes/authRoutes')(app);
+require('./routes/dataRoutes')(app, io);
+
 const PORT = process.env.PORT || 5000;
-const port = 8000;
-io.listen(port);
-app.listen(PORT);
+server.listen(PORT);
