@@ -11,7 +11,6 @@ module.exports = (app, io) => {
                   'xhr-polling',
                   'jsonp-polling',
                   'polling']);
-    io.set("polling duration", 10);
     console.log("connected and set");
     let res, regex;
     client.on('answerRequest', async data => {
