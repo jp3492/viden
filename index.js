@@ -28,6 +28,16 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
+io.set("transports", ['websocket',
+              'flashsocket',
+              'htmlfile',
+              'xhr-polling',
+              'jsonp-polling',
+              'polling']);
+
+require('./routes/authRoutes')(app);
+require('./routes/dataRoutes')(app, io);
+
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static('client/build'));
   const path = require('path');
@@ -36,8 +46,6 @@ if (process.env.NODE_ENV === 'production') {
   });
 }
 
-require('./routes/authRoutes')(app);
-require('./routes/dataRoutes')(app, io);
 
 const PORT = process.env.PORT || 5000;
 server.listen(PORT);
