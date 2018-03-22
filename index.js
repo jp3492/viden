@@ -17,6 +17,9 @@ const app = express();
 const server = require('http').createServer(app);
 const io = require('socket.io').listen(server);
 
+io.set('transports', ['xhr-polling']);
+io.set('polling duration', 10);
+
 app.use(bodyParser.json({limit: '1mb' }));
 app.use(
   cookieSession({
