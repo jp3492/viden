@@ -1,5 +1,4 @@
 const express = require('express');
-const http = require('http');
 const mongoose = require('mongoose');
 const cookieSession = require('cookie-session');
 const passport = require('passport');
@@ -15,7 +14,7 @@ require('./services/passport');
 mongoose.connect(keys.mongoURI);
 
 const app = express();
-const server = http.Server(app);
+const server = require('http').createServer(app);
 const io = require('socket.io')(server);
 
 app.use(bodyParser.json({limit: '1mb' }));
@@ -28,14 +27,6 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-io.set("transports", ['websocket',
-              'flashsocket',
-              'htmlfile',
-              'xhr-polling',
-              'jsonp-polling',
-              'polling']);
-io.set('polling duration', 10);
-
 require('./routes/authRoutes')(app);
 require('./routes/dataRoutes')(app, io);
 
@@ -46,7 +37,6 @@ if (process.env.NODE_ENV === 'production') {
     res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
   });
 }
-
 
 const PORT = process.env.PORT || 5000;
 server.listen(PORT);
