@@ -15,7 +15,7 @@ mongoose.connect(keys.mongoURI);
 
 const app = express();
 const server = require('http').createServer(app);
-const io = require('socket.io')(server);
+const io = require('socket.io').listen(server);
 
 app.use(bodyParser.json({limit: '1mb' }));
 app.use(
