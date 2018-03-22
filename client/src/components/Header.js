@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 
 import Menu from './Menu';
 import Search from './Search';
+import Create from './Create';
 
 class Header extends Component{
   render(){

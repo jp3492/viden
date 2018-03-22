@@ -17,7 +17,7 @@ class BodyRight extends Component{
     const { view, filteredProjects, filteredFriends } = this.props;
     const mapOver = (view === "groups") ? filteredFriends: filteredProjects;
     return(
-      <ul id="bodyRight" className="col s8 collection">
+      <ul id="bodyRight" className="col s9 collection">
         {mapOver.map( o => this.renderMap(view, o))}
       </ul>
     )

@@ -10,20 +10,20 @@ import CreateProject from './CreateProject';
 import CreateFolder from './CreateFolder';
 import CreateGroup from './CreateGroup';
 import UpdateUser from './UpdateUser';
+import CreateVolley from './CreateVolley';
 
 class Create extends Component{
   componentDidMount(){
-    $('.create-drop').dropdown({
-        inDuration: 300,
-        outDuration: 225,
-        constrainWidth: false, // Does not change width of dropdown to that of the activator
-        hover: false, // Activate on hover
-        gutter: 0, // Spacing from edge
-        belowOrigin: true, // Displays dropdown below the button
-        alignment: 'left', // Displays dropdown with edge aligned to the left of button
-        stopPropagation: true // Stops event propagation
-      }
-    );
+    $('.dropdown-button').dropdown({
+      inDuration: 300,
+      outDuration: 225,
+      constrainWidth: false, // Does not change width of dropdown to that of the activator
+      hover: false, // Activate on hover
+      gutter: 0, // Spacing from edge
+      belowOrigin: false, // Displays dropdown below the button
+      alignment: 'left', // Displays dropdown with edge aligned to the left of button
+      stopPropagation: false // Stops event propagation
+    });
     $(document).ready(function(){
       $('.modal').modal();
     });
@@ -41,7 +41,7 @@ class Create extends Component{
   }
   render(){
     const { dispatch, create, update } = this.props;
-    const createWhat = (create === null) ? null: (create.type === "project") ? <CreateProject />: (create.type === "folder") ? <CreateFolder />: (create.type === "group") ? <CreateGroup />: <UpdateUser />;
+    const createWhat = (create === null) ? null: (create.type === "dataVolley") ? <CreateVolley />: (create.type === "project") ? <CreateProject />: (create.type === "folder") ? <CreateFolder />: (create.type === "group") ? <CreateGroup />: <UpdateUser />;
     const del = (update === true) ?
       <a onClick={ () => this.deleteObj() }
         id="delete_btn" className="left btn waves-effect waves-green">Delete</a>: null;
@@ -49,12 +49,13 @@ class Create extends Component{
       <a onClick={ () => this.submitCreate(true) } id="create_btn" ref="#" className="btn waves-effect waves-green">Update</a>:
       <a onClick={ () => this.submitCreate(false) } id="create_btn" ref="#" className="btn waves-effect waves-green">Create</a>
     return(
-      <div className="col s1 row" id="bodyCreate">
-        <a className='dropdown-button create-drop btn col s12' href='#' data-activates='dropdown2'>New</a>
-        <ul id='dropdown2' className='dropdown-content col s12'>
-          <li><a onClick={ () => dispatch({ type: CREATE, payload: "project" }) } className="modal-trigger" href="#modal1">Project<i className="material-icons">insert_drive_file</i></a></li>
-          <li><a onClick={ () => dispatch({ type: CREATE, payload: "folder" }) } className="modal-trigger" href="#modal1">Folder<i className="material-icons">folder</i></a></li>
-          <li><a onClick={ () => dispatch({ type: CREATE, payload: "group" }) } className="modal-trigger" href="#modal1">Group<i className="material-icons">people</i></a></li>
+      <div className="col s2" id="bodyCreate">
+        <a id="createBtn" materialize="dropdown" className='dropdown-button btn folderBtn col s12' href='#' data-activates="createOptions">+</a>
+        <ul id="createOptions" className='dropdown-content'>
+          <li onClick={ () => dispatch({ type: CREATE, payload: "project" }) }><a  className="modal-trigger" href="#modal1">Project</a></li>
+          <li onClick={ () => dispatch({ type: CREATE, payload: "folder" }) }><a  className="modal-trigger" href="#modal1">Folder</a></li>
+          <li onClick={ () => dispatch({ type: CREATE, payload: "group" }) }><a  className="modal-trigger" href="#modal1">Group</a></li>
+          <li onClick={ () => dispatch({ type: CREATE, payload: "dataVolley" }) }><a  className="modal-trigger" href="#modal1">DataVolley</a></li>
         </ul>
         <div id="modal1" className="modal">
           {createWhat}

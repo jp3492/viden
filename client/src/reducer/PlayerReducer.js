@@ -1,5 +1,5 @@
 import { PP, MUTE, SU, SD, VU, VD, CV, HP, HN, SET_PLAYER, SET_TIME, MARK, SUBMIT_HIGHLIGHT, CHANGE_COMMENT, SELECT_HIGHLIGHT, EDIT, UPDATE_HIGHLIGHT, LOGOUT,
-PROGRESS, CHANGE_TIME, DELETE_HIGHLIGHT, PLAY_LIST, INITIATE, CHANGE_SEARCH_TERM, COPY, COPY_ADD } from '../actions/types';
+PROGRESS, CHANGE_TIME, DELETE_HIGHLIGHT, PLAY_LIST, INITIATE, CHANGE_SEARCH_TERM, COPY, COPY_ADD, COPY_CREATE, SELECT_PROJECT, CHANGE_PAGE, CREATE_POST } from '../actions/types';
 const initialState = {
   playing: true,
   playList: true,
@@ -23,6 +23,15 @@ const initialState = {
 export default function ( state = initialState, action ){
   let volume, speed, players, highlight, initiated, playing, copy;
   switch (action.type) {
+    case CREATE_POST: return { ...state, copy: false };
+    case CHANGE_SEARCH_TERM: return { ...state, highlight: 0 };
+    case CHANGE_PAGE:
+      if (action.payload === "home") {
+        return { ...initialState, players: {}};
+      }
+      return state;
+    case SELECT_PROJECT: return { ...initialState, players: {}};
+    case COPY_CREATE: return { ...state, playing: false };
     case COPY_ADD:
       const inCopy = state.copy.highlights.filter( h => { return h._id === action.payload._id });
       if (inCopy.length === 1) {
@@ -32,7 +41,6 @@ export default function ( state = initialState, action ){
     case COPY:
       copy = (state.copy === false) ? { title: "", description: "", parent: null, highlights: [], videos: [] } : false;
       return { ...state, copy };
-    case CHANGE_SEARCH_TERM: return state;
     case PLAY_LIST: return { ...state, playList: !state.playList };
     case DELETE_HIGHLIGHT:
       highlight = (state.highlight === 0) ? 0: state.highlight-1;
@@ -75,6 +83,6 @@ export default function ( state = initialState, action ){
     case SD:    return { ...state, speed: state.speed - 0.1 };
     case CV:    return { ...state, video: action.payload };
     case LOGOUT: return initialState;
-    default:    return initialState;
+    default:    return state;
   }
 }

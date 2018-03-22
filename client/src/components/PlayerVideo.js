@@ -5,9 +5,16 @@ import ReactPlayer from 'react-player';
 import { SET_PLAYER, PAUSE, PP, PROGRESS, SELECT_HIGHLIGHT, INITIATE } from '../actions/types';
 
 class PlayerVideo extends Component{
-  seeking(players, video, dispatch, start, stop, highlight, filteredHighlights, playList){
+  seeking(players, video, dispatch, start, stop, playList, count){
     const timer = setInterval( () => {
-      const time = Number(players[video].getCurrentTime().toFixed(1));
+      const { filteredHighlights, player: { highlight, counter } } = this.props;
+      let time;
+      if (players[video].getCurrentTime() === null || count !== counter) {
+        clearInterval(timer);
+      } else {
+        time = Number(players[video].getCurrentTime().toFixed(1));
+      }
+      console.log("current time:", time, "stop:", stop);
       if (Number(time) >= Number(stop)) {
         const { player: { edit, playing } } = this.props;
         if (edit === true) {
@@ -20,7 +27,13 @@ class PlayerVideo extends Component{
               dispatch({ type: PP });
             } else {
               const next = filteredHighlights[highlight+1];
-              dispatch({ type: SELECT_HIGHLIGHT, payload: { video: next.video, highlight: highlight+1}});
+              if (highlight+1 > filteredHighlights.length) {
+                dispatch({ type: PP });
+                clearInterval(timer);
+              } else {
+                console.log(time, stop);
+                dispatch({ type: SELECT_HIGHLIGHT, payload: { video: next.video, highlight: highlight+1 } });
+              }
             }
           } else {
             dispatch({ type: PP });
@@ -31,20 +44,29 @@ class PlayerVideo extends Component{
   }
   componentWillReceiveProps(nextProps){
     if (nextProps.player.counter !== this.props.player.counter) {
-      const { dispatch, filteredHighlights, player: { highlight, players, video, playList, edit }, site } = nextProps;
+      const { dispatch, filteredHighlights, player: { highlight, players, video, playList, edit, counter }, site } = nextProps;
+      if (filteredHighlights[highlight] === undefined) {
+        return null;
+      }
       const { start, stop } = filteredHighlights[highlight];
       players[video].seekTo(start);
       const seeking = setInterval( () => {
-        const time = Number(players[video].getCurrentTime().toFixed(1));
+        let time;
+        if (players[video].getCurrentTime() === null) {
+          clearInterval(seeking);
+        } else {
+          time = Number(players[video].getCurrentTime().toFixed(1));
+        }
         if (time === start) {
           clearInterval(seeking);
-          this.seeking(players, video, dispatch, start, stop, highlight, filteredHighlights, playList);
+          console.log("time before seeking:", time, "stop:", stop);
+          this.seeking(players, video, dispatch, start, stop, playList, counter);
         }
       }, 100);
     }
   }
   shouldComponentUpdate(nextProps, nextState){
-    if ((this.props.player.playing !== nextProps.player.playing) || (this.props.player.video !== nextProps.player.video)) { return true }
+    if ((this.props.player.playing !== nextProps.player.playing) || (this.props.player.video !== nextProps.player.video) || (this.props.filteredHighlights !== nextProps.filteredHighlights)) { return true }
     return false;
   }
   setPlayer(i, p){
@@ -64,7 +86,10 @@ class PlayerVideo extends Component{
             ref={ p => this.setPlayer(i, p) }/>;
   }
   render(){
-    const { selectedProject, projects } = this.props;
+    const { selectedProject, projects, site } = this.props;
+    if (site === "home") {
+      return null;
+    }
     const project = projects.filter( p => { return p._id === selectedProject });
     return(
       <div>

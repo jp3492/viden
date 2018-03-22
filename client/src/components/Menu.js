@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import { CHANGE_VIEW } from '../actions/types';
+import Create from './Create';
 
 class Menu extends Component{
   renderTab(tab){
@@ -19,11 +20,12 @@ class Menu extends Component{
     const tabs = [ [ "profile", "person" ], [ "groups", "people" ], [ "directory", "folder" ], [ "notifications", "notifications" ] ];
     return(
       <div id="menu" className="col s3">
-        <div className="col s12">
+        <div className="col s10">
           <ul className="tabs">
             {tabs.map( t => this.renderTab(t))}
           </ul>
         </div>
+        <Create />
       </div>
     )
   }

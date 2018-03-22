@@ -1,6 +1,6 @@
 import { FETCH_USER, CHANGE_VIEW, CHANGE_PAGE, CHANGE_SEARCH_LOCAL, CHANGE_SEARCH_OPTION, CHANGE_SEARCH_TERM, SELECT_USER, SELECT_PROJECT, SELECT_GROUP, SELECT_FOLDER,
 CREATE, CHANGE_CREATE_ATTRIBUTE, CLEAR_CREATE, CREATE_REMOVE_VIDEO, CREATE_POST, UPDATE, REMOVE, SUBMIT_HIGHLIGHT, UPDATE_HIGHLIGHT, LOGOUT,
-DELETE_HIGHLIGHT, REQUEST, ANSWER_REQUEST } from '../actions/types';
+DELETE_HIGHLIGHT, REQUEST, ANSWER_REQUEST, COPY_CREATE, COPY } from '../actions/types';
 import ReactPlayer from 'react-player';
 import $ from 'jquery';
 
@@ -192,8 +192,13 @@ export default function ( state = initialState, action ){
         return { ...state, create };
       }
       return state;
+    case COPY_CREATE:
+      return { ...state, create: action.payload, update: false };
+    case COPY:
+      return { ...state, create: { type: "project", title: "", parent: null, privacy: "public", description: "", videos: [] } };
     case CREATE:
       switch (action.payload) {
+        case "dataVolley":  create = { type: "dataVolley", title: "", parent: null, privacy: "public", description: "", videos: [], file: null }; break;
         case "folder":    create = { type: "folder", name: "", parent: null, privacy: "public", description: "" }; break;
         case "group":     create = { type: "group", name: "", parent: null, description: "", friends: [] }; break;
         case "project":   create = { type: "project", title: "", parent: null, privacy: "public", description: "", videos: [] }; break;
@@ -265,7 +270,7 @@ export default function ( state = initialState, action ){
       }
     case LOGOUT: return initialState;
     case CHANGE_PAGE:
-      return { ...state, site: action.payload, searchTerm: "" };
+      return { ...state, site: action.payload, searchTerm: "", create: null };
     case FETCH_USER:
       filteredFriends = (state.filteredFriends === []) ? action.payload.friends: state.filteredFriends;
       return { ...initialState, access: action.payload.access, projects: action.payload.projects, filteredProjects: action.payload.projects, friends: action.payload.friends, filteredFriends, folders: action.payload.folders, groups: action.payload.groups };

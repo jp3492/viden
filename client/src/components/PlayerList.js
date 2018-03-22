@@ -8,7 +8,7 @@ class PlayerList extends Component{
   selectHighlight(video, i, st, sp, com){
     const { dispatch, players, selectedProject, projects, filteredHighlights } = this.props;
     const { start, stop } = filteredHighlights[i];
-    dispatch({ type: SELECT_HIGHLIGHT, payload: { video: video, highlight: i, start: st, stop: sp, comment: com } })
+    dispatch({ type: SELECT_HIGHLIGHT, payload: { video, highlight: i } })
   }
   renderHighlights(h, i, videos){
     const { start, stop, comment, _id, video } = h;
@@ -26,7 +26,7 @@ class PlayerList extends Component{
       </p></a>: null;
     return <li
       onDoubleClick={ () => dispatch({ type: EDIT, payload: { comment: selectedHighlight.comment, start: selectedHighlight.start, stop: selectedHighlight.stop } })}
-      onClick={ () => this.selectHighlight(video, i, start, stop, comment)}
+      onClick={ () => this.selectHighlight(video, i)}
       id={i} className={className}>
       <a  >{start+" "+stop+" "+comment}</a>{copying}</li>;
   }

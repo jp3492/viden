@@ -1,10 +1,29 @@
 import axios from 'axios';
 import openSocket from 'socket.io-client';
 import { FETCH_USER, CREATE_UPDATE, CREATE_POST, CREATING_UPDATE, CREATING_POST, REMOVE, CHANGE_SEARCH_TERM, SUBMIT_HIGHLIGHT, UPDATE_HIGHLIGHT,
-DELETE_HIGHLIGHT, REQUEST, ANSWER_REQUEST } from './types';
+DELETE_HIGHLIGHT, REQUEST, ANSWER_REQUEST, COPY_CREATE } from './types';
 
 const socket = openSocket('http://localhost:8000');
 const ytKey = "AIzaSyDNjPIijQMBwx6H7ZO1bPZpv3bmL2ZhIq4";
+
+export const copyCreate = (copy, project) => async dispatch => {
+  const videos = copy.highlights.reduce((arr, highlight) => {
+    const { video, link } = highlight;
+    if (arr.includes(link)) {
+      return arr;
+    } else {
+      arr.push(link);
+      return arr;
+    }
+  }, []);
+  const highlights = copy.highlights.map( h => {
+    const video = videos.indexOf(h.link);
+    return { start: h.start, stop: h.stop, comment: h.comment, video, _opid: project, _ohid: h._id };
+  });
+
+  const create = { type: "project", title: "", parent: null, privacy: "public", description: "", videos, highlights }
+  dispatch({ type: COPY_CREATE, payload: create });
+}
 
 export const answerRequest = (me, type, target, user, confirm) => async dispatch =>{
   socket.emit('answerRequest', { me, type, target, user, confirm });
@@ -63,6 +82,7 @@ export const removeObj = (obj, _id) => async dispatch => {
 }
 
 export const create_update = (update, create, _id) => async dispatch => {
+  console.log(update, create, _id);
   socket.emit('post', { update, create, _id });
   socket.on('post', res => {
     dispatch({ type: CREATE_POST, payload: res });

@@ -22,6 +22,11 @@ const HighlightSchema = new Schema({
   stop: Number,
   comment: String,
   video: Number,
+  _opid: {
+    type: Schema.Types.ObjectId,
+    ref: 'users'
+  },
+  _ohid: String,
   comments: [CommentSchema]
 });
 

@@ -3,9 +3,8 @@ import { connect } from 'react-redux';
 import $ from 'jquery';
 
 import { CHANGE_CREATE_ATTRIBUTE, CLEAR_CREATE, CREATE_REMOVE_VIDEO } from '../actions/types';
-import CreateInvite from './CreateInvite';
 
-class CreateProject extends Component{
+class CreateVolley extends Component{
   componentDidMount(){
     const { dispatch } = this.props;
     $(document).ready(function() {
@@ -17,6 +16,15 @@ class CreateProject extends Component{
         dispatch({ type: CHANGE_CREATE_ATTRIBUTE, payload: { key: "privacy", value: $('#privacy').val() } });
       });
     });
+  }
+  readTextFile(file, dispatch) {
+    var reader = new FileReader();
+    reader.onload = function(event)
+    {
+        var contents = event.target.result;
+        dispatch({ type: CHANGE_CREATE_ATTRIBUTE, payload: { key: "file", value: contents }});
+    };
+    reader.readAsText(file);
   }
   renderFolder(f){
     const { name, _id } = f;
@@ -42,8 +50,8 @@ class CreateProject extends Component{
     }
     return <p>{title}</p>;
   }
-  renderLink(admin, dispatch, copy){
-    if (copy) {
+  renderLink(admin, dispatch, copy, create){
+    if (copy || create.videos.length > 0) {
       return null;
     }
     if (admin === true) {
@@ -94,33 +102,37 @@ class CreateProject extends Component{
       <div className="modal-content">
         <h4>{head}<a onClick={ () => dispatch({type: CLEAR_CREATE }) } href="#" className="secondary-content modal-close"><i className="material-icons">clear</i></a></h4>
         <div className="row">
-          <div className="col s7">
-            <div className="input-field col s12">
-              {this.renderName(create.title, dispatch, admin)}
-            </div>
-            <div className="input-field col s12">
-              {this.renderLink(admin, dispatch, copy)}
-            </div>
-            <div className="col s12">
-              <ul className="collection">
-                {create.videos.map( v => this.renderVideos(v, dispatch, admin, copy))}
-              </ul>
-            </div>
-            <div className="input-field col s12">
-              <select id="parent">
-                <option value="" disabled selected>Choose parent folder...</option>
-                {folders.map( f => this.renderFolder(f, dispatch))}
-              </select>
-            </div>
-            <div className="input-field col s12">
-              {this.renderDescription(create.description, dispatch, admin)}
-            </div>
-            <div className="input-field col s12">
-              {this.renderPrivacy(create.privacy, admin)}
-            </div>
+          <div className="input-field col s12">
+            {this.renderName(create.title, dispatch, admin)}
           </div>
-          <div className="col s5">
-            <CreateInvite />
+          <div className="input-field col s12">
+            {this.renderLink(admin, dispatch, copy, create)}
+          </div>
+          <div className="col s12">
+            <ul className="collection">
+              {create.videos.map( v => this.renderVideos(v, dispatch, admin, copy))}
+            </ul>
+          </div>
+          <div className="input-field col s12">
+            <select id="parent">
+              <option value="" disabled selected>Choose parent folder...</option>
+              {folders.map( f => this.renderFolder(f, dispatch))}
+            </select>
+          </div>
+          <div className="input-field col s12">
+            {this.renderDescription(create.description, dispatch, admin)}
+          </div>
+          <div className="input-field col s12">
+            {this.renderPrivacy(create.privacy, admin)}
+          </div>
+          <div className="file-field input-field col s12">
+            <div className="btn">
+              <span>File</span>
+              <input id="dv" type="file" accept=".dvw" onChange={ e => this.readTextFile(e.target.files[0], dispatch)} />
+            </div>
+            <div className="file-path-wrapper">
+              <input className="file-path validate" type="text" />
+            </div>
           </div>
         </div>
       </div>
@@ -131,4 +143,4 @@ const mapStateToProps = ({ auth, main: { create, folders } }) => {
   return { auth, create, folders };
 }
 
-export default connect(mapStateToProps)(CreateProject);
+export default connect(mapStateToProps)(CreateVolley);

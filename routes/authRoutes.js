@@ -23,14 +23,18 @@ module.exports = app => {
   });
 
   app.get('/api/current_user', async (req, res) => {
-    let user = req.user._doc;
+    if (req.user === undefined) {
+      res.send(false);
+    }
+    const { _id } = req.user;
+    let user = req.user;
     let projects = await Highlights.find({ _uid: user._id });
     let foreignProjects = user.access.filter( a => { return (a.type === "project" && a.status === "confirmed") });
     foreignProjects = await Promise.all(foreignProjects.map( async p => {
       const project = await Highlights.findById(p.target);
       return project;
     }));
-    foreignProjects = foreignProjects.filter( p => { return p._uid.toString() !== id.toString() });
+    foreignProjects = foreignProjects.filter( p => { return p._uid.toString() !== _id.toString() });
     projects = projects.concat(foreignProjects);
     user = { ...req.user._doc, projects };
     const friends = await Promise.all(user.friends.map( async f => {

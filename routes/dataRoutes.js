@@ -5,8 +5,6 @@ const Highlights = mongoose.model('highlights');
 
 module.exports = (app, io) => {
   io.on('connection', (client) => {
-    io.set('transports', ['xhr-polling']);
-    io.set('polling duration', 10);
     console.log("connected and set");
     let res, regex;
     client.on('answerRequest', async data => {
@@ -94,6 +92,7 @@ module.exports = (app, io) => {
 
     client.on('remove', async data => {
       const { _id, obj } = data;
+      console.log(data);
       switch (obj.type) {
         case "folder":  await User.update({ _id }, { $pull: { folders: { _id: obj._id } } }); break;
         case "group":   await User.update({ _id }, { $pull: { groups: { _id: obj._id } } }); break;
@@ -136,8 +135,61 @@ module.exports = (app, io) => {
         }
       } else {
         switch (create.type) {
+          case "dataVolley":
+            const dv = create.file;
+            let actions = dv.split("[3SCOUT]")[1].split("\n");
+            let teams = dv.split("[3TEAMS]")[1].split("[3MORE]")[0].split('\n'); teams.shift(); teams.pop();
+            let team_home = teams[0].split(';');
+            let team_visit = teams[1].split(';');
+            teams = { home: { id: team_home[0], name: team_home[1], coach: team_home[3], staff: team_home[4] },
+                      visit: { id: team_visit[0], name: team_visit[1], coach: team_visit[3], staff: team_visit[4] } }
+            actions.shift();
+            actions.pop();
+            scout = actions.map(stat => stat.split(';'));
+            let clean_scout = [];
+            let left_scout = [];
+            scout.map(stat => {
+              if (stat[0].includes('>') || stat[0].includes('$$') || stat[0].includes('z') || stat[0][1] === 'T' || stat[0].includes('c') || stat[0][1] === 'P' || stat[0].includes('s')) {
+                left_scout.push(stat) } else {
+                clean_scout.push(stat) } return null } );
+            function alterQuality(quality) {
+              switch (quality) { case "#": return 5; case "+": return 4; case "!": return 3; case "/": return 2; case "-": return 1; case "=": return 0; default: return null; } }
+            function alterHome(home){
+              if (home === "*") { return teams.home.name.substr(0,3).toLowerCase() }
+              return teams.visit.name.substr(0,3).toLowerCase(); }
+            let s_h = 0, s_v = 0, p_h = 0, p_v = 0, s = 1, reset = false;
+            function setScores(stat){
+              if (reset === true) { p_h = 0; p_v = 0; reset = false; }
+              if (stat.includes('*p')) { p_h++; const diff = p_h - p_v;
+                if (p_h >= 25 && diff > 1) { s_h++; s++; reset = true; }
+              } else if (stat.includes('ap')) { p_v++; const diff = p_v - p_h;
+                if (p_v >= 25 && diff > 1) { s_v++; s++; reset = true; } } }
+            scout = clean_scout.map(stat => {
+              setScores(stat[0]);
+              if (!stat[0].includes('p')) { let isHome, quality; isHome = alterHome(stat[0][0]); quality = alterQuality(stat[0][5]);
+                return { time: stat[12], home: isHome, player: Number(stat[0].substr(1,2)), action: stat[0][3], type: stat[0][4], quality, s, s_h, s_v, p_h, p_v }; }
+            });
+            scout.map((stat, i) => {
+              if (stat === undefined) { scout.splice(i, 1); } });
+            scout = scout.map((stat, i) => { stat.index = i+1; return stat; });
+            scout = scout.map( stat => {
+              const stop = Number(stat.time) + 15;
+              const comment = `${stat.home},${stat.player}:${stat.action},${stat.type}=${stat.quality}.${stat.s_h}:${stat.s_v},${stat.p_h}:${stat.p_v}`;
+              return { start: Number(stat.time), stop, comment, video: 0 }
+            })
+            const newHighlights = new Highlights({ type: "dataVolley", title: create.title, description: create.description, videos: create.videos, _uid: _id, privacy: create.privacy, parent: create.parent });
+            await newHighlights.save();
+            const id = newHighlights._id;
+            await Promise.all(scout.map( async (highlight) => {
+              await Highlights.update({ _id: id }, { $push: { highlights: highlight } } );
+            }));
+            const newVolley = await Highlights.findById(id);
+            res = { type: "dataVolley", data: newVolley };
+            console.log(res);
+            break;
           case "project":
-            const newProject = new Highlights({ title: create.title, description: create.description, videos: create.videos, parent: create.parent, privacy: create.privacy, _uid: _id });
+            const highlights = (create.highlights !== undefined) ? create.highlights: [];
+            const newProject = new Highlights({ highlights, title: create.title, description: create.description, videos: create.videos, parent: create.parent, privacy: create.privacy, _uid: _id });
             await newProject.save();
             res = { type: "project", data: newProject };
             break;

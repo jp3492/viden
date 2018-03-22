@@ -27,6 +27,19 @@ img {
 .iconSelected {
   color: orange !important;
 }
+#inviteFriends {
+  margin: 0 !important;
+  border-left: 1px solid grey !important;
+}
+ul {
+  border: none !important;
+  box-shadow: none !important;
+  margin: 0 !important;
+}
+.collapsible-header {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
 #playerCopy  {
   margin: 0 !important;
   padding: 0 !important;
@@ -67,6 +80,8 @@ width: 100% !important;
 }
 #playerList {
   margin: 0 !important;
+  overflow-y: scroll !important;
+  max-height: calc(100% - 200px) !important;
 }
 #playerList > li {
   padding-right: 0 !important;
@@ -179,15 +194,27 @@ width: 100% !important;
   margin-bottom: 0 !important;
   position: relative;
 }
-#bodyLeft > .card {
-  height: 100% !important;
+#bodyLeft > .row > div > .card {
   margin-bottom: 0 !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
 }
 #bodyLeft > .row > div > .card > .card-content {
   padding: 0 !important;
 }
+.collapsible-header, ul > li > .collapsible-header, li > .collapsible-header  {
+  background-color: transparent;
+}
+#bodyLeft > .row > div > .card > div > ul {
+  border: none !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
+}
 #bodyLeft > .row > div {
   padding: 0 !important;
+}
+#edit {
+  border: none !important;
 }
 #selectedUser, #selectedProject {
   padding: 24px !important;
@@ -219,13 +246,19 @@ width: 100% !important;
   padding-right: 0 !important;
   height: 100% !important;
 }
+#createBtn {
+  margin-top: 13px !important;
+  font-size: 24px !important;
+}
 #notification {
   box-shadow: none !important;
 }
 #bodyCreate {
   padding: 0 !important;
-  padding-right: 10px !important;
-  margin-top: 10px !important;
+  padding-right: 0 !important;
+  margin-top: 0 !important;
+  height: 66px !important;
+  line-height: 62px !important;
 }
 #directory, #groups {
   padding: 0 !important;
@@ -341,7 +374,7 @@ width: 100% !important;
   font-size: 34px !important;
 }
 .modal {
-  width: 30% !important;
+  width: 50% !important;
   max-height: 90% !important;
 }
 .modal > .modal-footer {
@@ -368,9 +401,15 @@ width: 100% !important;
 .tabSelected > i {
   color: orange !important;
 }
-.folderSelected, .groupSelected, .projectSelected, .userSelected {
+.projectSelected, .userSelected {
   background-color: orange !important;
   color: white !important;
+}
+.folderSelected, .groupSelected {
+  background-color: #e1e3e8 !important;
+}
+.folderSelected > i, .groupSelected > i {
+  color: orange !important;
 }
 .card {
   cursor: pointer !important;
