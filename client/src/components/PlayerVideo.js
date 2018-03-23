@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import ReactPlayer from 'react-player';
+import _ from 'lodash';
 
 import { SET_PLAYER, PAUSE, PP, PROGRESS, SELECT_HIGHLIGHT, INITIATE } from '../actions/types';
 
@@ -14,7 +15,6 @@ class PlayerVideo extends Component{
       } else {
         time = Number(players[video].getCurrentTime().toFixed(1));
       }
-      console.log("current time:", time, "stop:", stop);
       if (Number(time) >= Number(stop)) {
         const { player: { edit, playing } } = this.props;
         if (edit === true) {
@@ -31,7 +31,6 @@ class PlayerVideo extends Component{
                 dispatch({ type: PP });
                 clearInterval(timer);
               } else {
-                console.log(time, stop);
                 dispatch({ type: SELECT_HIGHLIGHT, payload: { video: next.video, highlight: highlight+1 } });
               }
             }
@@ -48,7 +47,8 @@ class PlayerVideo extends Component{
       if (filteredHighlights[highlight] === undefined) {
         return null;
       }
-      const { start, stop } = filteredHighlights[highlight];
+      const highlights = _.sortBy(filteredHighlights, "start");
+      const { start, stop } = highlights[highlight];
       players[video].seekTo(start);
       const seeking = setInterval( () => {
         let time;
@@ -59,7 +59,6 @@ class PlayerVideo extends Component{
         }
         if (time === start) {
           clearInterval(seeking);
-          console.log("time before seeking:", time, "stop:", stop);
           this.seeking(players, video, dispatch, start, stop, playList, counter);
         }
       }, 100);
@@ -86,21 +85,20 @@ class PlayerVideo extends Component{
             ref={ p => this.setPlayer(i, p) }/>;
   }
   render(){
-    const { selectedProject, projects, site } = this.props;
-    if (site === "home") {
-      return null;
-    }
+    const { selectedProject, projects, site, selectedProjects } = this.props;
+    if (site === "home") { return null }
     const project = projects.filter( p => { return p._id === selectedProject });
+    const videos = (selectedProjects === false) ? project[0].videos: selectedProjects.videos;
     return(
       <div>
-        {project[0].videos.map( (v, i) => this.renderVideo(v, i))}
+        {videos.map( (v, i) => this.renderVideo(v, i))}
       </div>
     )
   }
 }
 
-const mapStateToProps = ({ main: { selectedProject, projects, filteredHighlights, site }, player }) => {
-  return { selectedProject, projects, player, filteredHighlights, site };
+const mapStateToProps = ({ main: { selectedProject, projects, filteredHighlights, site, selectedProjects }, player }) => {
+  return { selectedProject, projects, player, filteredHighlights, site, selectedProjects };
 }
 
 export default connect(mapStateToProps)(PlayerVideo);

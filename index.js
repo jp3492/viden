@@ -14,11 +14,6 @@ require('./services/passport');
 mongoose.connect(keys.mongoURI);
 
 const app = express();
-const server = require('http').createServer(app);
-const io = require('socket.io').listen(server);
-
-io.set('transports', ['xhr-polling']);
-io.set('polling duration', 10);
 
 app.use(bodyParser.json({limit: '1mb' }));
 app.use(
@@ -31,7 +26,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 require('./routes/authRoutes')(app);
-require('./routes/dataRoutes')(app, io);
+require('./routes/dataRoutes')(app);
 
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static('client/build'));
@@ -42,4 +37,4 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 const PORT = process.env.PORT || 5000;
-server.listen(PORT);
+app.listen(PORT);

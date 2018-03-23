@@ -1,6 +1,6 @@
 import { FETCH_USER, CHANGE_VIEW, CHANGE_PAGE, CHANGE_SEARCH_LOCAL, CHANGE_SEARCH_OPTION, CHANGE_SEARCH_TERM, SELECT_USER, SELECT_PROJECT, SELECT_GROUP, SELECT_FOLDER,
 CREATE, CHANGE_CREATE_ATTRIBUTE, CLEAR_CREATE, CREATE_REMOVE_VIDEO, CREATE_POST, UPDATE, REMOVE, SUBMIT_HIGHLIGHT, UPDATE_HIGHLIGHT, LOGOUT,
-DELETE_HIGHLIGHT, REQUEST, ANSWER_REQUEST, COPY_CREATE, COPY } from '../actions/types';
+DELETE_HIGHLIGHT, REQUEST, ANSWER_REQUEST, COPY_CREATE, COPY, SELECT_MULTIPLE, ADD_PROJECT } from '../actions/types';
 import ReactPlayer from 'react-player';
 import $ from 'jquery';
 
@@ -23,13 +23,31 @@ const initialState = {
   selectedUser: null,
   selectedGroup: null,
   selectedFolder: null,
-  selectedProject: null
+  selectedProject: null,
+  selectedProjects: false
 }
 
 export default function ( state = initialState, action ){
   let filteredProjects, filteredFriends, selectedProject, selectedUser, create, videos, folder, group, project,
-   user, projects, folders, groups, friends, searchOption, searchTerm, view, filteredHighlights, highlights, access;
+   user, projects, folders, groups, friends, searchOption, searchTerm, view, filteredHighlights, highlights, access, video;
   switch (action.type) {
+    case ADD_PROJECT:
+      if (state.selectedProjects.projects.indexOf(action.payload) === -1) {
+        project = state.projects.filter( p => { return p._id === action.payload });
+        videos = project[0].videos.filter( v => { return state.selectedProjects.videos.indexOf(v) === -1 } );
+        videos = state.selectedProjects.videos.concat(videos);
+        highlights = project[0].highlights.map( h => {
+          video = videos.indexOf(project[0].videos[h.video]);
+          return { ...h, project: state.selectedProjects.projects.length, video }
+        });
+        highlights = state.selectedProjects.highlights.concat(highlights);
+        return { ...state, selectedProjects: { ...state.selectedProjects, projects: [ ...state.selectedProjects.projects, action.payload ], videos, highlights } };
+      } else {
+        return { ...state, selectedProjects: { ...state.selectedProjects, projects: state.selectedProjects.projects.filter( p => {  return p !== action.payload }) } };
+      }
+    case SELECT_MULTIPLE:
+      if (state.selectedProjects === false) { return { ...state, selectedProjects: { videos: [], projects: [], highlights: [] } } }
+      else { return { ...state, selectedProjects: false } }
     case ANSWER_REQUEST:
       const { me, target, confirm } = action.payload;
       if (action.payload.type === "friend") {
@@ -113,7 +131,7 @@ export default function ( state = initialState, action ){
         case "folder":
           folders = state.folders.filter( f => { return f._id !== state.create._id });
           return { ...state, folders, create: null, update: false, selectedFolder: null };
-        case "groups":
+        case "group":
           groups = state.groups.filter( g => { return g._id !== state.create._id });
           return { ...state, groups, create: null, update: false, selectedGroup: null };
         case "project":
@@ -232,7 +250,8 @@ export default function ( state = initialState, action ){
     case CHANGE_SEARCH_TERM:
       if (state.site === "player") {
         project = state.projects.filter( p => { return p._id === state.selectedProject });
-        filteredHighlights = project[0].highlights.filter( h => {
+        highlights = (state.selectedProjects === false) ? project[0].highlights: state.selectedProjects.highlights;
+        filteredHighlights = highlights.filter( h => {
           const comm = h.comment.toLowerCase();
           if (comm.includes(action.payload.toLowerCase())) {
             return true;
@@ -270,6 +289,12 @@ export default function ( state = initialState, action ){
       }
     case LOGOUT: return initialState;
     case CHANGE_PAGE:
+      if (state.selectedProjects !== false) {
+        if (action.payload === "home") {
+          return { ...state, site: action.payload, searchTerm: "", create: null, selectedProjects: false };
+        }
+        return { ...state, site: action.payload, searchTerm: "", create: null, filteredHighlights: state.selectedProjects.highlights };
+      }
       return { ...state, site: action.payload, searchTerm: "", create: null };
     case FETCH_USER:
       filteredFriends = (state.filteredFriends === []) ? action.payload.friends: state.filteredFriends;

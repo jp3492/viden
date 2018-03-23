@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import _ from 'lodash';
 
 import { submitHighlight, updateHighlight } from '../actions';
 import { PP, CV, MARK, SUBMIT_HIGHLIGHT, HP, HN, SAVE, PLAY_LIST } from '../actions/types';
@@ -31,15 +32,16 @@ class PlayerControls extends Component{
     players[video].seekTo(to);
   }
   render(){
-    const { dispatch, player: { video, players, highlight, progress, playList, playing }, projects, selectedProject, filteredHighlights } = this.props;
+    const { dispatch, player: { video, players, highlight, progress, playList, playing }, projects, selectedProject, filteredHighlights, selectedProjects } = this.props;
     const project = projects.filter( p => { return p._id === selectedProject });
-    const videos = project[0].videos.length - 1;
+    const videos = (selectedProjects === false) ? project[0].videos.length - 1: selectedProjects.videos.length - 1;
     const nextVideo = (video === videos) ? 0: video + 1;
     const prevVideo = (video === 0) ? videos: video - 1;
+    const highlights = _.sortBy(filteredHighlights, "start");
     const nextIndex = (highlight === (filteredHighlights.length - 1)) ? 0: highlight + 1;
     const prevIndex = (highlight === 0) ? filteredHighlights.length - 1: highlight - 1;
-    const nextHighlight = filteredHighlights[nextIndex];
-    const prevHighlight = filteredHighlights[prevIndex];
+    const nextHighlight = highlights[nextIndex];
+    const prevHighlight = highlights[prevIndex];
     const playingList = (playList === true) ? "material-icons playList": "material-icons";
     const play = (playing === false) ? "Play": "Pause";
     return(
@@ -66,8 +68,8 @@ class PlayerControls extends Component{
   }
 }
 
-const mapStateToProps = ({ player, main: { projects, selectedProject, filteredHighlights } }) => {
-  return { player, projects, selectedProject, filteredHighlights };
+const mapStateToProps = ({ player, main: { projects, selectedProject, filteredHighlights, selectedProjects } }) => {
+  return { player, projects, selectedProject, filteredHighlights, selectedProjects };
 }
 
 const mapDispatchToProps = (dispatch) => {

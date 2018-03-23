@@ -14,12 +14,14 @@ class BodyRight extends Component{
     return <Project title={title} description={description} parent={parent} id={_id} />;
   }
   render(){
-    const { view, filteredProjects, filteredFriends } = this.props;
+    const { dispatch, view, filteredProjects, filteredFriends } = this.props;
     const mapOver = (view === "groups") ? filteredFriends: filteredProjects;
     return(
-      <ul id="bodyRight" className="col s9 collection">
-        {mapOver.map( o => this.renderMap(view, o))}
-      </ul>
+      <div>
+        <ul id="bodyRight" className="col s9 collection">
+          {mapOver.map( o => this.renderMap(view, o))}
+        </ul>
+      </div>
     )
   }
 }

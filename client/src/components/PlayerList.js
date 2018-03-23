@@ -5,9 +5,8 @@ import _ from 'lodash';
 import { SELECT_HIGHLIGHT, EDIT, COPY_ADD } from '../actions/types';
 
 class PlayerList extends Component{
-  selectHighlight(video, i, st, sp, com){
-    const { dispatch, players, selectedProject, projects, filteredHighlights } = this.props;
-    const { start, stop } = filteredHighlights[i];
+  selectHighlight(video, i){
+    const { dispatch } = this.props;
     dispatch({ type: SELECT_HIGHLIGHT, payload: { video, highlight: i } })
   }
   renderHighlights(h, i, videos){
@@ -31,19 +30,20 @@ class PlayerList extends Component{
       <a  >{start+" "+stop+" "+comment}</a>{copying}</li>;
   }
   render(){
-    const { projects, selectedProject, filteredHighlights } = this.props;
+    const { projects, selectedProject, filteredHighlights, selectedProjects } = this.props;
     const project = projects.filter( p => { return p._id === selectedProject });
     const highlights = _.sortBy(filteredHighlights, "start");
+    const videos = (selectedProjects === false) ? project[0].videos: selectedProjects.videos;
     return(
       <ul id="playerList" className="collection">
-        {filteredHighlights.map( (h, i) => this.renderHighlights(h, i, project[0].videos))}
+        {highlights.map( (h, i) => this.renderHighlights(h, i, videos))}
       </ul>
     )
   }
 }
 
-const mapStateToProps = ({ main: { selectedProject, projects, filteredHighlights }, player: { highlight, players, video, copy } }) => {
-  return { selectedProject, projects, highlight, players, video, filteredHighlights, copy };
+const mapStateToProps = ({ main: { selectedProject, projects, filteredHighlights, selectedProjects }, player: { highlight, players, video, copy } }) => {
+  return { selectedProject, projects, highlight, players, video, filteredHighlights, copy, selectedProjects };
 }
 
 export default connect(mapStateToProps)(PlayerList);

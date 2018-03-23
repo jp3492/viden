@@ -5,6 +5,7 @@ import { CHANGE_PAGE } from '../actions/types';
 
 import BodyLeft from './BodyLeft';
 import BodyRight from './BodyRight';
+import BodyHeader from './BodyHeader';
 
 class Body extends Component{
   componentDidMount(){
@@ -19,6 +20,7 @@ class Body extends Component{
 
     return(
       <div id="body" className="row">
+        <BodyHeader />
         <BodyLeft />
         <BodyRight />
       </div>

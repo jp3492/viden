@@ -45,3 +45,5 @@ export const ANSWER_REQUEST = "answer_request";
 export const COPY = "copy";
 export const COPY_ADD = "copy_add";
 export const COPY_CREATE = "copy_create";
+export const SELECT_MULTIPLE = "select_multiple"
+export const ADD_PROJECT = "add_project";

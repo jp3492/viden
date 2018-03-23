@@ -36,7 +36,11 @@ class Create extends Component{
   }
   deleteObj(){
     const { action, create, auth } = this.props;
-    action.removeObj({ _id: create._id, type: create.type }, auth._id);
+    if (create.type === "project") {
+      action.removeObj({ _id: create._id, type: create.type, _uid: create._uid }, auth._id);
+    } else {
+      action.removeObj({ _id: create._id, type: create.type }, auth._id);
+    }
     $('.modal').modal('close');
   }
   render(){
@@ -49,8 +53,8 @@ class Create extends Component{
       <a onClick={ () => this.submitCreate(true) } id="create_btn" ref="#" className="btn waves-effect waves-green">Update</a>:
       <a onClick={ () => this.submitCreate(false) } id="create_btn" ref="#" className="btn waves-effect waves-green">Create</a>
     return(
-      <div className="col s2" id="bodyCreate">
-        <a id="createBtn" materialize="dropdown" className='dropdown-button btn folderBtn col s12' href='#' data-activates="createOptions">+</a>
+      <div className="col s6" id="bodyCreate">
+        <a  materialize="dropdown" className='dropdown-button btn folderBtn col s12' href='#' data-activates="createOptions">New</a>
         <ul id="createOptions" className='dropdown-content'>
           <li onClick={ () => dispatch({ type: CREATE, payload: "project" }) }><a  className="modal-trigger" href="#modal1">Project</a></li>
           <li onClick={ () => dispatch({ type: CREATE, payload: "folder" }) }><a  className="modal-trigger" href="#modal1">Folder</a></li>

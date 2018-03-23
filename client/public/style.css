@@ -27,6 +27,10 @@ img {
 .iconSelected {
   color: orange !important;
 }
+#bodyHeader {
+  height: 50px !important;
+  margin: 0 !important;
+}
 #inviteFriends {
   margin: 0 !important;
   border-left: 1px solid grey !important;

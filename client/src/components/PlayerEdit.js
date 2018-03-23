@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import $ from 'jquery';
+import _ from 'lodash';
 
 import { deleteHighlight, copyCreate } from '../actions';
 import { CHANGE_COMMENT, CHANGE_TIME } from '../actions/types';
@@ -19,7 +20,8 @@ class PlayerEdit extends Component{
   }
   render(){
     const { dispatch, comment, start, stop, filteredHighlights, highlight, selectedProject, copy, action: { copyCreate } } = this.props;
-    const high = filteredHighlights[highlight];
+    const highlights = _.sortBy(filteredHighlights, "start");
+    const high = highlights[highlight];
     $(document).ready(function(){
       $('.modal').modal();
     });
