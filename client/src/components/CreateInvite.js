@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import $ from 'jquery';
+
+import { INVITE } from '../actions/types';
+
 class CreateInvite extends Component{
   componentDidMount(){
     $('.dropdown-button').dropdown({
@@ -18,17 +21,32 @@ class CreateInvite extends Component{
     });
   }
   renderGroup(group, i){
-    const { groups, friends } = this.props;
+    const { dispatch, groups, friends, create: { invites } } = this.props;
     const groupFriends = friends.filter( f => { return f.parent === group._id });
     const groupGroups = groups.filter( g => { return g.parent === group._id });
-    console.log(groupGroups);
+    let allFriends = [];
+    const addFromGroup = group => {
+      const childGroups = groups.filter( g => { return g.parent === group });
+      const childFriends = friends.filter( f => { return f.parent === group });
+      childFriends.map( f => {
+        allFriends.push(f._id);
+      });
+      childGroups.map( g => addFromGroup(g._id));
+    }
+    addFromGroup(group._id);
+    const allFriendsInvited = allFriends.filter( f => { return invites.indexOf(f) !== -1 });
+    const checked = (allFriendsInvited.length === allFriends.length) ? true: false;
+    if (allFriends.length === 0) {
+      return null;
+    }
     return (
         <li>
           <div className="collapsible-header"><i className="material-icons">people</i>{group.name}
             <a id={`checkb${i}`} className="secondary-content" onClick={ e => {
               e.preventDefault();
-              console.log(group._id); } }><p>
-              <input type="checkbox" className="filled-in" id={`check${i}`} checked={true} />
+              dispatch({ type: INVITE, payload: { type: "group", _id: group._id, checked, allFriends }});
+               } }><p>
+              <input type="checkbox" className="filled-in" id={`check${i}`} checked={checked} />
               <label htmlFor={`check${i}`}></label>
             </p></a>
           </div>
@@ -42,25 +60,26 @@ class CreateInvite extends Component{
     );
   }
   renderFriend(f, i){
-    return <li className="collection-item"><i className="material-icons">person</i>{f.firstName}
+    const { dispatch, create: { invites } } = this.props;
+    const checked = (invites.indexOf(f._id) !== -1) ? true: false;
+    return (
+    <li className="collection-item"><i className="material-icons">person</i>{f.firstName}
       <a id={`checkb${i}`} className="secondary-content" onClick={ e => {
         e.preventDefault();
-        console.log(f._id); } }><p>
-        <input type="checkbox" className="filled-in" id={`check${i}`} checked={true} />
+        dispatch({ type: INVITE, payload: { type: "user", _id: f._id} }); } }><p>
+        <input type="checkbox" className="filled-in" id={`check${i}`} checked={checked} />
         <label htmlFor={`check${i}`}></label>
       </p></a>
-    </li>;
+    </li>);
   }
   render(){
     const { groups, friends, create } = this.props;
     const parentGroups = groups.filter( g => { return g.parent === null });
-    const grouplessFriends = friends.filter( f => { return f.parent === null });
     return(
       <div id="inviteFriends" className="row">
         <div className="col s12">Send Access Invite</div>
         <ul className="collapsible">
           {parentGroups.map( (g, i) => this.renderGroup(g, i))}
-          {grouplessFriends.map( (f, i) => this.renderFriend(f, i))}
         </ul>
       </div>
     )

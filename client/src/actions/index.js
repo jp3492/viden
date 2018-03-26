@@ -1,8 +1,13 @@
 import axios from 'axios';
 import { FETCH_USER, CREATE_UPDATE, CREATE_POST, CREATING_UPDATE, CREATING_POST, REMOVE, CHANGE_SEARCH_TERM, SUBMIT_HIGHLIGHT, UPDATE_HIGHLIGHT,
-DELETE_HIGHLIGHT, REQUEST, ANSWER_REQUEST, COPY_CREATE } from './types';
+DELETE_HIGHLIGHT, REQUEST, ANSWER_REQUEST, COPY_CREATE, DELETE_MULTIPLE } from './types';
 
 const ytKey = "AIzaSyDNjPIijQMBwx6H7ZO1bPZpv3bmL2ZhIq4";
+
+export const deleteMultiple = projects => async dispatch => {
+  await axios.post('/api/deleteMultiple', projects);
+  dispatch({ type: DELETE_MULTIPLE, payload: projects });
+}
 
 export const copyCreate = (copy, project) => async dispatch => {
   const videos = copy.highlights.reduce((arr, highlight) => {
@@ -57,8 +62,8 @@ export const removeObj = (obj, _id) => async dispatch => {
   dispatch({ type: REMOVE, payload: res.data });
 }
 
-export const create_update = (update, create, _id) => async dispatch => {
-  const res = await axios.post('/api/create_update', { update, create, _id });
+export const create_update = (update, create, _id, invites) => async dispatch => {
+  const res = await axios.post('/api/create_update', { update, create, _id, invites });
   dispatch({ type: CREATE_POST, payload: res.data });
 }
 

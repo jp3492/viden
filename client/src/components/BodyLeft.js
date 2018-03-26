@@ -11,7 +11,7 @@ import Edit from './Edit';
 
 class BodyLeft extends Component{
   render(){
-    const { view, selectedProject, selectedUser } = this.props;
+    const { view, selectedProject, selectedUser, selectedProjects } = this.props;
     let showThis;
     switch (view) {
       case "profile": showThis = <Profile />; break;
@@ -21,6 +21,11 @@ class BodyLeft extends Component{
     }
     if (selectedUser !== null) { showThis = <SelectedUser /> }
     if (selectedProject !== null) { showThis = <SelectedProject /> }
+    else if (selectedProjects !== false) {
+      if (selectedProjects.projects.length !== 0) {
+        showThis = <SelectedProject />
+      }
+    }
     return(
       <div id="bodyLeft" className="col s3">
         <div className="row">
@@ -37,8 +42,8 @@ class BodyLeft extends Component{
     )
   }
 }
-const mapStateToProps = ({ main: { view, selectedProject, selectedUser } }) => {
-  return { view, selectedProject, selectedUser };
+const mapStateToProps = ({ main: { view, selectedProject, selectedUser, selectedProjects } }) => {
+  return { view, selectedProject, selectedUser, selectedProjects };
 }
 
 export default connect(mapStateToProps)(BodyLeft);

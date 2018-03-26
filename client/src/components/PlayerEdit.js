@@ -19,22 +19,28 @@ class PlayerEdit extends Component{
     return "DbClick->Edit"
   }
   render(){
-    const { dispatch, comment, start, stop, filteredHighlights, highlight, selectedProject, copy, action: { copyCreate } } = this.props;
+    const { auth, dispatch, comment, start, stop, filteredHighlights, highlight, selectedProject, copy, filteredProjects, selectedProjects, action: { copyCreate } } = this.props;
+    const project = (selectedProjects === false) ? filteredProjects.filter( p => { return p._id === selectedProject }): (selectedProjects.projects.length === 1) ? filteredProjects.filter( p => { return p._id === selectedProjects.projects[0] }): null;
+    const admin = (project === null) ? false: (project[0]._uid === auth._id) ? true: false;
     const highlights = _.sortBy(filteredHighlights, "start");
     const high = highlights[highlight];
     $(document).ready(function(){
       $('.modal').modal();
     });
     if (copy !== false) {
+      console.log(copy);
       return (
         <div id="playerCopy" className="col 12 row">
-          <a onClick={ () => copyCreate(copy, selectedProject) } className="btn col s12  modal-trigger" href="#modalCopy">Save</a>
+          <a onClick={ () => { console.log(copy);copyCreate(copy, selectedProject); } } className="btn col s12  modal-trigger" href="#modalCopy">Save</a>
           <div id="modalCopy" className="modal">
             <CreateProject copy={true}/>
             <CreateCopySubmit />
           </div>
         </div>
       );
+    }
+    if (admin === false) {
+      return null;
     }
     return(
       <div id="playerEdit" className="col 12">
@@ -56,8 +62,8 @@ class PlayerEdit extends Component{
   }
 }
 
-const mapStateToProps = ({ auth, player: { start, stop, comment, highlight, edit, copy }, main: { filteredHighlights, selectedProject } }) => {
-  return { auth, start, stop, comment, highlight, filteredHighlights, selectedProject, edit, copy };
+const mapStateToProps = ({ auth, player: { start, stop, comment, highlight, edit, copy }, main: { filteredHighlights, selectedProject, filteredProjects, selectedProjects } }) => {
+  return { auth, start, stop, comment, highlight, filteredHighlights, selectedProject, edit, copy, filteredProjects, selectedProjects };
 }
 
 const mapDispatchToProps = (dispatch) => {

@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import $ from 'jquery';
 
 import { CHANGE_CREATE_ATTRIBUTE, CLEAR_CREATE, CREATE_REMOVE_VIDEO } from '../actions/types';
+import CreateInvite from './CreateInvite';
 
 class CreateVolley extends Component{
   componentDidMount(){
@@ -98,10 +99,11 @@ class CreateVolley extends Component{
     }
     const admin = (auth._id === create._uid) ? true: (create._id === undefined) ? true: false;
     const head = (copy === true) ? "Copy Project": "Create Project";
+    const invite = (admin) ? <CreateInvite />: null;
     return(
       <div className="modal-content">
         <h4>{head}<a onClick={ () => dispatch({type: CLEAR_CREATE }) } href="#" className="secondary-content modal-close"><i className="material-icons">clear</i></a></h4>
-        <div className="row">
+        <div className="row col s7">
           <div className="input-field col s12">
             {this.renderName(create.title, dispatch, admin)}
           </div>
@@ -134,6 +136,9 @@ class CreateVolley extends Component{
               <input className="file-path validate" type="text" />
             </div>
           </div>
+        </div>
+        <div className="col s5">
+          {invite}
         </div>
       </div>
     )

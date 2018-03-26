@@ -27,7 +27,7 @@ class PlayerList extends Component{
       onDoubleClick={ () => dispatch({ type: EDIT, payload: { comment: selectedHighlight.comment, start: selectedHighlight.start, stop: selectedHighlight.stop } })}
       onClick={ () => this.selectHighlight(video, i)}
       id={i} className={className}>
-      <a  >{start+" "+stop+" "+comment}</a>{copying}</li>;
+      <a  >{start+"  "+comment}</a>{copying}</li>;
   }
   render(){
     const { projects, selectedProject, filteredHighlights, selectedProjects } = this.props;

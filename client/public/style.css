@@ -12,6 +12,9 @@ i {
 img {
   padding-top: 10px !important;
 }
+a {
+  height: auto !important;
+}
 .materialize-textarea {
   margin: 0 !important;
 }
@@ -26,6 +29,9 @@ img {
 }
 .iconSelected {
   color: orange !important;
+}
+#bodyRight > li > a {
+
 }
 #bodyHeader {
   height: 50px !important;

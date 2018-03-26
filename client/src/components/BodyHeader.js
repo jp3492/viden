@@ -14,7 +14,7 @@ class BodyHeader extends Component{
           <Create />
         </div>
         <div className="col s7" id="bodySort">
-          Sort Column Headers here... (name, highlights, updated)
+          
         </div>
         <div className="col s2" id="selectMultiple">
           <button className="btn" onClick={ () => dispatch({ type: SELECT_MULTIPLE })}>MultiSelect</button>

@@ -1,6 +1,6 @@
 import { FETCH_USER, CHANGE_VIEW, CHANGE_PAGE, CHANGE_SEARCH_LOCAL, CHANGE_SEARCH_OPTION, CHANGE_SEARCH_TERM, SELECT_USER, SELECT_PROJECT, SELECT_GROUP, SELECT_FOLDER,
 CREATE, CHANGE_CREATE_ATTRIBUTE, CLEAR_CREATE, CREATE_REMOVE_VIDEO, CREATE_POST, UPDATE, REMOVE, SUBMIT_HIGHLIGHT, UPDATE_HIGHLIGHT, LOGOUT,
-DELETE_HIGHLIGHT, REQUEST, ANSWER_REQUEST, COPY_CREATE, COPY, SELECT_MULTIPLE, ADD_PROJECT } from '../actions/types';
+DELETE_HIGHLIGHT, REQUEST, ANSWER_REQUEST, COPY_CREATE, COPY, SELECT_MULTIPLE, ADD_PROJECT, INVITE, DELETE_MULTIPLE } from '../actions/types';
 import ReactPlayer from 'react-player';
 import $ from 'jquery';
 
@@ -29,8 +29,13 @@ const initialState = {
 
 export default function ( state = initialState, action ){
   let filteredProjects, filteredFriends, selectedProject, selectedUser, create, videos, folder, group, project,
-   user, projects, folders, groups, friends, searchOption, searchTerm, view, filteredHighlights, highlights, access, video;
+   user, projects, folders, groups, friends, searchOption, searchTerm, view, filteredHighlights, highlights, access, video, invites,
+   selectedProjects;
   switch (action.type) {
+    case DELETE_MULTIPLE:
+      projects = state.projects.filter( p => { return action.payload.indexOf(p._id) === -1});
+      access = state.access.filter( a => { return action.payload.indexOf(a.target) === -1});
+      return { ...state, projects, filteredProjects: projects, access, selectedProject: null, selectedProjects: false };
     case ADD_PROJECT:
       if (state.selectedProjects.projects.indexOf(action.payload) === -1) {
         project = state.projects.filter( p => { return p._id === action.payload });
@@ -142,17 +147,38 @@ export default function ( state = initialState, action ){
           friends = state.friends.filter( f => { return f._id !== state.create._id });
           return { ...state, friends, filteredFriends: friends, create: null, update: false, selectedUser: null };
       }
+    case INVITE:
+      if (action.payload.type === "user") {
+        if (state.create.invites.indexOf(action.payload._id) !== -1) {
+          invites = state.create.invites;
+          invites = invites.filter( i => { return i !== action.payload._id})
+          return { ...state, create: { ...state.create, invites } }
+        }
+        return { ...state, create: { ...state.create, invites: [ ...state.create.invites, action.payload._id ] } }
+      }
+      if (action.payload.checked === true) {
+        invites = state.create.invites.filter( i => { return action.payload.allFriends.indexOf(i) === -1 });
+        return { ...state, create: { ...state.create, invites } };
+      } else {
+        invites = state.create.invites;
+        action.payload.allFriends.map( f => {
+          if (invites.indexOf(f) === -1) {
+            invites.push(f);
+          }
+        });
+      }
+      return { ...state, create: { ...state.create, invites } };
     case UPDATE:
       switch (action.payload) {
         case "folder":
           folder = state.folders.filter( f => { return f._id === state.selectedFolder });
-          create = { ...folder[0], type: "folder" }; break;
+          create = { ...folder[0], type: "folder", invites: [] }; break;
         case "group":
           group = state.groups.filter( g => { return g._id === state.selectedGroup });
-          create = { ...group[0], type: "group" }; break;
+          create = { ...group[0], type: "group", invites: [] }; break;
         case "project":
           project = state.projects.filter( p => { return p._id === state.selectedProject });
-          create = { ...project[0], type: "project" }; break;
+          create = { ...project[0], type: "project", invites: [] }; break;
         case "user":
           user = state.friends.filter( f => { return f._id === state.selectedUser });
           create = { ...user[0], type: "user" }; break;
@@ -211,15 +237,15 @@ export default function ( state = initialState, action ){
       }
       return state;
     case COPY_CREATE:
-      return { ...state, create: action.payload, update: false };
+      return { ...state, create: { ...action.payload, invites: [] }, update: false };
     case COPY:
-      return { ...state, create: { type: "project", title: "", parent: null, privacy: "public", description: "", videos: [] } };
+      return { ...state, create: { type: "project", title: "", parent: null, privacy: "public", description: "", videos: [], invites: [] } };
     case CREATE:
       switch (action.payload) {
-        case "dataVolley":  create = { type: "dataVolley", title: "", parent: null, privacy: "public", description: "", videos: [], file: null }; break;
+        case "dataVolley":  create = { type: "dataVolley", title: "", parent: null, privacy: "public", description: "", videos: [], file: null, invites: [] }; break;
         case "folder":    create = { type: "folder", name: "", parent: null, privacy: "public", description: "" }; break;
         case "group":     create = { type: "group", name: "", parent: null, description: "", friends: [] }; break;
-        case "project":   create = { type: "project", title: "", parent: null, privacy: "public", description: "", videos: [] }; break;
+        case "project":   create = { type: "project", title: "", parent: null, privacy: "public", description: "", videos: [], invites: [] }; break;
         default:          create = null;
       }
       return { ...state, create, update: false };
@@ -231,12 +257,13 @@ export default function ( state = initialState, action ){
       return { ...state, selectedGroup: action.payload, filteredFriends };
     case SELECT_PROJECT:
       selectedProject = (action.payload === state.selectedProject) ? null: action.payload;
+      selectedProjects = (action.payload === null) ? false: state.selectedProjects;
       filteredHighlights = state.projects.filter( p => { return p._id === action.payload});
       if (filteredHighlights[0] === undefined) {
-        return { ...state, selectedProject };
+        return { ...state, selectedProject, selectedProjects };
       }
       filteredHighlights = (selectedProject !== null) ? filteredHighlights[0].highlights: [];
-      return { ...state, selectedProject, filteredHighlights };
+      return { ...state, selectedProject, filteredHighlights, selectedProjects };
     case SELECT_USER:
       selectedUser = (action.payload === state.selectedUser) ? null: action.payload;
       return { ...state, selectedUser };

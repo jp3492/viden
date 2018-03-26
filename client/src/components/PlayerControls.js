@@ -7,7 +7,10 @@ import { submitHighlight, updateHighlight } from '../actions';
 import { PP, CV, MARK, SUBMIT_HIGHLIGHT, HP, HN, SAVE, PLAY_LIST } from '../actions/types';
 
 class PlayerControls extends Component{
-  renderMark(){
+  renderMark(admin){
+    if (admin === false) {
+      return null;
+    }
     const { dispatch, player: { playing, start, stop, players, video, comment, edit, highlight }, action: { submitHighlight, updateHighlight }, selectedProject, filteredHighlights } = this.props;
     const selectedHighlight = (filteredHighlights.length !== 0) ? filteredHighlights[highlight]._id: null;
     if (edit === true) {
@@ -32,8 +35,9 @@ class PlayerControls extends Component{
     players[video].seekTo(to);
   }
   render(){
-    const { dispatch, player: { video, players, highlight, progress, playList, playing }, projects, selectedProject, filteredHighlights, selectedProjects } = this.props;
-    const project = projects.filter( p => { return p._id === selectedProject });
+    const { dispatch, auth, player: { video, players, highlight, progress, playList, playing }, filteredProjects, projects, selectedProject, filteredHighlights, selectedProjects } = this.props;
+    const project = (selectedProjects === false) ? filteredProjects.filter( p => { return p._id === selectedProject }): (selectedProjects.projects.length === 1) ? filteredProjects.filter( p => { return p._id === selectedProjects.projects[0] }): null;
+    const admin = (project === null) ? false: (project[0]._uid === auth._id) ? true: false;
     const videos = (selectedProjects === false) ? project[0].videos.length - 1: selectedProjects.videos.length - 1;
     const nextVideo = (video === videos) ? 0: video + 1;
     const prevVideo = (video === 0) ? videos: video - 1;
@@ -62,14 +66,14 @@ class PlayerControls extends Component{
         <a className="btn" onClick={ () => dispatch({ type: CV, payload: prevVideo })}>NV</a>
         <a className="btn" onClick={ () => dispatch({ type: HP, payload: { v: prevHighlight.video, h: prevIndex } })}>PH</a>
         <a className="btn" onClick={ () => dispatch({ type: HN, payload: { v: nextHighlight.video, h: nextIndex } })}>NH</a>
-        {this.renderMark()}
+        {this.renderMark(admin)}
       </div>
     )
   }
 }
 
-const mapStateToProps = ({ player, main: { projects, selectedProject, filteredHighlights, selectedProjects } }) => {
-  return { player, projects, selectedProject, filteredHighlights, selectedProjects };
+const mapStateToProps = ({ auth, player, main: { projects, selectedProject, filteredHighlights, selectedProjects, filteredProjects } }) => {
+  return { auth, player, projects, selectedProject, filteredHighlights, selectedProjects, filteredProjects };
 }
 
 const mapDispatchToProps = (dispatch) => {

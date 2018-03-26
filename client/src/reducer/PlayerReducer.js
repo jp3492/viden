@@ -39,7 +39,7 @@ export default function ( state = initialState, action ){
       }
       return { ...state, copy: { ...state.copy, highlights: [ ...state.copy.highlights, action.payload ] } };
     case COPY:
-      copy = (state.copy === false) ? { title: "", description: "", parent: null, highlights: [], videos: [] } : false;
+      copy = (state.copy === false) ? { title: "", description: "", parent: null, highlights: [], videos: [], invites: [] } : false;
       return { ...state, copy };
     case PLAY_LIST: return { ...state, playList: !state.playList };
     case DELETE_HIGHLIGHT:
@@ -55,7 +55,6 @@ export default function ( state = initialState, action ){
     case HN:    return { ...state, highlight: action.payload.h, video: action.payload.v, counter: state.counter + 1 };
     case SELECT_HIGHLIGHT: return { ...state, playing: true, highlight: action.payload.highlight, video: action.payload.video, counter: state.counter + 1, start: null, stop: null, comment: "", edit: false };
     case CHANGE_COMMENT:  return { ...state, comment: action.payload };
-    case "persist/REHYDRATE": return { ...state, rehydrate: false };
     case SUBMIT_HIGHLIGHT:  return { ...state, start: null, stop: null, comment: "" };
     case MARK:  return { ...state, [action.payload.what]: action.payload.time.toFixed(1) };
     case INITIATE:

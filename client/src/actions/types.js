@@ -47,3 +47,5 @@ export const COPY_ADD = "copy_add";
 export const COPY_CREATE = "copy_create";
 export const SELECT_MULTIPLE = "select_multiple"
 export const ADD_PROJECT = "add_project";
+export const INVITE = "invite";
+export const DELETE_MULTIPLE = "delete_multiple";

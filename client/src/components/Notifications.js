@@ -26,9 +26,12 @@ class Notifications extends Component{
   renderAccess(a){
     const { auth, action: { answerRequest } } = this.props;
     const { target, type, status, user, firstName, lastName, name } = a;
+    const text = (a.status === "requested") ?
+      firstName+" "+lastName+" wants to access your "+type+": "+name :
+      firstName+" "+lastName+" invited you to have access to his "+type+": "+name;
     return (
       <li className="collection-item">
-        {firstName+" "+lastName+" wants to access your "+type+": "+name}
+        {text}
         <a href="#" className="secondary-content"
           onClick={ () => answerRequest(auth._id, type, target, user, true )}><i className="material-icons">check</i></a>
         <a href="#" className="secondary-content"
@@ -39,7 +42,7 @@ class Notifications extends Component{
   render(){
     const { access, friends } = this.props;
     const requestedFriends = friends.filter( f => { return f.status === "requested" });
-    const requestedAccess = access.filter( a => { return a.status === "requested" });
+    const requestedAccess = access.filter( a => { return a.status === "requested" || a.status === "invited" });
     return(
       <ul id="notification" className="collapsible" data-collapsible="accordion">
         <li>

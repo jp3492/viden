@@ -90,6 +90,7 @@ class CreateProject extends Component{
     }
     const admin = (auth._id === create._uid) ? true: (create._id === undefined) ? true: false;
     const head = (copy === true) ? "Copy Project": "Create Project";
+    const invite = (admin) ? <CreateInvite />: null;
     return(
       <div className="modal-content">
         <h4>{head}<a onClick={ () => dispatch({type: CLEAR_CREATE }) } href="#" className="secondary-content modal-close"><i className="material-icons">clear</i></a></h4>
@@ -120,7 +121,7 @@ class CreateProject extends Component{
             </div>
           </div>
           <div className="col s5">
-            <CreateInvite />
+            {invite}
           </div>
         </div>
       </div>
