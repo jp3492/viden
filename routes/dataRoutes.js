@@ -15,7 +15,6 @@ module.exports = (app) => {
       }));
       await User.update({ _id: project._uid }, { $pull: { access: { target: p } } });
       if (admin === true) {
-        console.log(p);
         await Highlights.remove({ _id: p });
       }
     }));
@@ -24,6 +23,7 @@ module.exports = (app) => {
   });
   app.post('/api/answerRequest', async (req, res) => {
     const { me, type, target, user, confirm } = req.body;
+    console.log(req.body);
     if (type === "friend") {
       if (confirm === true) {
         await User.update({ _id: me, "friends._id": user }, { $set: { "friends.$.status": "confirmed" } });

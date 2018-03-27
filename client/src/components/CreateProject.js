@@ -120,7 +120,7 @@ class CreateProject extends Component{
               {this.renderPrivacy(create.privacy, admin)}
             </div>
           </div>
-          <div className="col s5">
+          <div className="col s5" id="invite">
             {invite}
           </div>
         </div>

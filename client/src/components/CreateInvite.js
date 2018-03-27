@@ -40,15 +40,15 @@ class CreateInvite extends Component{
       return null;
     }
     return (
-        <li>
+        <li className="collection-item">
           <div className="collapsible-header"><i className="material-icons">people</i>{group.name}
             <a id={`checkb${i}`} className="secondary-content" onClick={ e => {
               e.preventDefault();
               dispatch({ type: INVITE, payload: { type: "group", _id: group._id, checked, allFriends }});
-               } }><p>
+               } }>
               <input type="checkbox" className="filled-in" id={`check${i}`} checked={checked} />
               <label htmlFor={`check${i}`}></label>
-            </p></a>
+            </a>
           </div>
           <div className="collapsible-body">
             <ul className="collapsible">
@@ -66,10 +66,10 @@ class CreateInvite extends Component{
     <li className="collection-item"><i className="material-icons">person</i>{f.firstName}
       <a id={`checkb${i}`} className="secondary-content" onClick={ e => {
         e.preventDefault();
-        dispatch({ type: INVITE, payload: { type: "user", _id: f._id} }); } }><p>
+        dispatch({ type: INVITE, payload: { type: "user", _id: f._id} }); } }>
         <input type="checkbox" className="filled-in" id={`check${i}`} checked={checked} />
         <label htmlFor={`check${i}`}></label>
-      </p></a>
+      </a>
     </li>);
   }
   render(){

@@ -13,9 +13,6 @@ class BodyHeader extends Component{
         <div className="col s3">
           <Create />
         </div>
-        <div className="col s7" id="bodySort">
-          
-        </div>
         <div className="col s2" id="selectMultiple">
           <button className="btn" onClick={ () => dispatch({ type: SELECT_MULTIPLE })}>MultiSelect</button>
         </div>

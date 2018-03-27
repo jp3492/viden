@@ -1,11 +1,15 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import ReactPlayer from 'react-player';
+import { withRouter } from 'react-router-dom';
 import _ from 'lodash';
 
 import { SET_PLAYER, PAUSE, PP, PROGRESS, SELECT_HIGHLIGHT, INITIATE } from '../actions/types';
 
 class PlayerVideo extends Component{
+  componentDidMount(){
+    console.log(this.props.location.pathname);
+  }
   seeking(players, video, dispatch, start, stop, playList, count){
     const timer = setInterval( () => {
       const { filteredHighlights, player: { highlight, counter } } = this.props;
@@ -74,6 +78,14 @@ class PlayerVideo extends Component{
       dispatch({ type: SET_PLAYER, payload: { i, p } });
     }
   }
+  checkPlay(play){
+    document.activeElement.blur();
+    window.focus();
+    const { dispatch, player: { playing } } = this.props;
+    if ((play === true && playing === false) || (play === false && playing === true)) {
+      dispatch({ type: PP });
+    }
+  }
   renderVideo(v, i){
     const { dispatch, player: { playing, video, initiated } } = this.props;
     const p = (initiated === true) ? ((video === i) ? playing: false): true;
@@ -81,6 +93,8 @@ class PlayerVideo extends Component{
     return <ReactPlayer
             key={`player${i}`}
             url={v} playing={p}
+            onPlay={ () => this.checkPlay(true)}
+            onPause={ () => this.checkPlay(false)}
             onStart={ () => dispatch({type: INITIATE })} className={className}
             ref={ p => this.setPlayer(i, p) }/>;
   }
@@ -101,4 +115,4 @@ const mapStateToProps = ({ main: { selectedProject, projects, filteredHighlights
   return { selectedProject, projects, player, filteredHighlights, site, selectedProjects };
 }
 
-export default connect(mapStateToProps)(PlayerVideo);
+export default withRouter(connect(mapStateToProps)(PlayerVideo));

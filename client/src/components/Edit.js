@@ -8,6 +8,7 @@ import { request, deleteMultiple } from '../actions';
 import { UPDATE, LOGOUT, CHANGE_PAGE } from '../actions/types';
 
 class Edit extends Component{
+
   logout(dispatch){
     dispatch({ type: LOGOUT });
     window.location.href = "/api/logout";
@@ -19,7 +20,7 @@ class Edit extends Component{
     const type = (selectedUser !== null) ? "user": (selectedProject !== null) ? "project": (selectedGroup !== null) ? "group": "folder";
     const mulDel = (selectedProjects !== false) ? <a onClick={ () => deleteMultiple(selectedProjects.projects)} className="btn red">Delete All</a>: null;
     const edit = (selectedProjects !== false) ? null: <a onClick={ () => { dispatch({ type: UPDATE, payload: type }); $('.modal').modal('open'); } } className="btn-flat">Edit</a>;
-    const viewing = <a onClick={ () => { dispatch({ type: CHANGE_PAGE, payload: "player" }); history.push('/player'); } } className="btn">View</a>;
+    const viewing = <a onClick={ () => { dispatch({ type: CHANGE_PAGE, payload: "player" }); history.push(`/player/${selectedProject}`); } } className="btn">View</a>;
     let buttons;
     if ((selectedFolder !== null && selectedProject === null) || (selectedGroup !== null && selectedUser === null)) {
       buttons = <div>{edit}</div>;

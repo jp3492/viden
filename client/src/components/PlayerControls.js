@@ -7,21 +7,48 @@ import { submitHighlight, updateHighlight } from '../actions';
 import { PP, CV, MARK, SUBMIT_HIGHLIGHT, HP, HN, SAVE, PLAY_LIST } from '../actions/types';
 
 class PlayerControls extends Component{
-  renderMark(admin){
-    if (admin === false) {
-      return null;
+  componentDidMount(){
+    document.addEventListener('keyup', e => this.keyPress(e));
+  }
+  keyPress(e){
+    const { dispatch } = this.props;
+    if (e.keyCode === 37 && e.ctrlKey) { this.nextVideo(false) }
+    else if (e.keyCode === 39 && e.ctrlKey) { this.nextVideo(true) }
+    switch (e.keyCode) {
+      case 32: dispatch({ type: PP }); break;
+      case 38: this.nextHighlight(false); break;
+      case 40: this.nextHighlight(true); break;
+      case 37: this.forward(false); break;
+      case 39: this.forward(true); break;
+      case 13: this.mark(); break;
+      default: null; break;
     }
+  }
+  mark() {
     const { dispatch, player: { playing, start, stop, players, video, comment, edit, highlight }, action: { submitHighlight, updateHighlight }, selectedProject, filteredHighlights } = this.props;
-    const selectedHighlight = (filteredHighlights.length !== 0) ? filteredHighlights[highlight]._id: null;
-    if (edit === true) {
-      return <button className="btn" onClick={ () => updateHighlight(selectedProject, selectedHighlight, start, stop, comment)}>Save</button>
+    const highlights = _.sortBy(filteredHighlights, "start");
+    const selectedHighlight = (highlights.length !== 0) ? highlights[highlight]._id: null;
+    const act = (edit === true) ? 1: (start === null) ? 2: (stop === null) ? 3: 4;
+    switch (act) {
+      case 1:
+        updateHighlight(selectedProject, selectedHighlight, start, stop, comment)
+        break;
+      case 2:
+        dispatch({ type: MARK, payload: { what: "start", time: players[video].getCurrentTime() }})
+        break;
+      case 3:
+        dispatch({ type: MARK, payload: { what: "stop",time: players[video].getCurrentTime() }})
+        break;
+      case 4:
+        submitHighlight(selectedProject, video, start, stop, comment)
+        break;
     }
-    if (start === null) {
-      return <button className="btn" onClick={ () => dispatch({ type: MARK, payload: { what: "start", time: players[video].getCurrentTime() }})}>Start</button>
-    } else if (stop === null) {
-      return <button className="btn" onClick={ () => dispatch({ type: MARK, payload: { what: "stop",time: players[video].getCurrentTime() }})}>Stop</button>
-    }
-    return <button className="btn" onClick={ () => submitHighlight(selectedProject, video, start, stop, comment) }>Submit</button>
+  }
+  renderMark(admin){
+    if (admin === false) { return null }
+    const { player: { edit, start, stop } } = this.props;
+    const butt = (edit === true) ? "Save": (start === null) ? "Start": (stop === null) ? "Stop": "Submit";
+    return <button className="btn" onClick={() => this.mark()}>{butt}</button>;
   }
   jumpProgress(e){
     const { player: { video, players } } = this.props;
@@ -34,38 +61,41 @@ class PlayerControls extends Component{
     const to = (f === true) ? current + 1: (current !== 0) ? current - 1: 0;
     players[video].seekTo(to);
   }
+  nextVideo(next){
+    const { dispatch, player: { video }, selectedProjects, selectedProject, filteredProjects } = this.props;
+    const project = (selectedProjects === false) ? filteredProjects.filter( p => { return p._id === selectedProject }): (selectedProjects.projects.length === 1) ? filteredProjects.filter( p => { return p._id === selectedProjects.projects[0] }): null;
+    const videos = (selectedProjects === false) ? project[0].videos.length - 1: selectedProjects.videos.length - 1;
+    const vid = (next === true) ? (video === videos) ? 0: video + 1: (video === 0) ? videos: video - 1;
+    dispatch({ type: CV, payload: vid })
+  }
+  nextHighlight(next){
+    const { dispatch, filteredHighlights, player: { highlight } } = this.props;
+    const highlights = _.sortBy(filteredHighlights, "start");
+    const nextIndex = (next === true) ? (highlight === (filteredHighlights.length - 1)) ? 0: highlight + 1: (highlight === 0) ? filteredHighlights.length - 1: highlight - 1;
+    const nextHighlight = highlights[nextIndex];
+    const type = (next === true) ? HN: HP;
+    dispatch({ type, payload: { v: nextHighlight.video, h: nextIndex } });
+  }
   render(){
-    const { dispatch, auth, player: { video, players, highlight, progress, playList, playing }, filteredProjects, projects, selectedProject, filteredHighlights, selectedProjects } = this.props;
+    const { dispatch, auth, player: { progress, playList, playing }, selectedProjects, filteredProjects, selectedProject } = this.props;
     const project = (selectedProjects === false) ? filteredProjects.filter( p => { return p._id === selectedProject }): (selectedProjects.projects.length === 1) ? filteredProjects.filter( p => { return p._id === selectedProjects.projects[0] }): null;
     const admin = (project === null) ? false: (project[0]._uid === auth._id) ? true: false;
-    const videos = (selectedProjects === false) ? project[0].videos.length - 1: selectedProjects.videos.length - 1;
-    const nextVideo = (video === videos) ? 0: video + 1;
-    const prevVideo = (video === 0) ? videos: video - 1;
-    const highlights = _.sortBy(filteredHighlights, "start");
-    const nextIndex = (highlight === (filteredHighlights.length - 1)) ? 0: highlight + 1;
-    const prevIndex = (highlight === 0) ? filteredHighlights.length - 1: highlight - 1;
-    const nextHighlight = highlights[nextIndex];
-    const prevHighlight = highlights[prevIndex];
     const playingList = (playList === true) ? "material-icons playList": "material-icons";
     const play = (playing === false) ? "Play": "Pause";
     return(
       <div id="playerControls" className="row">
-        <div
-          id="progress"
-            onClick={ (e) => this.jumpProgress(e)}
-            className="progress">
-          <div
-            onClick={ (e) => this.jumpProgress(e)}
-            className="determinate" style={{width: `${progress}%`}}></div>
+        <div id="progress" onClick={ (e) => this.jumpProgress(e)} className="progress">
+          <div onClick={ (e) => this.jumpProgress(e)} className="determinate" style={{width: `${progress}%`}}>
+          </div>
         </div>
         <a id="playList" className="btn" onClick={ () => dispatch({ type: PLAY_LIST })}><i className={playingList}>list</i></a>
         <a className="btn" onClick={ () => dispatch({ type: PP })}>{play}</a>
         <a className="btn" onClick={ () => this.forward(false) }>Back</a>
         <a className="btn" onClick={ () => this.forward(true) }>Forw</a>
-        <a className="btn" onClick={ () => dispatch({ type: CV, payload: nextVideo })}>PV</a>
-        <a className="btn" onClick={ () => dispatch({ type: CV, payload: prevVideo })}>NV</a>
-        <a className="btn" onClick={ () => dispatch({ type: HP, payload: { v: prevHighlight.video, h: prevIndex } })}>PH</a>
-        <a className="btn" onClick={ () => dispatch({ type: HN, payload: { v: nextHighlight.video, h: nextIndex } })}>NH</a>
+        <a className="btn" onClick={ () => this.nextVideo(false) }>PV</a>
+        <a className="btn" onClick={ () => this.nextVideo(true) }>NV</a>
+        <a className="btn" onClick={ () => this.nextHighlight(false)}>PH</a>
+        <a className="btn" onClick={ () => this.nextHighlight(true)}>NH</a>
         {this.renderMark(admin)}
       </div>
     )

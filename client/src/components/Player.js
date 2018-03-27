@@ -9,7 +9,6 @@ import PlayerHeader from './PlayerHeader';
 import PlayerFilter from './PlayerFilter';
 
 class Player extends Component{
-
   render(){
     return(
       <div id="player" className="row">

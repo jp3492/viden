@@ -103,7 +103,8 @@ class CreateVolley extends Component{
     return(
       <div className="modal-content">
         <h4>{head}<a onClick={ () => dispatch({type: CLEAR_CREATE }) } href="#" className="secondary-content modal-close"><i className="material-icons">clear</i></a></h4>
-        <div className="row col s7">
+        <div className="row">
+        <div className="col s7">
           <div className="input-field col s12">
             {this.renderName(create.title, dispatch, admin)}
           </div>
@@ -139,6 +140,7 @@ class CreateVolley extends Component{
         </div>
         <div className="col s5">
           {invite}
+        </div>
         </div>
       </div>
     )

@@ -30,6 +30,13 @@ a {
 .iconSelected {
   color: orange !important;
 }
+#inviteFriends > div > ul > li > div > a > p{
+  margin: 0 !important;
+}
+.collapsible-header > a {
+  position: absolute !important;
+  right: 0 !important;
+}
 #bodyRight > li > a {
 
 }
@@ -91,7 +98,7 @@ width: 100% !important;
 #playerList {
   margin: 0 !important;
   overflow-y: scroll !important;
-  max-height: calc(100% - 200px) !important;
+  max-height: calc(100% - 100px) !important;
 }
 #playerList > li {
   padding-right: 0 !important;
@@ -120,7 +127,7 @@ width: 100% !important;
   margin: 0 !important;
 }
 #playerEdit > textarea {
-  height: 77px;
+  height: auto;
 }
 #playerLeft {
   position: absolute;
