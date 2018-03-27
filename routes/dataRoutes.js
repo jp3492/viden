@@ -41,6 +41,7 @@ module.exports = (app) => {
         await User.update({ _id: user }, { $pull: { access: { target, user: me } } });
       }
     }
+    console.log();
     res.send(req.body);
   });
   app.post('/api/request', async (req, res) => {
@@ -128,10 +129,12 @@ module.exports = (app) => {
         case "user":    await User.update({ _id, "friends._id": create._id }, { $set: { "friends.$.parent": create.parent } });
                         response = { type: "user", data: create }; break;
       }
-      await Promise.all(invites.map( async i => {
-        await User.update({ _id: i }, { $push: { access: { target: create._id, user: _id, type: create.type, status: "invited" } } });
-        await User.update({ _id }, { $push: { access: { target: create._id, user: i, type: create.type, status: "inviteSent" } } });
-      }));
+      if (create.type === "project") {
+        await Promise.all(invites.map( async i => {
+          await User.update({ _id: i }, { $push: { access: { target: create._id, user: _id, type: create.type, status: "invited" } } });
+          await User.update({ _id }, { $push: { access: { target: create._id, user: i, type: create.type, status: "inviteSent" } } });
+        }));
+      }
     } else {
       switch (create.type) {
         case "dataVolley":  const dv = create.file;
