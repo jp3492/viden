@@ -178,6 +178,9 @@ width: 100% !important;
   margin: 0 !important;
   width: 100% !important;
 }
+.row {
+  margin: 0 !important;
+}
 .playList {
   color: #5E7CE2 !important;
 }
@@ -290,6 +293,10 @@ width: 100% !important;
   border: 1px solid #e0e0e0 !important;
   box-shadow: 0 0px 0px 0 rgba(0,0,0,0.14), 0 0px 1px 0 rgba(0,0,0,0.12), 0 3px 0px -2px rgba(0,0,0,0.2) !important;
   cursor: pointer;
+}
+#bodyRight > li > div > div > .col {
+  height: 22px !important;
+  padding: 0 !important;
 }
 #dropdown2 {
   top: 55px !important;

@@ -116,7 +116,6 @@ module.exports = (app) => {
   });
   app.post('/api/create_update', async (req, res) => {
     const { update, create, _id, invites } = req.body;
-    console.log(req.body);
     let response;
     if (update) {
       switch (create.type) {

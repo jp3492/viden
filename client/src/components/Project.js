@@ -9,7 +9,7 @@ class Project extends Component{
     const className = (selectedProject === id) ? "collection-item projectSelected row": "collection-item row";
     const checked = (selectedProjects === false) ? false: (selectedProjects.projects.indexOf(id) !== -1) ? true: false;
     const multiple = (selectedProjects !== false) ?
-      <a id={`checkbox${id}`} className="secondary-content" onClick={ e => {
+      <a id={`checkbox${id}`} onClick={ e => {
         e.preventDefault();
         dispatch({ type: ADD_PROJECT, payload: id });
          } }>
@@ -18,7 +18,7 @@ class Project extends Component{
       </a>: null;
     return(
       <li className={className} onClick={ () => dispatch({ type: SELECT_PROJECT, payload: id })}>
-        <div><div className="col s3">{title}</div><div className="col s3">{description}</div>{multiple}</div>
+        <div><div className="col s3 row"><div className="col s1">{multiple}</div>{title}</div><div className="col s3">{description}</div></div>
       </li>
     )
   }
