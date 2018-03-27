@@ -34,7 +34,6 @@ module.exports = app => {
       const project = await Highlights.findById(p.target);
       return project;
     }));
-    console.log(foreignProjects);
     foreignProjects = foreignProjects.filter( p => { return p._uid.toString() !== _id.toString() });
     projects = projects.concat(foreignProjects);
     user = { ...req.user._doc, projects };

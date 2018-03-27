@@ -51,8 +51,7 @@ class PlayerVideo extends Component{
       if (filteredHighlights[highlight] === undefined) {
         return null;
       }
-      const highlights = _.sortBy(filteredHighlights, "start");
-      const { start, stop } = highlights[highlight];
+      const { start, stop } = filteredHighlights[highlight];
       players[video].seekTo(start);
       const seeking = setInterval( () => {
         let time;
@@ -93,9 +92,12 @@ class PlayerVideo extends Component{
     return <ReactPlayer
             key={`player${i}`}
             url={v} playing={p}
+            progressInterval={100}
+            className={className}
+            onProgress={ time => dispatch({ type: PROGRESS, payload: time })}
             onPlay={ () => this.checkPlay(true)}
             onPause={ () => this.checkPlay(false)}
-            onStart={ () => dispatch({type: INITIATE })} className={className}
+            onStart={ () => dispatch({type: INITIATE })}
             ref={ p => this.setPlayer(i, p) }/>;
   }
   render(){

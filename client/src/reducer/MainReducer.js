@@ -3,6 +3,7 @@ CREATE, CHANGE_CREATE_ATTRIBUTE, CLEAR_CREATE, CREATE_REMOVE_VIDEO, CREATE_POST,
 DELETE_HIGHLIGHT, REQUEST, ANSWER_REQUEST, COPY_CREATE, COPY, SELECT_MULTIPLE, ADD_PROJECT, INVITE, DELETE_MULTIPLE } from '../actions/types';
 import ReactPlayer from 'react-player';
 import $ from 'jquery';
+import _ from 'lodash';
 
 const initialState = {
   site: "home",
@@ -263,6 +264,7 @@ export default function ( state = initialState, action ){
         return { ...state, selectedProject, selectedProjects };
       }
       filteredHighlights = (selectedProject !== null) ? filteredHighlights[0].highlights: [];
+      filteredHighlights = _.sortBy(filteredHighlights, "start");
       return { ...state, selectedProject, filteredHighlights, selectedProjects };
     case SELECT_USER:
       selectedUser = (action.payload === state.selectedUser) ? null: action.payload;
@@ -285,6 +287,7 @@ export default function ( state = initialState, action ){
           }
           return false;
         });
+        filteredHighlights = _.sortBy(filteredHighlights, "start");
         return { ...state, searchTerm: action.payload, filteredHighlights };
       }
       if (state.searchLocal) {

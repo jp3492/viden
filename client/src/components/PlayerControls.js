@@ -48,7 +48,7 @@ class PlayerControls extends Component{
     if (admin === false) { return null }
     const { player: { edit, start, stop } } = this.props;
     const butt = (edit === true) ? "Save": (start === null) ? "Start": (stop === null) ? "Stop": "Submit";
-    return <button className="btn" onClick={() => this.mark()}>{butt}</button>;
+    return <a className="btn col s2 controlBtn" onClick={() => this.mark()}>{butt}</a>;
   }
   jumpProgress(e){
     const { player: { video, players } } = this.props;
@@ -88,15 +88,19 @@ class PlayerControls extends Component{
           <div onClick={ (e) => this.jumpProgress(e)} className="determinate" style={{width: `${progress}%`}}>
           </div>
         </div>
-        <a id="playList" className="btn" onClick={ () => dispatch({ type: PLAY_LIST })}><i className={playingList}>list</i></a>
-        <a className="btn" onClick={ () => dispatch({ type: PP })}>{play}</a>
-        <a className="btn" onClick={ () => this.forward(false) }>Back</a>
-        <a className="btn" onClick={ () => this.forward(true) }>Forw</a>
-        <a className="btn" onClick={ () => this.nextVideo(false) }>PV</a>
-        <a className="btn" onClick={ () => this.nextVideo(true) }>NV</a>
-        <a className="btn" onClick={ () => this.nextHighlight(false)}>PH</a>
-        <a className="btn" onClick={ () => this.nextHighlight(true)}>NH</a>
-        {this.renderMark(admin)}
+        <a id="playList" className="btn col s1 controlBtn" onClick={ () => dispatch({ type: PLAY_LIST })}><i className={playingList}>list</i></a>
+        <div className="row col s11">
+          <a className="btn col s2 controlBtn" onClick={ () => dispatch({ type: PP })}>{play}</a>
+          <a className="btn col s1 controlBtn">Slow</a>
+          <a className="btn col s1 controlBtn">Fast</a>
+          <a className="btn col s1 controlBtn" onClick={ () => this.forward(false) }>Back</a>
+          <a className="btn col s1 controlBtn" onClick={ () => this.forward(true) }>Forw</a>
+          <a className="btn col s1 controlBtn" onClick={ () => this.nextVideo(false) }>PV</a>
+          <a className="btn col s1 controlBtn" onClick={ () => this.nextVideo(true) }>NV</a>
+          <a className="btn col s1 controlBtn" onClick={ () => this.nextHighlight(false)}>PH</a>
+          <a className="btn col s1 controlBtn" onClick={ () => this.nextHighlight(true)}>NH</a>
+          {this.renderMark(admin)}
+        </div>
       </div>
     )
   }

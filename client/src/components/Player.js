@@ -7,6 +7,7 @@ import PlayerControls from './PlayerControls';
 import PlayerEdit from './PlayerEdit';
 import PlayerHeader from './PlayerHeader';
 import PlayerFilter from './PlayerFilter';
+import PlayerVideoHeader from './PlayerVideoHeader';
 
 class Player extends Component{
   render(){
@@ -19,6 +20,7 @@ class Player extends Component{
           </div>
         </div>
         <div id="playerLeft" className="col s9">
+          <PlayerVideoHeader />
           <PlayerVideo />
           <PlayerControls />
         </div>
