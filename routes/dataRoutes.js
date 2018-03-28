@@ -24,6 +24,7 @@ module.exports = (app) => {
   app.post('/api/answerRequest', async (req, res) => {
     const { me, type, target, user, confirm } = req.body;
     console.log(req.body);
+    let project = null;
     if (type === "friend") {
       if (confirm === true) {
         await User.update({ _id: me, "friends._id": user }, { $set: { "friends.$.status": "confirmed" } });
@@ -34,15 +35,21 @@ module.exports = (app) => {
       }
     } else {
       if (confirm === true) {
-        await User.update({ _id: me, "access.target": target }, { $set: { "access.$.status": "confirmed" } });
-        await User.update({ _id: user, "access.target": target }, { $set: { "access.$.status": "confirmed" } });
+        const i = await User.findById(me);
+        const u = await User.findById(user);
+        console.log(i, u);
+        const acc = i.access.filter( a => { return (a.target === target && a.user.toString() === user )});
+        await User.update({ _id: me, access: { "$elemMatch": { target, user } } }, { $set: { "access.$.status": "confirmed" } });
+        await User.update({ _id: user, access: { "$elemMatch": { target, user: me } } }, { $set: { "access.$.status": "confirmed" } });
+        if (acc[0].status === "invited") {
+          project = await Highlights.findById(target);
+        }
       } else {
         await User.update({ _id: me }, { $pull: { access: { target, user } } });
         await User.update({ _id: user }, { $pull: { access: { target, user: me } } });
       }
     }
-    console.log();
-    res.send(req.body);
+    res.send({ ...req.body, project });
   });
   app.post('/api/request', async (req, res) => {
     const { me, type, target, user } = req.body;
@@ -52,8 +59,8 @@ module.exports = (app) => {
       await User.update({ _id: me }, { $push: { friends: newFriend } });
       await User.update({ _id: user }, { $push: { friends: newRequest } });
     } else {
-      const newAccess = { user: user, status: "requestSent", type, target };
-      const newInvite = { user: me, status: "requested", type, target };
+      const newAccess = { user: user.toString(), status: "requestSent", type, target };
+      const newInvite = { user: me.toString(), status: "requested", type, target };
       await User.update({ _id: me }, { $push: {access: newAccess } });
       await User.update({ _id: user }, { $push: { access: newInvite } });
     }
@@ -130,8 +137,14 @@ module.exports = (app) => {
       }
       if (create.type === "project") {
         await Promise.all(invites.map( async i => {
-          await User.update({ _id: i }, { $push: { access: { target: create._id, user: _id, type: create.type, status: "invited" } } });
-          await User.update({ _id }, { $push: { access: { target: create._id, user: i, type: create.type, status: "inviteSent" } } });
+          const invitor = await User.findById(_id)
+          const invitee = await User.findById(i);
+          const invitorA = invitor.access.filter( a => { return a.target === create._id && a.user.toString() === i.toString() });
+          const inviteeA = invitee.access.filter( a => { return a.target === create._id && a.user.toString() === _id.toString()});
+          if (invitorA.length === 0 && inviteeA.length === 0) {
+            await User.update({ _id: i }, { $push: { access: { target: create._id, user: _id, type: create.type, status: "invited" } } });
+            await User.update({ _id }, { $push: { access: { target: create._id, user: i, type: create.type, status: "inviteSent" } } });
+          }
         }));
       }
     } else {
@@ -189,12 +202,10 @@ module.exports = (app) => {
         case "project":     const highlights = (create.highlights !== undefined) ? create.highlights: [];
                             const newProject = new Highlights({ highlights, title: create.title, description: create.description, videos: create.videos, parent: create.parent, privacy: create.privacy, _uid: _id });
                             await newProject.save();
-                            console.log("mapping here");
                             await Promise.all(invites.map( async i => {
                               await User.update({ _id: i }, { $push: { access: { target: newProject._id, user: _id, type: create.type, status: "invited" } } });
                               await User.update({ _id }, { $push: { access: { target: newProject._id, user: i, type: create.type, status: "inviteSent" } } });
                             }));
-                            console.log("mapping not working");
                             response = { type: "project", data: newProject };
                             break;
         case "folder":      const folder = { name: create.name, description: create.description, privacy: create.privacy, parent: create.parent };

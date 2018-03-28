@@ -47,6 +47,7 @@ export default function ( state = initialState, action ){
           return { ...h, project: state.selectedProjects.projects.length, video }
         });
         highlights = state.selectedProjects.highlights.concat(highlights);
+        highlights = _.sortBy(highlights, "start");
         return { ...state, selectedProjects: { ...state.selectedProjects, projects: [ ...state.selectedProjects.projects, action.payload ], videos, highlights } };
       } else {
         return { ...state, selectedProjects: { ...state.selectedProjects, projects: state.selectedProjects.projects.filter( p => {  return p !== action.payload }) } };
@@ -77,7 +78,13 @@ export default function ( state = initialState, action ){
             }
             return a;
           });
-          return { ...state, access };
+          if (action.payload.project !== null) {
+            projects = [ ...state.projects, action.payload.project ];
+          } else {
+            projects = state.projects;
+          }
+
+          return { ...state, access, projects, filteredProjects: projects };
         } else {
           access = state.access.filter( a => { return a.user !== action.payload.user && a.target !== target });
           return { ...state, access }
@@ -194,7 +201,13 @@ export default function ( state = initialState, action ){
               if (p._id === data._id) { return data }
               return p;
             });
-            return { ...state, projects, filteredProjects: projects, create: null, update: false };
+            access = state.access;
+            if (data.invites.length !== 0) {
+              data.invites.map( i => {
+                access.push({ user: i, target: data._id, status: "inviteSent", type: "project"})
+              });
+            }
+            return { ...state, projects, filteredProjects: projects, create: null, update: false, access };
           case "folder":
             folders = state.folders.map( f => {
               if (f._id === data._id) { return data }

@@ -15,6 +15,9 @@ img {
 a {
   height: auto !important;
 }
+#codeInput {
+  height: calc(100% - 22.5px) !important;
+}
 .controlBtn {
   height: 55px !important;
   line-height: 55px !important;
@@ -200,7 +203,20 @@ width: 100% !important;
   height: 45px !important;
   line-height: 45px !important;
 }
-.active {
+.indicator {
+  background-color: transparent !important;
+}
+#numNotif {
+  position: absolute !important;
+  width: 15px !important;
+  top: 0 !important;
+  color: orange !important;
+  right: 3% !important;
+  z-index: 1000 !important;
+  background-color: transparent !important;
+  cursor: pointer !important;
+}
+.tab > .active {
   background-color: orange !important;
   color: white !important;
 }

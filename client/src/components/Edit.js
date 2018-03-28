@@ -45,11 +45,15 @@ class Edit extends Component{
       }
 
     } else if (selectedUser !== null) {
-      const selFri = filteredFriends.filter( f => { return f._id === selectedUser });
-      buttons = (selFri[0].status === "confirmed") ? edit:
-                (selFri[0].status === "requested") ? <a>Confirm Request in Notifications</a>:
-                (selFri[0].status === "requestSent") ? <a>Request Sent</a>:
-                <a onClick={ () => { request(auth._id, "friend", null, selectedUser) }} className="btn-flat">Request</a>;
+      console.log(selectedUser);
+      const selFri = friends.filter( f => { return f._id === selectedUser });
+      if (selFri[0] === undefined) {
+        buttons = <a onClick={ () => { request(auth._id, "friend", null, selectedUser) }} className="btn-flat">Request</a>;
+      } else {
+        buttons = (selFri[0].status === "confirmed") ? edit:
+                  (selFri[0].status === "requested") ? <a>Confirm Request in Notifications</a>:
+                  (selFri[0].status === "requestSent") ? <a>Request Sent</a>: null;
+      }
     }
     buttons = (view === "profile") ? <a onClick={ () => this.logout(dispatch)} className="btn-flat">Logout</a>: buttons;
     return (

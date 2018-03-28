@@ -7,9 +7,6 @@ import _ from 'lodash';
 import { SET_PLAYER, PAUSE, PP, PROGRESS, SELECT_HIGHLIGHT, INITIATE } from '../actions/types';
 
 class PlayerVideo extends Component{
-  componentDidMount(){
-    console.log(this.props.location.pathname);
-  }
   seeking(players, video, dispatch, start, stop, playList, count){
     const timer = setInterval( () => {
       const { filteredHighlights, player: { highlight, counter } } = this.props;

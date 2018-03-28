@@ -28,7 +28,6 @@ class PlayerEdit extends Component{
       $('.modal').modal();
     });
     if (copy !== false) {
-      console.log(copy);
       return (
         <div id="playerCopy" className="col 12 row">
           <a onClick={ () => { console.log(copy);copyCreate(copy, selectedProject); } } className="btn col s12  modal-trigger" href="#modalCopy">Save</a>
@@ -55,7 +54,7 @@ class PlayerEdit extends Component{
             {this.renderEdit(high, selectedProject)}
           </div>
         </div>
-        <textarea value={comment} className="col s12 materialize-textarea" onChange={ e => dispatch({ type: CHANGE_COMMENT, payload: e.target.value })}>
+        <textarea id="codeInput" value={comment} className="col s12 materialize-textarea" onChange={ e => dispatch({ type: CHANGE_COMMENT, payload: e.target.value })}>
         </textarea>
       </div>
     )
