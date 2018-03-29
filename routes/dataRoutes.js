@@ -4,6 +4,14 @@ const User = mongoose.model('users');
 const Highlights = mongoose.model('highlights');
 
 module.exports = (app) => {
+  app.post('/api/deleteHighlights', async (req, res) => {
+    const { highlights, project } = req.body;
+    console.log(req.body);
+    await Promise.all(highlights.map( async h => {
+      await Highlights.update({ _id: project }, { $pull: { highlights: { _id: h } } });
+    }));
+    res.sendStatus(200);
+  });
   app.post('/api/deleteMultiple', async (req, res) =>{
     await Promise.all(req.body.map( async p => {
       const project = await Highlights.findById(p);
@@ -23,7 +31,6 @@ module.exports = (app) => {
   });
   app.post('/api/answerRequest', async (req, res) => {
     const { me, type, target, user, confirm } = req.body;
-    console.log(req.body);
     let project = null;
     if (type === "friend") {
       if (confirm === true) {

@@ -45,7 +45,6 @@ class Edit extends Component{
       }
 
     } else if (selectedUser !== null) {
-      console.log(selectedUser);
       const selFri = friends.filter( f => { return f._id === selectedUser });
       if (selFri[0] === undefined) {
         buttons = <a onClick={ () => { request(auth._id, "friend", null, selectedUser) }} className="btn-flat">Request</a>;

@@ -1,6 +1,6 @@
 import { FETCH_USER, CHANGE_VIEW, CHANGE_PAGE, CHANGE_SEARCH_LOCAL, CHANGE_SEARCH_OPTION, CHANGE_SEARCH_TERM, SELECT_USER, SELECT_PROJECT, SELECT_GROUP, SELECT_FOLDER,
 CREATE, CHANGE_CREATE_ATTRIBUTE, CLEAR_CREATE, CREATE_REMOVE_VIDEO, CREATE_POST, UPDATE, REMOVE, SUBMIT_HIGHLIGHT, UPDATE_HIGHLIGHT, LOGOUT,
-DELETE_HIGHLIGHT, REQUEST, ANSWER_REQUEST, COPY_CREATE, COPY, SELECT_MULTIPLE, ADD_PROJECT, INVITE, DELETE_MULTIPLE } from '../actions/types';
+DELETE_HIGHLIGHT, REQUEST, ANSWER_REQUEST, COPY_CREATE, COPY, SELECT_MULTIPLE, ADD_PROJECT, INVITE, DELETE_MULTIPLE, DELETE_HIGHLIGHTS } from '../actions/types';
 import ReactPlayer from 'react-player';
 import $ from 'jquery';
 import _ from 'lodash';
@@ -33,6 +33,13 @@ export default function ( state = initialState, action ){
    user, projects, folders, groups, friends, searchOption, searchTerm, view, filteredHighlights, highlights, access, video, invites,
    selectedProjects;
   switch (action.type) {
+    case DELETE_HIGHLIGHTS:
+      project = state.projects.filter( p => { return p._id === action.payload.project });
+      highlights = project[0].highlights.filter( h => { return action.payload.highlights.indexOf(h._id) === -1 });
+      project = { ...project[0], highlights };
+      projects = state.projects.map( p => { if (p._id === action.payload.project) { return project } return p });
+      filteredProjects = state.filteredProjects.map( p => { if (p._id === action.payload.project) { return project } return p })
+      return { ...state, filteredHighlights: highlights, projects, filteredProjects };
     case DELETE_MULTIPLE:
       projects = state.projects.filter( p => { return action.payload.indexOf(p._id) === -1});
       access = state.access.filter( a => { return action.payload.indexOf(a.target) === -1});

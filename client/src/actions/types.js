@@ -49,3 +49,4 @@ export const SELECT_MULTIPLE = "select_multiple"
 export const ADD_PROJECT = "add_project";
 export const INVITE = "invite";
 export const DELETE_MULTIPLE = "delete_multiple";
+export const DELETE_HIGHLIGHTS = "delete_highlights";

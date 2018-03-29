@@ -1,8 +1,14 @@
 import axios from 'axios';
 import { FETCH_USER, CREATE_UPDATE, CREATE_POST, CREATING_UPDATE, CREATING_POST, REMOVE, CHANGE_SEARCH_TERM, SUBMIT_HIGHLIGHT, UPDATE_HIGHLIGHT,
-DELETE_HIGHLIGHT, REQUEST, ANSWER_REQUEST, COPY_CREATE, DELETE_MULTIPLE } from './types';
+DELETE_HIGHLIGHT, REQUEST, ANSWER_REQUEST, COPY_CREATE, DELETE_MULTIPLE, DELETE_HIGHLIGHTS } from './types';
 
 const ytKey = "AIzaSyDNjPIijQMBwx6H7ZO1bPZpv3bmL2ZhIq4";
+
+export const deleteHighlights = (highlights, project) => async dispatch => {
+  const highs = highlights.map( h => { return h._id });
+  await axios.post('/api/deleteHighlights', { highlights: highs, project });
+  dispatch({ type: DELETE_HIGHLIGHTS, payload: { highlights: highs, project } });
+}
 
 export const deleteMultiple = projects => async dispatch => {
   await axios.post('/api/deleteMultiple', projects);

@@ -2,26 +2,32 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import _ from 'lodash';
+import $ from 'jquery';
 
 import { submitHighlight, updateHighlight } from '../actions';
 import { PP, CV, MARK, SUBMIT_HIGHLIGHT, HP, HN, SAVE, PLAY_LIST } from '../actions/types';
 
 class PlayerControls extends Component{
   componentDidMount(){
-    document.addEventListener('keyup', e => this.keyPress(e));
+    document.addEventListener('keydown', e => this.keyPress(e) );
   }
   keyPress(e){
     const { dispatch } = this.props;
-    if (e.keyCode === 37 && e.ctrlKey) { this.nextVideo(false) }
-    else if (e.keyCode === 39 && e.ctrlKey) { this.nextVideo(true) }
-    switch (e.keyCode) {
-      case 32: dispatch({ type: PP }); break;
-      case 38: this.nextHighlight(false); break;
-      case 40: this.nextHighlight(true); break;
-      case 37: this.forward(false); break;
-      case 39: this.forward(true); break;
-      case 13: this.mark(); break;
-      default: null; break;
+    if ($('#modalCopy')[0] === undefined || $('#modalCopy')[0].M_Modal.isOpen !== true) {
+      if (e.keyCode === 37 && e.ctrlKey) { this.nextVideo(false) }
+      else if (e.keyCode === 39 && e.ctrlKey) { this.nextVideo(true) }
+      else if (e.keyCode === 32 && e.ctrlKey) { dispatch({ type: PP }) }
+      switch (e.keyCode) {
+        case 38: this.nextHighlight(false); break;
+        case 40: this.nextHighlight(true); break;
+        case 37: this.forward(false); break;
+        case 39: this.forward(true); break;
+        case 13: e.preventDefault(); this.mark(); break;
+        default: null; break;
+      }
+    };
+    if (document.getElementById('codeInput') !== null) {
+      document.getElementById('codeInput').focus()
     }
   }
   mark() {

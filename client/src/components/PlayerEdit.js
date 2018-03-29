@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux';
 import $ from 'jquery';
 import _ from 'lodash';
 
-import { deleteHighlight, copyCreate } from '../actions';
+import { deleteHighlight, copyCreate, deleteHighlights } from '../actions';
 import { CHANGE_COMMENT, CHANGE_TIME } from '../actions/types';
 
 import CreateProject from './CreateProject';
@@ -19,18 +19,21 @@ class PlayerEdit extends Component{
     return "DbClick->Edit"
   }
   render(){
-    const { auth, dispatch, comment, start, stop, filteredHighlights, highlight, selectedProject, copy, filteredProjects, selectedProjects, action: { copyCreate } } = this.props;
+    const { auth, dispatch, comment, start, stop, filteredHighlights, highlight, selectedProject, copy, filteredProjects, selectedProjects,
+      action: { copyCreate, deleteHighlights } } = this.props;
     const project = (selectedProjects === false) ? filteredProjects.filter( p => { return p._id === selectedProject }): (selectedProjects.projects.length === 1) ? filteredProjects.filter( p => { return p._id === selectedProjects.projects[0] }): null;
     const admin = (project === null) ? false: (project[0]._uid === auth._id) ? true: false;
     const highlights = _.sortBy(filteredHighlights, "start");
     const high = highlights[highlight];
+    const del = (selectedProjects === false) ? <a onClick={ () => deleteHighlights(copy.highlights, selectedProject) } className="btn red col s6">Delete</a>: null;
     $(document).ready(function(){
       $('.modal').modal();
     });
     if (copy !== false) {
       return (
-        <div id="playerCopy" className="col 12 row">
-          <a onClick={ () => { console.log(copy);copyCreate(copy, selectedProject); } } className="btn col s12  modal-trigger" href="#modalCopy">Save</a>
+        <div id="playerCopy" className="col s12 row">
+          <a onClick={ () => copyCreate(copy, selectedProject) } className="btn col s6  modal-trigger" href="#modalCopy">Save</a>
+          {del}
           <div id="modalCopy" className="modal">
             <CreateProject copy={true}/>
             <CreateCopySubmit />
@@ -66,7 +69,7 @@ const mapStateToProps = ({ auth, player: { start, stop, comment, highlight, edit
 }
 
 const mapDispatchToProps = (dispatch) => {
-  return { action: bindActionCreators({ deleteHighlight, copyCreate }, dispatch), dispatch };
+  return { action: bindActionCreators({ deleteHighlight, copyCreate, deleteHighlights }, dispatch), dispatch };
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(PlayerEdit);
