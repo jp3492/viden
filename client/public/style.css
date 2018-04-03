@@ -15,6 +15,9 @@ img {
 a {
   height: auto !important;
 }
+.determinate {
+  transition: width 0s !important;
+}
 #codeInput {
   height: calc(100% - 22.5px) !important;
 }
@@ -315,6 +318,9 @@ width: 100% !important;
 }
 #notification {
   box-shadow: none !important;
+}
+#notification > li, #directory > li > div, #groups > li > div, collapsible-body > span > li {
+  padding: 10px !important;
 }
 #bodyCreate {
   padding: 0 !important;

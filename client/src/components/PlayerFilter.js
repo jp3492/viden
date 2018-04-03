@@ -28,7 +28,7 @@ class PlayerFilter extends Component{
           </div>
         </div>
         <div className="row">
-          <input className="col s8" onChange={ e => dispatch({type: CHANGE_SEARCH_TERM, payload: e.target.value }) } placeholder="Filter for..." />
+          <input id="playerFilterSearch" className="col s8" onChange={ e => dispatch({type: CHANGE_SEARCH_TERM, payload: e.target.value }) } placeholder="Filter for..." />
           <i className="col s2 center-align material-icons">filter_list</i>
           <i className={copyClass} onClick={ () => dispatch({ type: COPY })}>playlist_add</i>
         </div>

@@ -26,7 +26,8 @@ class PlayerControls extends Component{
         default: null; break;
       }
     };
-    if (document.getElementById('codeInput') !== null) {
+    console.log(document.activeElement,  document.getElementById('playerFilterSearch'));
+    if (document.getElementById('codeInput') !== null && document.activeElement !== document.getElementById('playerFilterSearch')) {
       document.getElementById('codeInput').focus()
     }
   }
@@ -36,18 +37,10 @@ class PlayerControls extends Component{
     const selectedHighlight = (highlights.length !== 0) ? highlights[highlight]._id: null;
     const act = (edit === true) ? 1: (start === null) ? 2: (stop === null) ? 3: 4;
     switch (act) {
-      case 1:
-        updateHighlight(selectedProject, selectedHighlight, start, stop, comment)
-        break;
-      case 2:
-        dispatch({ type: MARK, payload: { what: "start", time: players[video].getCurrentTime() }})
-        break;
-      case 3:
-        dispatch({ type: MARK, payload: { what: "stop",time: players[video].getCurrentTime() }})
-        break;
-      case 4:
-        submitHighlight(selectedProject, video, start, stop, comment)
-        break;
+      case 1: updateHighlight(selectedProject, selectedHighlight, start, stop, comment); break;
+      case 2: dispatch({ type: MARK, payload: { what: "start", time: players[video].getCurrentTime() }}); break;
+      case 3: dispatch({ type: MARK, payload: { what: "stop",time: players[video].getCurrentTime() }}); break;
+      case 4: submitHighlight(selectedProject, video, start, stop, comment); break;
     }
   }
   renderMark(admin){
@@ -62,9 +55,10 @@ class PlayerControls extends Component{
     players[video].seekTo(progress);
   }
   forward(f){
-    const { player: { players, video } } = this.props;
+    const { player: { players, video, playing } } = this.props;
     const current = players[video].getCurrentTime();
-    const to = (f === true) ? current + 1: (current !== 0) ? current - 1: 0;
+    const time = (playing === true) ? 1: 0.1;
+    const to = (f === true) ? current + time: (current !== 0) ? current - time: 0;
     players[video].seekTo(to);
   }
   nextVideo(next){

@@ -19,6 +19,7 @@ class PlayerList extends Component{
     const copying = (copy !== false) ?
       <a id={`checkbox${i}`} className="secondary-content" onClick={ e => {
         e.preventDefault();
+        e.stopPropagation();
         dispatch({ type: COPY_ADD, payload: { start, stop, comment, video, link: videos[video], _id } }); } }><p>
         <input type="checkbox" className="filled-in" id={`check${i}`} checked={defaultChecked} />
         <label htmlFor={`check${i}`}></label>
