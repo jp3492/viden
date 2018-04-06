@@ -7,11 +7,16 @@ import Create from './Create';
 import Login from './Login';
 
 class Header extends Component{
-  render(){
-    const { auth } = this.props;
+  componentDidMount(){
+    const { auth, history } = this.props;
     if (auth === false) {
-      return <Login />;
+      history.push('/login')
     }
+  }
+  render(){
+    const { auth, site } = this.props;
+    if (auth === false) { return null }
+    if (site === "player") { return null }
     return(
       <div id="header" className="row">
         <Menu />
@@ -20,7 +25,7 @@ class Header extends Component{
     )
   }
 }
-const mapStateToProps = ({ auth }) => {
-  return { auth };
+const mapStateToProps = ({ auth, main: { site } }) => {
+  return { auth, site };
 }
 export default connect(mapStateToProps)(Header);

@@ -5,6 +5,18 @@ import { withRouter } from 'react-router-dom';
 import { LOG } from '../actions/types';
 
 class Login extends Component {
+  componentWillReceiveProps(nextProps){
+    const { auth, history } = nextProps;
+    if (auth !== false) {
+      history.push('/home');
+    }
+  }
+  componentWillMount(){
+    const { auth, history } = this.props;
+    if (auth !== false) {
+      history.push('/home');
+    }
+  }
   render(){
     const { history, dispatch, log, auth } = this.props;
     const text = (auth === false && log === true) ? <b>Signing in...</b>: <b>Retrieving user data...</b>
