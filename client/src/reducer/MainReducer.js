@@ -1,11 +1,13 @@
 import { FETCH_USER, CHANGE_VIEW, CHANGE_PAGE, CHANGE_SEARCH_LOCAL, CHANGE_SEARCH_OPTION, CHANGE_SEARCH_TERM, SELECT_USER, SELECT_PROJECT, SELECT_GROUP, SELECT_FOLDER,
 CREATE, CHANGE_CREATE_ATTRIBUTE, CLEAR_CREATE, CREATE_REMOVE_VIDEO, CREATE_POST, UPDATE, REMOVE, SUBMIT_HIGHLIGHT, UPDATE_HIGHLIGHT, LOGOUT,
-DELETE_HIGHLIGHT, REQUEST, ANSWER_REQUEST, COPY_CREATE, COPY, SELECT_MULTIPLE, ADD_PROJECT, INVITE, DELETE_MULTIPLE, DELETE_HIGHLIGHTS } from '../actions/types';
+DELETE_HIGHLIGHT, REQUEST, ANSWER_REQUEST, COPY_CREATE, COPY, SELECT_MULTIPLE, ADD_PROJECT, INVITE, DELETE_MULTIPLE, DELETE_HIGHLIGHTS,
+LOG } from '../actions/types';
 import ReactPlayer from 'react-player';
 import $ from 'jquery';
 import _ from 'lodash';
 
 const initialState = {
+  log: false,
   site: "home",
   view: "directory",
   searchLocal:  true,
@@ -33,6 +35,8 @@ export default function ( state = initialState, action ){
    user, projects, folders, groups, friends, searchOption, searchTerm, view, filteredHighlights, highlights, access, video, invites,
    selectedProjects;
   switch (action.type) {
+    case LOG:
+      return { ...state, log: true };
     case DELETE_HIGHLIGHTS:
       project = state.projects.filter( p => { return p._id === action.payload.project });
       highlights = project[0].highlights.filter( h => { return action.payload.highlights.indexOf(h._id) === -1 });
@@ -291,7 +295,19 @@ export default function ( state = initialState, action ){
       return { ...state, selectedUser };
     case CHANGE_VIEW:
       searchOption = (action.payload === "directory") ? "projects": (action.payload === "groups") ? "people": state.searchOption;
-      return { ...state, searchOption, view: action.payload, selectedUser: null, selectedProject: null, filteredFriends: state.friends, filteredProjects: state.projects, selectedGroup: null, selectedFolder: null };
+      filteredProjects = state.projects.filter( p => {
+        if (state.searchTerm !== "") {
+          return p.title.toLowerCase().includes(state.searchTerm.toLowerCase());
+        }
+        return p;
+      });
+      filteredFriends = state.friends.filter( f => {
+        if (state.searchTerm !== "") {
+          return (f.firstName.toLowerCase().includes(state.searchTerm.toLowerCase()) || f.lastName.toLowerCase().includes(state.searchTerm.toLowerCase()));
+        }
+        return f;
+      });
+      return { ...state, searchOption, view: action.payload, selectedUser: null, selectedProject: null, filteredFriends: state.friends, filteredProjects, selectedGroup: null, selectedFolder: null };
     case CHANGE_SEARCH_LOCAL:   return { ...state, searchLocal: !state.searchLocal };
     case CHANGE_SEARCH_OPTION:
       view = (action.payload === "people") ? "groups": (action.payload === "projects") ? "directory": state.view;
@@ -313,12 +329,12 @@ export default function ( state = initialState, action ){
       if (state.searchLocal) {
         switch (state.searchOption) {
           case "projects":
-            filteredProjects = state.projects.filter( p => {
+            filteredProjects = state.filteredProjects.filter( p => {
               return p.title.toLowerCase().includes(action.payload.toLowerCase());
             });
             return { ...state, filteredProjects, searchTerm: action.payload, selectedProject: null };
           case "people":
-            filteredFriends = state.friends.filter( f => {
+            filteredFriends = state.filteredFriends.filter( f => {
               return (f.firstName.toLowerCase().includes(action.payload.toLowerCase()) || f.lastName.toLowerCase().includes(action.payload.toLowerCase()));
             });
             return { ...state, filteredFriends, searchTerm: action.payload, selectedUser: null };

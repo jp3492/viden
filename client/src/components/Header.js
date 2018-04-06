@@ -4,15 +4,13 @@ import { connect } from 'react-redux';
 import Menu from './Menu';
 import Search from './Search';
 import Create from './Create';
+import Login from './Login';
 
 class Header extends Component{
   render(){
     const { auth } = this.props;
     if (auth === false) {
-      return <a href="/auth/google">Google OAuth</a>;
-    }
-    if (auth.approved === false) {
-      return <div><h4>Waiting for Admins approval</h4><a href="/auth/google">Switch Account</a></div>;
+      return <Login />;
     }
     return(
       <div id="header" className="row">

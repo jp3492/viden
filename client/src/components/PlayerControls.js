@@ -26,7 +26,6 @@ class PlayerControls extends Component{
         default: null; break;
       }
     };
-    console.log(document.activeElement,  document.getElementById('playerFilterSearch'));
     if (document.getElementById('codeInput') !== null && document.activeElement !== document.getElementById('playerFilterSearch')) {
       document.getElementById('codeInput').focus()
     }

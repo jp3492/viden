@@ -11,8 +11,9 @@ import Player from './Player';
 
 class App extends Component {
   componentWillMount(){
-    this.props.fetchUser();
-    // alert("Projects are showing double when acces right given");
+    if (this.props.auth === false) {
+      this.props.fetchUser();
+    }
   }
   render(){
     return(
