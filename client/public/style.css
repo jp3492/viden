@@ -15,15 +15,22 @@ img {
 a {
   height: auto !important;
 }
-#login {
+#approve > div {
+  margin-right: auto !important;
+  margin-left: auto !important;
+  margin-top: 50px !important;
+  height: auto;
+  width: 700px;
+  border-radius: 3px;
+}
+#login, #approve {
   height: 100%;
   width: 100%;
 }
 #login > div {
   margin-right: auto !important;
   margin-left: auto !important;
-  margin-top: auto !important;
-  margin-bottom: auto !important;
+  margin-top: 50px !important;
   height: auto;
   width: 700px;
   background-color: #585858;

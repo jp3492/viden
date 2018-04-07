@@ -36,9 +36,16 @@ class Login extends Component {
           </div>
           {text}
         </div>
-      ): <a className="btn red" href="/auth/google" onClick={ () => dispatch({ type: LOG })}>Google OAuth</a>;
+      ): (auth !== false && auth.approved === false) ?
+        (
+          <div>
+            <b>Your account needs to be approved...</b>
+            <a className="btn red" href="/auth/google" onClick={ () => dispatch({ type: LOG })}>Switch account</a>
+          </div>
+        )
+      :<a className="btn red" href="/auth/google" onClick={ () => dispatch({ type: LOG })}>Google OAuth</a>;
     return (
-      <div className="valign-wrapper" id="login">
+      <div id="login">
         <div className="row">
          <div className="col s12">
            <div className="card">

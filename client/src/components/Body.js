@@ -6,6 +6,7 @@ import { CHANGE_PAGE } from '../actions/types';
 import BodyLeft from './BodyLeft';
 import BodyRight from './BodyRight';
 import BodyHeader from './BodyHeader';
+import Approve from './Approve';
 
 class Body extends Component{
   componentDidMount(){
@@ -14,10 +15,13 @@ class Body extends Component{
   }
   render(){
     const { dispatch, auth } = this.props;
-    if (auth === false || auth.approved === false) {
+    if (auth === false) {
       return null;
     }
-
+    if (auth !== false && auth.approved === false) {
+      console.log("approving");
+      return <Approve />
+    }
     return(
       <div id="body" className="row">
         <BodyHeader />

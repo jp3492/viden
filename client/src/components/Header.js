@@ -17,7 +17,7 @@ class Header extends Component{
   }
   render(){
     const { auth, site } = this.props;
-    if (auth === false) { return null }
+    if (auth === false || (auth !== false && auth.approved === false)) { return null }
     if (site === "player") { return null }
     return(
       <div id="header" className="row">
