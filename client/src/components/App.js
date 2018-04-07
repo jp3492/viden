@@ -12,8 +12,9 @@ import Login from './Login';
 
 class App extends Component {
   componentWillMount(){
-    if (this.props.auth === false) {
-      this.props.fetchUser();
+    const { auth, fetchUser } = this.props;
+    if (auth === false) {
+      fetchUser();
     }
   }
   render(){

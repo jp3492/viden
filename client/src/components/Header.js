@@ -11,6 +11,8 @@ class Header extends Component{
     const { auth, history } = this.props;
     if (auth === false) {
       history.push('/login')
+    } else {
+      history.push('/home')
     }
   }
   render(){
