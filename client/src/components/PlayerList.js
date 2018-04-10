@@ -16,7 +16,7 @@ class PlayerList extends Component{
     const className = (highlight === i) ? "collection-item selectedHighlight": "collection-item";
     const inCopy = (copy !== false) ? copy.highlights.filter( h => { return h._id === _id }): [];
     const defaultChecked = (inCopy.length !== 0) ? true: false;
-    const copying = (copy !== false) ?
+    const copying = (copy !== false) ? 
       <a id={`checkbox${i}`} className="secondary-content" onClick={ e => {
         e.preventDefault();
         e.stopPropagation();

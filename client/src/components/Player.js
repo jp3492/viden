@@ -19,25 +19,15 @@ class Player extends Component{
             <div className="indeterminate"></div>
           </div>
         </div>
-        <div id="playerLeft" className="col s9">
+        <div id="playerLeft">
           <PlayerVideoHeader />
           <PlayerVideo />
           <PlayerControls />
         </div>
-        <div id="playerRight" className="col s3">
-          <div className="row">
-            <div className="col s12">
-              <div className="card">
-                <div className="card-content">
-                  <PlayerFilter />
-                  <PlayerList />
-                </div>
-                <div className="card-action">
-                  <PlayerEdit />
-                </div>
-              </div>
-            </div>
-          </div>
+        <div id="playerRight">
+          <PlayerFilter />
+          <PlayerList />
+          <PlayerEdit />
         </div>
       </div>
     )

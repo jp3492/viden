@@ -1,0 +1,25 @@
+.modal {
+  width: 50% !important;
+  max-height: 90% !important;
+}
+.modal > .modal-footer {
+  padding: 24px !important;
+  height: auto !important;
+}
+.modal-content {
+  padding-bottom: 0 !important;
+}
+.modal-content > .row {
+  margin-bottom: 0 !important;
+}
+#inviteFriends > div > ul > li > div > a > p{
+  margin: 0 !important;
+}
+.collapsible-header > a {
+  position: absolute !important;
+  right: 0 !important;
+}
+#inviteFriends {
+  margin: 0 !important;
+  border-left: 1px solid grey !important;
+}

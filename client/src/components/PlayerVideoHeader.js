@@ -9,7 +9,7 @@ class PlayerVideoHeader extends Component{
     const className = (video === i) ? "active": "";
     let width = 100 / len;
     width = `${width}%`;
-    return <li onClick={ () => dispatch({ type: CV, payload: i }) } className="tab col s3" style={{ width }}><a className={className}>Video {i}</a></li>;
+    return <li onClick={ () => dispatch({ type: CV, payload: i }) } className="tab col s3" style={{ width }}><a className={className}>Video {i+1}</a></li>;
   }
   render(){
     const { history, filteredProjects, selectedProject, selectedProjects } = this.props;
@@ -25,13 +25,10 @@ class PlayerVideoHeader extends Component{
         <div className="col s2" id="playerVideoHeaderMenu">
           <div className="row">
             <div className="center-align col s2">
-              <i onClick={ () => history.push("/") } className="material-icons">home</i>
+              <i onClick={ () => history.push("/home") } className="material-icons">home</i>
             </div>
-            <div className="col s8">
+            <div className="col s10 right-align">
               <p>{title}<br />{"V:"+vids+", H:"+highlights}</p>
-            </div>
-            <div className="center-align col s2">
-              <i className="material-icons">settings</i>
             </div>
           </div>
         </div>

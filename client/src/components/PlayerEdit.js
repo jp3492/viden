@@ -11,6 +11,9 @@ import CreateProject from './CreateProject';
 import CreateCopySubmit from './CreateCopySubmit';
 
 class PlayerEdit extends Component{
+  componentDidMount(){
+    document.getElementById('codeInput').focus();
+  }
   renderEdit(high, selectedProject){
     const { edit, action: { deleteHighlight } } = this.props;
     if (edit) {
@@ -29,6 +32,9 @@ class PlayerEdit extends Component{
     $(document).ready(function(){
       $('.modal').modal();
     });
+    if (admin === false || start === null) {
+      return null;
+    }
     if (copy !== false) {
       return (
         <div id="playerCopy" className="col s12 row">
@@ -44,21 +50,32 @@ class PlayerEdit extends Component{
     if (admin === false) {
       return null;
     }
+    // <div className="col s4" onClick={ () => dispatch({ type: CHANGE_TIME, payload: "start" })}>
+    //   {`Start: ${start}`}
+    // </div>
+    // <div className="col s4" onClick={ () => dispatch({ type: CHANGE_TIME, payload: "stop" })}>
+    //   {`Stop: ${stop}`}
+    // </div>
+    // <div className="col s4">
+    //   {this.renderEdit(high, selectedProject)}
+    // </div>
+    // <textarea id="codeInput" value={comment} className="col s12 materialize-textarea" onChange={ e => dispatch({ type: CHANGE_COMMENT, payload: e.target.value })}>
+    // </textarea>
     return(
-      <div id="playerEdit" className="col 12">
-        <div className="row">
-          <div className="col s4" onClick={ () => dispatch({ type: CHANGE_TIME, payload: "start" })}>
+      <div id="playerEdit" className="col 12 row">
+        <textarea id="codeInput" value={comment} placeholder="Code..." className="col s12 materialize-textarea" onChange={ e => dispatch({ type: CHANGE_COMMENT, payload: e.target.value })}>
+        </textarea>
+        <div className="col s12" id="times">
+          <div className="col s4 center-align" onClick={ () => dispatch({ type: CHANGE_TIME, payload: "start" })}>
             {`Start: ${start}`}
           </div>
-          <div className="col s4" onClick={ () => dispatch({ type: CHANGE_TIME, payload: "stop" })}>
+          <div className="col s4 center-align" onClick={ () => dispatch({ type: CHANGE_TIME, payload: "stop" })}>
             {`Stop: ${stop}`}
           </div>
-          <div className="col s4">
+          <div className="col s4 center-align">
             {this.renderEdit(high, selectedProject)}
           </div>
         </div>
-        <textarea id="codeInput" value={comment} className="col s12 materialize-textarea" onChange={ e => dispatch({ type: CHANGE_COMMENT, payload: e.target.value })}>
-        </textarea>
       </div>
     )
   }

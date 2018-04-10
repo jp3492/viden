@@ -46,7 +46,7 @@ class PlayerControls extends Component{
     if (admin === false) { return null }
     const { player: { edit, start, stop } } = this.props;
     const butt = (edit === true) ? "Save": (start === null) ? "Start": (stop === null) ? "Stop": "Submit";
-    return <a className="btn col s2 controlBtn" onClick={() => this.mark()}>{butt}</a>;
+    return <a className="btn controlBtn" onClick={() => this.mark()}>{butt}</a>;
   }
   jumpProgress(e){
     const { player: { video, players } } = this.props;
@@ -79,26 +79,26 @@ class PlayerControls extends Component{
     const { dispatch, auth, player: { progress, playList, playing }, selectedProjects, filteredProjects, selectedProject } = this.props;
     const project = (selectedProjects === false) ? filteredProjects.filter( p => { return p._id === selectedProject }): (selectedProjects.projects.length === 1) ? filteredProjects.filter( p => { return p._id === selectedProjects.projects[0] }): null;
     const admin = (project === null) ? false: (project[0]._uid === auth._id) ? true: false;
-    const playingList = (playList === true) ? "material-icons playList": "material-icons";
+    const playingList = (playList === true) ? "material-icons playList center-align": "material-icons center-align";
     const play = (playing === false) ? "Play": "Pause";
     return(
-      <div id="playerControls" className="row">
+      <div id="playerControls">
         <div id="progress" onClick={ (e) => this.jumpProgress(e)} className="progress">
           <div onClick={ (e) => this.jumpProgress(e)} className="determinate" style={{width: `${progress}%`}}>
           </div>
         </div>
-        <a id="playList" className="btn col s1 controlBtn" onClick={ () => dispatch({ type: PLAY_LIST })}><i className={playingList}>list</i></a>
-        <div className="row col s11">
-          <a className="btn col s2 controlBtn" onClick={ () => dispatch({ type: PP })}>{play}</a>
-          <a className="btn col s1 controlBtn">Slow</a>
-          <a className="btn col s1 controlBtn">Fast</a>
-          <a className="btn col s1 controlBtn" onClick={ () => this.forward(false) }>Back</a>
-          <a className="btn col s1 controlBtn" onClick={ () => this.forward(true) }>Forw</a>
-          <a className="btn col s1 controlBtn" onClick={ () => this.nextVideo(false) }>PV</a>
-          <a className="btn col s1 controlBtn" onClick={ () => this.nextVideo(true) }>NV</a>
-          <a className="btn col s1 controlBtn" onClick={ () => this.nextHighlight(false)}>PH</a>
-          <a className="btn col s1 controlBtn" onClick={ () => this.nextHighlight(true)}>NH</a>
+        <div id="controlButtons">
+          <a className="btn controlBtn" onClick={ () => dispatch({ type: PP })}>{play}</a>
+          <a className="btn controlBtn">Slow</a>
+          <a className="btn controlBtn">Fast</a>
+          <a className="btn controlBtn" onClick={ () => this.forward(false) }>Back</a>
+          <a className="btn controlBtn" onClick={ () => this.forward(true) }>Forw</a>
+          <a className="btn controlBtn" onClick={ () => this.nextVideo(false) }>PV</a>
+          <a className="btn controlBtn" onClick={ () => this.nextVideo(true) }>NV</a>
+          <a className="btn controlBtn" onClick={ () => this.nextHighlight(false)}>PH</a>
+          <a className="btn controlBtn" onClick={ () => this.nextHighlight(true)}>NH</a>
           {this.renderMark(admin)}
+          <a id="playList" className="valign-wrapper center-align" onClick={ () => dispatch({ type: PLAY_LIST })}><i className={playingList}>list</i></a>
         </div>
       </div>
     )

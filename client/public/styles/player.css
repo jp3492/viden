@@ -1,0 +1,263 @@
+#player {
+  width: 100%;
+  height: 100%;
+}
+#playerVideo {
+  flex: auto !important;
+  position: relative !important;
+}
+#playerVideoHeader > div > .tabs {
+  height: 45px !important;
+}
+#playerVideoHeader > div > .tabs > .tab {
+  background-color: #616161 !important;
+}
+#playerVideoHeaderMenu {
+  background-color: var(--dark) !important;
+}
+#playerVideoHeaderMenu * {
+  color: var(--light-text) !important;
+}
+#playerVideoHeaderMenu > div > div {
+  height: 45px !important;
+}
+#playerVideoHeaderMenu > div > div {
+  padding-left: 0 !important;
+}
+#playerVideoHeaderMenu > div > div > p {
+  margin: 0 !important;
+}
+#playerVideoHeaderMenu > div > div > i {
+  line-height: 1.3 !important;
+  font-size: 35px !important;
+}
+#controlButtons {
+  display: flex !important;
+  flex-direction: row;
+}
+#controlButtons > a {
+  flex: 1;
+}
+#codeInput {
+  height: 55px !important;
+  background-color: var(--dark) !important;
+  color: var(--light-text) !important;
+}
+.controlBtn {
+  height: 45px !important;
+  line-height: 45px !important;
+  background-color: var(--grey) !important;
+}
+.materialize-textarea {
+  margin: 0 !important;
+}
+#playerCopy  {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+#playerCopy > .s2 {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+#playerCopy > button {
+  margin: 0 !important;
+  padding: 0 !important;
+  position: absolute !important;
+  width: 100% !important;
+}
+#playerLoad {
+  position: fixed !important;
+  height: 100% !important;
+  width: 100% !important;
+  z-index: 1000 !important;
+  background-color: var(--light-text) !important;
+}
+#playerFilter {
+  flex: none !important;
+  box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.2);
+  z-index: 12 !important;
+  margin: 0 !important;
+  height: 45px !important;
+  background-color: var(--dark) !important;
+}
+#playerFilter > .row > input {
+  margin: 0 !important;
+  color: var(--light-text) !important;
+}
+#playerFilter > .row > input::placeholder {
+  color: var(--light-text) !important;
+}
+#playerFilter > .row > i {
+  line-height: 1.3 !important;
+  font-size: 36px !important;
+  color: var(--light-text) !important;
+}
+#playerFilter > .row > div > i {
+  line-height: 1.5 !important;
+  font-size: 30px !important;
+}
+#playerFilter > .row {
+  margin: 0 !important;
+}
+#playerFilterSearch {
+  border-bottom: none !important;
+}
+#playerFilterSearch:focus {
+  border-bottom: none !important;
+}
+textarea {
+  border: none !important;
+  box-shadow: none !important;
+  padding-top: 5px !important;
+}
+textarea:focus {
+  border: none !important;
+  box-shadow: none !important;
+}
+#playerList {
+  flex: auto !important;
+  margin: 0 !important;
+  overflow-y: auto !important;
+  height: auto !important;
+}
+#playerList > li {
+  padding-right: 0 !important;
+  border: none !important;
+  background-color: var(--grey);
+  cursor: pointer;
+}
+#playerList > li > a {
+  color: var(--light-text);
+}
+#playerList > li > .secondary-content > p {
+  margin: 0 !important;
+}
+#playerList::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
+}
+.selectedHighlight {
+  background-color: var(--light) !important;
+}
+#playerLeft {
+  width: 75% !important;
+  display: flex !important;
+  flex-direction: column !important;
+  position: absolute;
+  left: 0;
+  height: 100%;
+  padding: 0 !important;
+}
+#playerRight {
+  width: 25%;
+  display: flex !important;
+  flex-direction: column !important;
+  right: 0;
+  position: absolute;
+  height: 100%;
+  padding: 0 !important;
+}
+#playerRight > .row > div {
+  padding: 0 !important;
+}
+#playerRight > .row > div > .card {
+  margin: 0 !important;
+  height: 100% !important;
+}
+#playerRight > .row > div > .card > .card-content {
+  padding: 0 !important;
+  height: calc(100% - 100px) !important;
+}
+#playerRight > .row > div > .card > .card-action {
+  padding: 0 !important;
+  height: 100px !important;
+  bottom: 0 !important;
+}
+#playerEdit {
+  background-color: var(--dark) !important;
+  flex: none !important;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  padding: 0 !important;
+  margin: 0 !important;
+  height: 100px !important;
+}
+#times > div {
+  height: 100%;
+  line-height: 45px !important;
+  color: var(--light-text) !important;
+}
+#times {
+  background-color: var(--grey) !important;
+}
+#playerEdit > .row {
+  margin: 0 !important;
+}
+#playerEdit > .row > div {
+  color: var(--light-text) !important;
+}
+#playerEdit > textarea {
+  color: var(--light-text) !important;
+}
+#playerControls {
+  flex: none !important;
+  bottom: 0;
+  height: 60px;
+  margin: 0 !important;
+  width: 100% !important;
+}
+#playerControls > .row {
+  padding: 0 !important;
+}
+.playList {
+  color: var(--btn-primary) !important;
+}
+#playList {
+  width: 20px;
+}
+#playList > i {
+  width: 100% !important;
+  font-size: 36px !important;
+}
+#playerControls > a > i {
+  line-height: 1;
+  font-size: 38px !important;
+}
+.progress {
+  margin: 0 !important;
+  height: 15px !important;
+  width: 100% !important;
+  margin-bottom: 0 !important;
+  cursor: pointer !important;
+  background-color: white !important;
+}
+.determinate {
+  transition: width 0s !important;
+  /* color for progress */
+}
+#playerVideoHeader {
+  flex: none !important;
+  height: 45px !important;
+}
+#playerVideoHeader > div {
+  padding: 0 !important;
+  cursor: pointer !important;
+}
+#playerVideoHeader > div > ul > li > a {
+  height: 45px !important;
+  line-height: 45px !important;
+}
+.player {
+  position: absolute !important;
+  left: 0 !important;
+  top: 0 !important;
+  bottom: 0 !important;
+}
+.invisible{
+  display: none !important;
+}
+.tab > .active {
+  background-color: #8e8e8e !important;
+  color: white !important;
+}

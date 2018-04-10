@@ -87,6 +87,8 @@ class PlayerVideo extends Component{
     const p = (initiated === true) ? ((video === i) ? playing: false): true;
     const className = (video === i) ? "player": "invisible player";
     return <ReactPlayer
+            height='100%'
+            width='100%'
             key={`player${i}`}
             url={v} playing={p}
             progressInterval={100}
@@ -103,7 +105,7 @@ class PlayerVideo extends Component{
     const project = projects.filter( p => { return p._id === selectedProject });
     const videos = (selectedProjects === false) ? project[0].videos: selectedProjects.videos;
     return(
-      <div>
+      <div id="playerVideo">
         {videos.map( (v, i) => this.renderVideo(v, i))}
       </div>
     )

@@ -1,0 +1,93 @@
+#header {
+  box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.2);
+  margin-bottom: 0 !important;
+  z-index: 20 !important;
+}
+
+#menu {
+  padding: 0 !important;
+}
+#search {
+  padding-left: 0 !important;
+}
+#searchOption{
+  height: 66px !important;
+  line-height: 62px !important;
+}
+#searchField {
+  padding-left: 0 !important;
+}
+#searchField > input {
+  margin: 10px !important;
+  padding-left: 10px !important;
+  border: none !important;
+  border-radius: 5px;
+  background-color: #f2f2f2 !important;
+  color: black !important;
+}
+#searchField > input:focus {
+  border-bottom: none !important;
+  box-shadow: 0 0 0 0 red !important
+}
+#menu > div > .tabs {
+  height: 66px !important;
+}
+.localOff {
+  color: var(--grey) !important;
+}
+.localOn > i {
+  color: var(--btn-active) !important;
+}
+.iconSelected {
+  color: var(--btn-active) !important;
+}
+.indicator {
+  background-color: transparent !important;
+}
+#numNotif {
+  position: absolute !important;
+  width: 15px !important;
+  top: 0 !important;
+  color: orange !important;
+  right: 3% !important;
+  z-index: 1000 !important;
+  background-color: transparent !important;
+  cursor: pointer !important;
+}
+#search, #menu {
+  background-color: white !important;
+}
+#clearSearch {
+  height: 66px !important;
+}
+#clearSearch > a > i {
+  line-height: 66px !important;
+  font-size: 34px !important;
+  color: orange !important;
+}
+#clearSearch > .row > a {
+  left: -20px !important;
+}
+#clearSearch > .row {
+  height: 100% !important;
+  line-height: 80px !important;
+}
+#clearSearch > .row > a > i {
+  font-size: 30px !important;
+}
+
+.tab {
+  line-height: 90px !important;
+}
+.tab > a {
+    color: white !important;
+}
+.tabs > li{
+  height: 66px !important;
+}
+.tabs > li > i {
+  font-size: 34px !important;
+}
+.tabSelected > i {
+  color: var(--btn-active) !important;
+}
