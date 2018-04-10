@@ -11,9 +11,6 @@ import CreateProject from './CreateProject';
 import CreateCopySubmit from './CreateCopySubmit';
 
 class PlayerEdit extends Component{
-  componentDidMount(){
-    document.getElementById('codeInput').focus();
-  }
   renderEdit(high, selectedProject){
     const { edit, action: { deleteHighlight } } = this.props;
     if (edit) {
