@@ -25,14 +25,11 @@ class PlayerEdit extends Component{
     const admin = (project === null) ? false: (project[0]._uid === auth._id) ? true: false;
     const highlights = _.sortBy(filteredHighlights, "start");
     const high = highlights[highlight];
-    const del = (selectedProjects === false) ? <a onClick={ () => deleteHighlights(copy.highlights, selectedProject) } className="btn red col s6">Delete</a>: null;
+    const del = (selectedProjects === false && admin === true) ? <a onClick={ () => deleteHighlights(copy.highlights, selectedProject) } className="btn red col s6">Delete</a>: null;
     $(document).ready(function(){
       $('.modal').modal();
     });
-    if (admin === false || start === null) {
-      return null;
-    }
-    if (copy !== false) {
+    if (copy !== false && copy.highlights.length !== 0) {
       return (
         <div id="playerCopy" className="col s12 row">
           <a onClick={ () => copyCreate(copy, selectedProject) } className="btn col s6  modal-trigger" href="#modalCopy">Save</a>
@@ -44,20 +41,9 @@ class PlayerEdit extends Component{
         </div>
       );
     }
-    if (admin === false) {
+    if (admin === false || start === null) {
       return null;
     }
-    // <div className="col s4" onClick={ () => dispatch({ type: CHANGE_TIME, payload: "start" })}>
-    //   {`Start: ${start}`}
-    // </div>
-    // <div className="col s4" onClick={ () => dispatch({ type: CHANGE_TIME, payload: "stop" })}>
-    //   {`Stop: ${stop}`}
-    // </div>
-    // <div className="col s4">
-    //   {this.renderEdit(high, selectedProject)}
-    // </div>
-    // <textarea id="codeInput" value={comment} className="col s12 materialize-textarea" onChange={ e => dispatch({ type: CHANGE_COMMENT, payload: e.target.value })}>
-    // </textarea>
     return(
       <div id="playerEdit" className="col 12 row">
         <textarea id="codeInput" value={comment} placeholder="Code..." className="col s12 materialize-textarea" onChange={ e => dispatch({ type: CHANGE_COMMENT, payload: e.target.value })}>

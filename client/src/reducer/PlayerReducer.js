@@ -63,7 +63,7 @@ export default function ( state = initialState, action ){
       initiated = (state.initiated === 1) ? true: state.initiated - 1;
       playing = (state.initiated === 1) ? false: true;
       if (initiated === true) {
-        document.getElementById("playerLoad").style.display = "none";
+        document.getElementById("playerInitiate").style.display = "none";
       }
       return { ...state, initiated, playing };
     case SET_PLAYER:

@@ -1,7 +1,7 @@
 import { FETCH_USER, CHANGE_VIEW, CHANGE_PAGE, CHANGE_SEARCH_LOCAL, CHANGE_SEARCH_OPTION, CHANGE_SEARCH_TERM, SELECT_USER, SELECT_PROJECT, SELECT_GROUP, SELECT_FOLDER,
 CREATE, CHANGE_CREATE_ATTRIBUTE, CLEAR_CREATE, CREATE_REMOVE_VIDEO, CREATE_POST, UPDATE, REMOVE, SUBMIT_HIGHLIGHT, UPDATE_HIGHLIGHT, LOGOUT,
 DELETE_HIGHLIGHT, REQUEST, ANSWER_REQUEST, COPY_CREATE, COPY, SELECT_MULTIPLE, ADD_PROJECT, INVITE, DELETE_MULTIPLE, DELETE_HIGHLIGHTS,
-LOG } from '../actions/types';
+LOG, GET_PROJECT } from '../actions/types';
 import ReactPlayer from 'react-player';
 import $ from 'jquery';
 import _ from 'lodash';
@@ -35,6 +35,8 @@ export default function ( state = initialState, action ){
    user, projects, folders, groups, friends, searchOption, searchTerm, view, filteredHighlights, highlights, access, video, invites,
    selectedProjects;
   switch (action.type) {
+    case GET_PROJECT:
+      return { ...state, site: "player", filteredProjects: [...state.filteredProjects, action.payload ], projects: [ ...state.projects, action.payload], filteredHighlights: action.payload.highlights, selectedProject: action.payload._id };
     case LOG:
       return { ...state, log: true };
     case DELETE_HIGHLIGHTS:
@@ -363,6 +365,9 @@ export default function ( state = initialState, action ){
       }
       return { ...state, site: action.payload, searchTerm: "", create: null };
     case FETCH_USER:
+      if (action.payload === false) {
+        return initialState;
+      }
       filteredFriends = (state.filteredFriends === []) ? action.payload.friends: state.filteredFriends;
       return { ...initialState, access: action.payload.access, projects: action.payload.projects, filteredProjects: action.payload.projects, friends: action.payload.friends, filteredFriends, folders: action.payload.folders, groups: action.payload.groups };
     default: return state;

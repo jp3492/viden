@@ -51,3 +51,4 @@ export const DELETE_MULTIPLE = "delete_multiple";
 export const DELETE_HIGHLIGHTS = "delete_highlights";
 export const LOGOUT = "logout";
 export const LOG = "log";
+export const GET_PROJECT = "get_project";

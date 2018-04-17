@@ -10,13 +10,13 @@ import { PersistGate } from 'redux-persist/integration/react';
 import { persistStore, persistReducer, autoRehydrate } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import hardSet from 'redux-persist/lib/stateReconciler/hardSet';
-import autoMergeLevel1 from 'redux-persist/lib/stateReconciler/autoMergeLevel1'
+import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2'
 import logger from 'redux-logger';
 
 import App from './components/App';
 import reducer from './reducer';
 
-const persistConfig = { key: 'root', storage, stateReconciler: autoMergeLevel1 }
+const persistConfig = { key: 'root', storage, stateReconciler: autoMergeLevel2 }
 
 const persistedReducer = persistReducer(persistConfig, reducer);
 

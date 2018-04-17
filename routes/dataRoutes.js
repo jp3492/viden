@@ -4,9 +4,13 @@ const User = mongoose.model('users');
 const Highlights = mongoose.model('highlights');
 
 module.exports = (app) => {
+  app.get('/api/project/:id', async (req, res) => {
+    const { id } = req.params;
+    const project = await Highlights.findById(id);
+    res.send(project);
+  });
   app.post('/api/deleteHighlights', async (req, res) => {
     const { highlights, project } = req.body;
-    console.log(req.body);
     await Promise.all(highlights.map( async h => {
       await Highlights.update({ _id: project }, { $pull: { highlights: { _id: h } } });
     }));
@@ -44,7 +48,6 @@ module.exports = (app) => {
       if (confirm === true) {
         const i = await User.findById(me);
         const u = await User.findById(user);
-        console.log(i, u);
         const acc = i.access.filter( a => { return (a.target === target && a.user.toString() === user )});
         await User.update({ _id: me, access: { "$elemMatch": { target, user } } }, { $set: { "access.$.status": "confirmed" } });
         await User.update({ _id: user, access: { "$elemMatch": { target, user: me } } }, { $set: { "access.$.status": "confirmed" } });

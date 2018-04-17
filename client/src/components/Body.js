@@ -9,6 +9,12 @@ import BodyHeader from './BodyHeader';
 import Approve from './Approve';
 
 class Body extends Component{
+  componentWillMount(){
+    const { auth, history } = this.props;
+    if (auth === false) {
+      history.push('/login');
+    }
+  }
   componentDidMount(){
     const { dispatch, auth } = this.props;
     dispatch({ type: CHANGE_PAGE, payload: "home" });
@@ -19,7 +25,6 @@ class Body extends Component{
       return null;
     }
     if (auth !== false && auth.approved === false) {
-      console.log("approving");
       return <Approve />
     }
     return(

@@ -15,7 +15,7 @@ mongoose.connect(keys.mongoURI);
 const app = express();
 
 app.use(bodyParser.json({limit: '1mb' }));
-app.use(cookieSession({maxAge: 10 * 2 * 60 * 60 * 1000, keys: [keys.cookieKey]}));
+app.use(cookieSession({maxAge: 2 * 60 * 60 * 1000, keys: [keys.cookieKey]}));
 app.use(passport.initialize());
 app.use(passport.session());
 

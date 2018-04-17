@@ -12,8 +12,8 @@ import Login from './Login';
 
 class App extends Component {
   componentWillMount(){
-    const { auth, fetchUser } = this.props;
-    if (auth === false) {
+    const { auth, fetchUser, main: { selectedProject } } = this.props;
+    if (auth === false && selectedProject === null) {
       fetchUser();
     }
   }

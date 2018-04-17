@@ -52,6 +52,7 @@
   margin: 0 !important;
 }
 #playerCopy  {
+  flex: none !important;
   margin: 0 !important;
   padding: 0 !important;
 }
@@ -173,16 +174,7 @@ textarea:focus {
   height: 100px !important;
   bottom: 0 !important;
 }
-#playerEdit {
-  background-color: var(--dark) !important;
-  flex: none !important;
-  bottom: 0;
-  right: 0;
-  left: 0;
-  padding: 0 !important;
-  margin: 0 !important;
-  height: 100px !important;
-}
+
 #times > div {
   height: 100%;
   line-height: 45px !important;
@@ -190,6 +182,16 @@ textarea:focus {
 }
 #times {
   background-color: var(--grey) !important;
+}
+#playerEdit {
+  background-color: var(--dark) !important;
+  flex: none !important;
+  bottom: 0 !important;
+  right: 0;
+  left: 0;
+  padding: 0 !important;
+  margin: 0 !important;
+  height: 100px !important;
 }
 #playerEdit > .row {
   margin: 0 !important;
@@ -260,4 +262,16 @@ textarea:focus {
 .tab > .active {
   background-color: #8e8e8e !important;
   color: white !important;
+}
+#playerInitiate {
+  position: fixed !important;
+  height: 100% !important;
+  width: 100% !important;
+  z-index: 99 !important;
+  background-color: grey !important;
+}
+#playerInitiate > ul {
+  width: 50%;
+  height: 50%;
+  margin: auto !important;
 }

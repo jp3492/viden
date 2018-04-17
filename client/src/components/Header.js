@@ -8,10 +8,10 @@ import Login from './Login';
 
 class Header extends Component{
   componentDidMount(){
-    const { auth, history, site } = this.props;
-    if (auth === false) {
+    const { auth, history, site, location: { pathname } } = this.props;
+    if (auth === false && pathname.includes('player') === false) {
       history.push('/login')
-    } else if (site !== "player") {
+    } else if (site !== "player" && pathname.includes('player') === false) {
       history.push('/home')
     }
   }

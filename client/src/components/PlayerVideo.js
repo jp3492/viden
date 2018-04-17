@@ -90,13 +90,14 @@ class PlayerVideo extends Component{
             height='100%'
             width='100%'
             key={`player${i}`}
-            url={v} playing={p}
+            url={v}
+            playing={p}
             progressInterval={100}
             className={className}
             onProgress={ time => dispatch({ type: PROGRESS, payload: time })}
             onPlay={ () => this.checkPlay(true)}
             onPause={ () => this.checkPlay(false)}
-            onStart={ () => dispatch({type: INITIATE })}
+            onStart={ () => dispatch({type: INITIATE, payload: i })}
             ref={ p => this.setPlayer(i, p) }/>;
   }
   render(){
