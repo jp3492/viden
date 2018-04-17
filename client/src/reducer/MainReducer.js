@@ -359,11 +359,11 @@ export default function ( state = initialState, action ){
     case CHANGE_PAGE:
       if (state.selectedProjects !== false) {
         if (action.payload === "home") {
-          return { ...state, site: action.payload, searchTerm: "", create: null, selectedProjects: false };
+          return { ...state, site: action.payload, searchTerm: "", create: null, selectedProjects: false, selectedProject: null };
         }
         return { ...state, site: action.payload, searchTerm: "", create: null, filteredHighlights: state.selectedProjects.highlights };
       }
-      return { ...state, site: action.payload, searchTerm: "", create: null };
+      return { ...state, site: action.payload, searchTerm: "", create: null, selectedProject: null };
     case FETCH_USER:
       if (action.payload === false) {
         return initialState;
