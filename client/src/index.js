@@ -22,8 +22,8 @@ const persistedReducer = persistReducer(persistConfig, reducer);
 
 const store = createStore(persistedReducer, {}, applyMiddleware(ReduxThunk, logger));
 const persistor = persistStore(store);
-// persistor.purge();
-// persistor.flush();
+persistor.purge();
+persistor.flush();
 
 export default class Preloader extends Component {
   constructor() {
