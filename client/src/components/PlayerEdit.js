@@ -13,6 +13,9 @@ import ProjectList from './ProjectList';
 
 class PlayerEdit extends Component{
   shouldComponentUpdate(nextProps, nextState){
+    if (this.props.start !== nextProps.start || this.props.stop !== nextProps.stop || this.props.comment !== nextProps.comment) {
+      return true;
+    }
     if ((nextProps.copy !== false && nextProps.copy.highlights.length === 1) || nextProps.copy === false || nextProps.copy.highlights.length === 0) {
       if (this.props.copy.folder !== nextProps.copy.folder || (this.props.copy.folder === nextProps.copy.folder && nextProps.copy.folder !== null) || this.props.copy.targets !== nextProps.copy.targets) {
         return false;
