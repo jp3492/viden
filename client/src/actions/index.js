@@ -1,6 +1,11 @@
 import axios from 'axios';
 import { FETCH_USER, CREATE_UPDATE, CREATE_POST, CREATING_UPDATE, CREATING_POST, REMOVE, CHANGE_SEARCH_TERM, SUBMIT_HIGHLIGHT, UPDATE_HIGHLIGHT,
-DELETE_HIGHLIGHT, REQUEST, ANSWER_REQUEST, COPY_CREATE, DELETE_MULTIPLE, DELETE_HIGHLIGHTS, LOG, GET_PROJECT, CHANGE_PAGE } from './types';
+DELETE_HIGHLIGHT, REQUEST, ANSWER_REQUEST, COPY_CREATE, DELETE_MULTIPLE, DELETE_HIGHLIGHTS, LOG, GET_PROJECT, CHANGE_PAGE, COPY_ADDED } from './types';
+
+export const copyAdd = copy => async dispatch => {
+  const res = await axios.post('/api/addHighlights', copy);
+  dispatch({ type: COPY_ADDED, payload: res.data })
+}
 
 export const getProject = id => async dispatch => {
   const res = await axios.get(`/api/project/${id}`);

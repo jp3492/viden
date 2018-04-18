@@ -4,6 +4,37 @@ const User = mongoose.model('users');
 const Highlights = mongoose.model('highlights');
 
 module.exports = (app) => {
+  app.post('/api/addHighlights', async (req, res) => {
+    const { targets, highlights } = req.body;
+    let videos = highlights.map( h => { return h.link } );
+    videos = _.uniq(videos);
+    //map over targets, check if link exists, if not add, check if same highlight exists, if not add_project
+    await Promise.all(targets.map( async t => {
+      const project = await Highlights.findById(t);
+      let newVideos = project.videos;
+      videos.map( v => {
+        if (newVideos.indexOf(v) === -1) {
+          newVideos.push(v);
+        }
+      })
+      await Highlights.update({ _id: t }, { $set: { videos: newVideos } });
+      const addHighlights = highlights.map( h => {
+        return { start: h.start, stop: h.stop, comment: h.comment, video: newVideos.indexOf(h.link) }
+      })
+      const oldHighlights = project.highlights.map( h => { return { start: h.start, stop: h.stop, comment: h.comment, video: h.video }});
+      let newHighlights = [];
+      Promise.all(addHighlights.map( async h => {
+        console.log(oldHighlights, h, _.findIndex(oldHighlights, h));
+        if (_.findIndex(oldHighlights, h) === -1) {
+          await Highlights.update({ _id: t }, { $push: { highlights: h } });
+        }
+      }))
+    }));
+    const objectIds = targets.map( t => { return mongoose.Types.ObjectId(t)});
+    const projects = await Highlights.find({ _id: { $in: objectIds } });
+    console.log(projects);
+    res.send(projects);
+  })
   app.get('/api/project/:id', async (req, res) => {
     const { id } = req.params;
     const project = await Highlights.findById(id);

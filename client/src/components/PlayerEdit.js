@@ -9,8 +9,19 @@ import { CHANGE_COMMENT, CHANGE_TIME } from '../actions/types';
 
 import CreateProject from './CreateProject';
 import CreateCopySubmit from './CreateCopySubmit';
+import ProjectList from './ProjectList';
 
 class PlayerEdit extends Component{
+  shouldComponentUpdate(nextProps, nextState){
+    if ((nextProps.copy !== false && nextProps.copy.highlights.length === 1) || nextProps.copy === false || nextProps.copy.highlights.length === 0) {
+      if (this.props.copy.folder !== nextProps.copy.folder || (this.props.copy.folder === nextProps.copy.folder && nextProps.copy.folder !== null) || this.props.copy.targets !== nextProps.copy.targets) {
+        return false;
+      }
+      return true
+    } else {
+      return false
+    }
+  }
   renderEdit(high, selectedProject){
     const { edit, action: { deleteHighlight } } = this.props;
     if (edit) {
@@ -25,18 +36,24 @@ class PlayerEdit extends Component{
     const admin = (project === null) ? false: (project[0]._uid === auth._id) ? true: false;
     const highlights = _.sortBy(filteredHighlights, "start");
     const high = highlights[highlight];
-    const del = (selectedProjects === false && admin === true) ? <a onClick={ () => deleteHighlights(copy.highlights, selectedProject) } className="btn red col s6">Delete</a>: null;
+    const del = (selectedProjects === false && admin === true) ? <a onClick={ () => deleteHighlights(copy.highlights, selectedProject) } className="btn red col s4">Delete</a>: null;
     $(document).ready(function(){
       $('.modal').modal();
+      $('#modalAdd').modal({ dismissible: true});
     });
+
     if (copy !== false && copy.highlights.length !== 0) {
       return (
         <div id="playerCopy" className="col s12 row">
-          <a onClick={ () => copyCreate(copy, selectedProject) } className="btn col s6  modal-trigger" href="#modalCopy">Save</a>
+          <a onClick={ () => copyCreate(copy, selectedProject) } className="btn col s4  modal-trigger" href="#modalCopy">Save</a>
+          <a  className="btn col s4  modal-trigger" href="#modalAdd">Add to</a>
           {del}
           <div id="modalCopy" className="modal">
             <CreateProject copy={true}/>
             <CreateCopySubmit />
+          </div>
+          <div id="modalAdd" className="modal">
+            <ProjectList />
           </div>
         </div>
       );

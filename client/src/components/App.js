@@ -14,7 +14,6 @@ class App extends Component {
   componentWillMount(){
     const { auth, fetchUser, main: { selectedProject } } = this.props;
     if (auth === false && selectedProject === null) {
-      console.log("fethcing");
       fetchUser();
     }
   }

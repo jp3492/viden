@@ -8,7 +8,6 @@ import { create_update } from '../actions';
 class CreateCopySubmit extends Component{
   submitCreate(update){
     const { action, create, auth } = this.props;
-    console.log("creating");
     action.create_update(update, create, auth._id, create.invites);
     $('.modal').modal('close');
   }

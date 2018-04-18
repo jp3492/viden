@@ -69,6 +69,8 @@ class PlayerControls extends Component{
   }
   nextHighlight(next){
     const { dispatch, filteredHighlights, player: { highlight } } = this.props;
+    const add = (next === true) ? -10: 10;
+    document.getElementById('playerList').scrollTop = document.getElementById(`highlight${highlight}`).offsetTop + add;
     const highlights = _.sortBy(filteredHighlights, "start");
     const nextIndex = (next === true) ? (highlight === (filteredHighlights.length - 1)) ? 0: highlight + 1: (highlight === 0) ? filteredHighlights.length - 1: highlight - 1;
     const nextHighlight = highlights[nextIndex];

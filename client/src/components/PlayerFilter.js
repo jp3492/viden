@@ -7,21 +7,21 @@ import { CHANGE_SEARCH_TERM, COPY } from '../actions/types';
 class PlayerFilter extends Component{
 
   render(){
-    const { history, dispatch, searchTerm, filteredProjects, selectedProject, selectedProjects, copy } = this.props;
+    const { auth, history, dispatch, searchTerm, filteredProjects, selectedProject, selectedProjects, copy } = this.props;
     const copyClass = (copy === false) ? "col s2 center-align material-icons": "col s2 center-align material-icons iconSelected";
+    const multi = (auth === false) ? null: <i className={copyClass} onClick={ () => dispatch({ type: COPY })}>playlist_add</i>;
     return (
       <div id="playerFilter">
         <div className="row">
-          <input id="playerFilterSearch" className="col s8" onChange={ e => dispatch({type: CHANGE_SEARCH_TERM, payload: e.target.value }) } placeholder="Filter code..." />
-          <i className="col s2 center-align material-icons">filter_list</i>
-          <i className={copyClass} onClick={ () => dispatch({ type: COPY })}>playlist_add</i>
+          <input id="playerFilterSearch" className="col s10" onChange={ e => dispatch({type: CHANGE_SEARCH_TERM, payload: e.target.value }) } placeholder="Filter code..." />
+          {multi}
         </div>
       </div>
     );
   }
 }
-const mapStateToProps = ({ main: { searchTerm, filteredProjects, selectedProject, selectedProjects }, player: { copy } }) => {
-  return { searchTerm, filteredProjects, selectedProject, copy, selectedProjects };
+const mapStateToProps = ({ auth, main: { searchTerm, filteredProjects, selectedProject, selectedProjects }, player: { copy } }) => {
+  return { auth, searchTerm, filteredProjects, selectedProject, copy, selectedProjects };
 }
 
 export default withRouter(connect(mapStateToProps)(PlayerFilter));

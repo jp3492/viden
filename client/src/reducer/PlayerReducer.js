@@ -1,6 +1,6 @@
 import { PP, MUTE, SU, SD, VU, VD, CV, HP, HN, SET_PLAYER, SET_TIME, MARK, SUBMIT_HIGHLIGHT, CHANGE_COMMENT, SELECT_HIGHLIGHT, EDIT, UPDATE_HIGHLIGHT, LOGOUT,
 PROGRESS, CHANGE_TIME, DELETE_HIGHLIGHT, PLAY_LIST, INITIATE, CHANGE_SEARCH_TERM, COPY, COPY_ADD, COPY_CREATE, SELECT_PROJECT, CHANGE_PAGE, CREATE_POST,
-DELETE_HIGHLIGHTS } from '../actions/types';
+DELETE_HIGHLIGHTS, COPY_SELECT_FOLDER, COPY_ADD_TARGET, COPY_ADDED } from '../actions/types';
 const initialState = {
   playing: true,
   playList: true,
@@ -24,6 +24,17 @@ const initialState = {
 export default function ( state = initialState, action ){
   let volume, speed, players, highlight, initiated, playing, copy;
   switch (action.type) {
+    case COPY_ADDED:
+      return { ...state, copy: false }
+    case COPY_ADD_TARGET:
+      if (state.copy.targets.indexOf(action.payload) === -1) {
+        return { ...state, copy: { ...state.copy, targets: [ ...state.copy.targets, action.payload ] } }
+      } else {
+        return { ...state, copy: { ...state.copy, targets: state.copy.targets.filter( t => { return t !== action.payload } ) } }
+      }
+    case COPY_SELECT_FOLDER:
+      const folder = (action.payload === state.copy.folder) ? null: action.payload;
+      return { ...state, copy: { ...state.copy, folder } };
     case DELETE_HIGHLIGHTS: return { ...state, copy: false };
     case CREATE_POST: return { ...state, copy: false };
     case CHANGE_SEARCH_TERM: return { ...state, highlight: 0 };
@@ -41,7 +52,7 @@ export default function ( state = initialState, action ){
       }
       return { ...state, copy: { ...state.copy, highlights: [ ...state.copy.highlights, action.payload ] } };
     case COPY:
-      copy = (state.copy === false) ? { title: "", description: "", parent: null, highlights: [], videos: [], invites: [] } : false;
+      copy = (state.copy === false) ? { title: "", description: "", parent: null, highlights: [], videos: [], invites: [], targets: [], folder: null } : false;
       return { ...state, copy };
     case PLAY_LIST: return { ...state, playList: !state.playList };
     case DELETE_HIGHLIGHT:

@@ -1,7 +1,7 @@
 import { FETCH_USER, CHANGE_VIEW, CHANGE_PAGE, CHANGE_SEARCH_LOCAL, CHANGE_SEARCH_OPTION, CHANGE_SEARCH_TERM, SELECT_USER, SELECT_PROJECT, SELECT_GROUP, SELECT_FOLDER,
 CREATE, CHANGE_CREATE_ATTRIBUTE, CLEAR_CREATE, CREATE_REMOVE_VIDEO, CREATE_POST, UPDATE, REMOVE, SUBMIT_HIGHLIGHT, UPDATE_HIGHLIGHT, LOGOUT,
 DELETE_HIGHLIGHT, REQUEST, ANSWER_REQUEST, COPY_CREATE, COPY, SELECT_MULTIPLE, ADD_PROJECT, INVITE, DELETE_MULTIPLE, DELETE_HIGHLIGHTS,
-LOG, GET_PROJECT } from '../actions/types';
+LOG, GET_PROJECT, COPY_ADDED } from '../actions/types';
 import ReactPlayer from 'react-player';
 import $ from 'jquery';
 import _ from 'lodash';
@@ -35,6 +35,26 @@ export default function ( state = initialState, action ){
    user, projects, folders, groups, friends, searchOption, searchTerm, view, filteredHighlights, highlights, access, video, invites,
    selectedProjects;
   switch (action.type) {
+    case COPY_ADDED:
+      //map over state.projects, check if is in received projects, if so, return new project
+      const newProjects = action.payload.map( p => { return p._id });
+      return { ...state, projects: state.projects.map( p => {
+          if (newProjects.indexOf(p._id) !== -1) {
+            project = action.payload.filter( t => { return t._id === p._id})
+            return project[0];
+          } else {
+            return p;
+          }
+        }),
+        filteredProjects: state.filteredProjects.map( p => {
+          if (newProjects.indexOf(p._id) !== -1) {
+            project = action.payload.filter( t => { return t._id === p._id})
+            return project[0];
+          } else {
+            return p;
+          }
+        })
+      }
     case GET_PROJECT:
       return { ...state, site: "player", filteredProjects: [...state.filteredProjects, action.payload ], projects: [ ...state.projects, action.payload], filteredHighlights: action.payload.highlights, selectedProject: action.payload._id };
     case LOG:
