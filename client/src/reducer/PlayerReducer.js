@@ -1,6 +1,6 @@
 import { PP, MUTE, SU, SD, VU, VD, CV, HP, HN, SET_PLAYER, SET_TIME, MARK, SUBMIT_HIGHLIGHT, CHANGE_COMMENT, SELECT_HIGHLIGHT, EDIT, UPDATE_HIGHLIGHT, LOGOUT,
 PROGRESS, CHANGE_TIME, DELETE_HIGHLIGHT, PLAY_LIST, INITIATE, CHANGE_SEARCH_TERM, COPY, COPY_ADD, COPY_CREATE, SELECT_PROJECT, CHANGE_PAGE, CREATE_POST,
-DELETE_HIGHLIGHTS, COPY_SELECT_FOLDER, COPY_ADD_TARGET, COPY_ADDED } from '../actions/types';
+DELETE_HIGHLIGHTS, COPY_SELECT_FOLDER, COPY_ADD_TARGET, COPY_ADDED, DISSMISS_HIGHLIGHT } from '../actions/types';
 const initialState = {
   playing: true,
   playList: true,
@@ -22,8 +22,10 @@ const initialState = {
 }
 
 export default function ( state = initialState, action ){
-  let volume, speed, players, highlight, initiated, playing, copy;
+  let volume, speed, players, highlight, initiated, playing, copy, start, stop;
   switch (action.type) {
+    case DISSMISS_HIGHLIGHT:
+      return { ...state, start: null, stop: null, comment: "" };
     case COPY_ADDED:
       return { ...state, copy: false }
     case COPY_ADD_TARGET:
@@ -58,7 +60,7 @@ export default function ( state = initialState, action ){
     case DELETE_HIGHLIGHT:
       highlight = (state.highlight === 0) ? 0: state.highlight-1;
       return { ...state, start: null, stop: null, comment: "", changing: null, edit: false, highlight };
-    case CHANGE_TIME:   return { ...state, changing: action.payload };
+    case CHANGE_TIME:   return { ...state, [action.payload]: null, changing: action.payload };
     case PROGRESS:
       if (state.changing === null) { return { ...state, progress: action.payload.played * 100 } }
       else { return { ...state, progress: action.payload.played * 100, [state.changing]: action.payload.playedSeconds.toFixed(1) } }

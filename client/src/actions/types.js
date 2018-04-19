@@ -55,3 +55,4 @@ export const GET_PROJECT = "get_project";
 export const COPY_SELECT_FOLDER = "copy_select_folder";
 export const COPY_ADD_TARGET = "copy_add_target";
 export const COPY_ADDED = "copy_added";
+export const DISSMISS_HIGHLIGHT = "dismiss_highlight";

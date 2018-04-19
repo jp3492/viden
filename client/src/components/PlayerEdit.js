@@ -5,7 +5,7 @@ import $ from 'jquery';
 import _ from 'lodash';
 
 import { deleteHighlight, copyCreate, deleteHighlights } from '../actions';
-import { CHANGE_COMMENT, CHANGE_TIME } from '../actions/types';
+import { CHANGE_COMMENT, CHANGE_TIME, DISSMISS_HIGHLIGHT } from '../actions/types';
 
 import CreateProject from './CreateProject';
 import CreateCopySubmit from './CreateCopySubmit';
@@ -13,6 +13,9 @@ import ProjectList from './ProjectList';
 
 class PlayerEdit extends Component{
   shouldComponentUpdate(nextProps, nextState){
+    if ((this.props.copy !== false && nextProps.copy === false) || (this.props.copy !== false && this.props.copy.highlights.length !== nextProps.copy.highlights.length)) {
+      return true;
+    }
     if (this.props.start !== nextProps.start || this.props.stop !== nextProps.stop || this.props.comment !== nextProps.comment) {
       return true;
     }
@@ -26,11 +29,11 @@ class PlayerEdit extends Component{
     }
   }
   renderEdit(high, selectedProject){
-    const { edit, action: { deleteHighlight } } = this.props;
+    const { edit, action: { deleteHighlight }, dispatch } = this.props;
     if (edit) {
-      return <a href="#" onClick={ () => deleteHighlight(selectedProject, high._id)}>Delete</a>;
+      return <a href="#" className="btn red" onClick={ () => deleteHighlight(selectedProject, high._id)}>Delete</a>;
     }
-    return "DbClick->Edit"
+    return <a href="#" className="btn red" onClick={ () => dispatch({ type: DISSMISS_HIGHLIGHT })}>Dismiss</a>;
   }
   render(){
     const { auth, dispatch, comment, start, stop, filteredHighlights, highlight, selectedProject, copy, filteredProjects, selectedProjects,
@@ -39,7 +42,9 @@ class PlayerEdit extends Component{
     const admin = (project === null) ? false: (project[0]._uid === auth._id) ? true: false;
     const highlights = _.sortBy(filteredHighlights, "start");
     const high = highlights[highlight];
-    const del = (selectedProjects === false && admin === true) ? <a onClick={ () => deleteHighlights(copy.highlights, selectedProject) } className="btn red col s4">Delete</a>: null;
+    console.log(copy.highlights);
+    const del = (selectedProjects === false && admin === true) ?
+      <a onClick={ () => deleteHighlights(copy.highlights, selectedProject) } className="btn red col s4">Delete</a>: null;
     $(document).ready(function(){
       $('.modal').modal();
       $('#modalAdd').modal({ dismissible: true});
@@ -61,7 +66,7 @@ class PlayerEdit extends Component{
         </div>
       );
     }
-    if (admin === false || start === null) {
+    if (admin === false || (start === null && comment === "")) {
       return null;
     }
     return(
