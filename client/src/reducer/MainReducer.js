@@ -166,6 +166,7 @@ export default function ( state = initialState, action ){
       const index = state.projects.indexOf(project[0]);
       let highlights = project[0].highlights;
       highlights = [ ...highlights, action.payload ];
+      highlights = _.sortBy(highlights, "start");
       project = { ...project[0], highlights };
       projects = state.projects.map( p => {
         if (p._id === state.selectedProject) { return project }

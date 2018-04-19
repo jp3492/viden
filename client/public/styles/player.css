@@ -47,6 +47,7 @@
   height: 45px !important;
   line-height: 45px !important;
   background-color: var(--grey) !important;
+  padding: 0 !important;
 }
 .materialize-textarea {
   margin: 0 !important;
@@ -141,7 +142,6 @@ textarea:focus {
   background-color: var(--light) !important;
 }
 #playerLeft {
-  width: 75% !important;
   display: flex !important;
   flex-direction: column !important;
   position: absolute;
@@ -150,7 +150,6 @@ textarea:focus {
   padding: 0 !important;
 }
 #playerRight {
-  width: 25%;
   display: flex !important;
   flex-direction: column !important;
   right: 0;

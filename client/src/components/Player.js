@@ -36,12 +36,12 @@ class Player extends Component{
     return(
       <div id="player" className="row">
         <PlayerInitiate />
-        <div id="playerLeft">
+        <div id="playerLeft" className="col l9 m10 s12">
           <PlayerVideoHeader />
           <PlayerVideo />
           <PlayerControls />
         </div>
-        <div id="playerRight">
+        <div id="playerRight" className="col l3 m2 s12">
           <PlayerFilter />
           <PlayerList />
           <PlayerEdit />
