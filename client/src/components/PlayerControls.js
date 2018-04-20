@@ -33,7 +33,7 @@ class PlayerControls extends Component{
   mark() {
     const { dispatch, player: { playing, start, stop, players, video, comment, edit, highlight }, action: { submitHighlight, updateHighlight }, selectedProject, filteredHighlights } = this.props;
     const highlights = _.sortBy(filteredHighlights, "start");
-    const selectedHighlight = (highlights.length !== 0) ? highlights[highlight]._id: null;
+    const selectedHighlight = (highlights[highlight] !== undefined && highlights.length !== 0) ? highlights[highlight]._id: null;
     const act = (edit === true) ? 1: (start === null) ? 2: (stop === null) ? 3: 4;
     switch (act) {
       case 1: updateHighlight(selectedProject, selectedHighlight, start, stop, comment); break;

@@ -18,9 +18,7 @@ export const log = inn => async dispatch => {
 }
 
 export const deleteHighlights = (highlights, project) => async dispatch => {
-  console.log(highlights);
   const highs = highlights.map( h => { return h._id });
-  console.log(highs);
   await axios.post('/api/deleteHighlights', { highlights: highs, project });
   dispatch({ type: DELETE_HIGHLIGHTS, payload: { highlights: highs, project } });
 }
@@ -58,8 +56,8 @@ export const request = (me, type, target, user) => async dispatch => {
   dispatch({ type: REQUEST, payload: res.data });
 }
 
-export const deleteHighlight = (project, highlight) => async dispatch => {
-  const res = await axios.post('/api/deleteHighlight', { project, highlight });
+export const deleteHighlight = (project, highlight, index) => async dispatch => {
+  const res = await axios.post('/api/deleteHighlight', { project, highlight, index });
   dispatch({ type: DELETE_HIGHLIGHT, payload: res.data });
 }
 

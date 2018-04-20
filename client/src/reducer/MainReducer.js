@@ -131,8 +131,22 @@ export default function ( state = initialState, action ){
       }
     case DELETE_HIGHLIGHT:
       filteredHighlights = state.filteredHighlights.filter( h => { return h._id !== action.payload.highlight });
+      filteredHighlights = filteredHighlights.map( h => {
+        if (h.index > action.payload.index) {
+          return { ...h, index: h.index - 1 }
+        } else {
+          return h
+        }
+      });
       project = state.projects.filter( p => { return p._id === state.selectedProject });
       highlights = project[0].highlights.filter( h => { return h._id !== action.payload.highlight });
+      highlights = highlights.map( h => {
+        if (h.index > action.payload.index) {
+          return { ...h, index: h.index - 1 };
+        } else {
+          return h;
+        }
+      });
       projects = state.projects.map( p => {
         if (p._id === action.payload.project) {
           return { ...p, highlights };
@@ -362,6 +376,12 @@ export default function ( state = initialState, action ){
             });
             return { ...state, filteredFriends, searchTerm: action.payload, selectedUser: null };
           case "sequences":
+            let allSequences = [];
+            state.projects.map( p => {
+              const aHighlights = p.highlights.map( h => { return { ...h, project: p._id } });
+              allSequences.concat(aHighlights);
+            })
+            console.log(allSequences);
             return state;
         }
       } else {

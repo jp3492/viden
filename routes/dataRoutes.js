@@ -32,7 +32,6 @@ module.exports = (app) => {
     }));
     const objectIds = targets.map( t => { return mongoose.Types.ObjectId(t)});
     const projects = await Highlights.find({ _id: { $in: objectIds } });
-    console.log(projects);
     res.send(projects);
   })
   app.get('/api/project/:id', async (req, res) => {
@@ -108,9 +107,22 @@ module.exports = (app) => {
     res.send(req.body);
   });
   app.post('/api/deleteHighlight', async (req, res) => {
-    const { project, highlight } = req.body;
+    const { project, highlight, index } = req.body;
     await Highlights.update(
       { _id: project }, { $pull: { highlights: { _id: highlight } } });
+    const high = await Highlights.findById(project);
+    let newHighlights = high.highlights;
+    newHighlights = newHighlights.map( h => {
+      if (h.index > index) {
+        return { start: h.start, stop: h.stop, comment: h.comment, video: h.video, _id: h._id, index: h.index-1 }
+      } else {
+        return h
+      }
+    });
+    await Highlights.update({ _id: project }, { $set: { highlights: newHighlights }});
+    const check = await Highlights.findById(project);
+    console.log(check);
+    //need to send this back or execute the same action in the state so that new indexes get assigned there as well
     res.send(req.body);
   });
   app.post('/api/updateHighlight', async (req, res) => {
@@ -122,9 +134,12 @@ module.exports = (app) => {
   });
   app.post('/api/submitHighlight', async (req, res) => {
     const { project, video, start, stop, comment } = req.body;
-    const highlight = { start, stop, comment, video };
+    let highlights = await Highlights.findById( project );
+    const indexes = highlights.highlights.map( h => { return h.index });
+    const index = indexes.length + 1;
+    const highlight = { start, stop, comment, video, index };
     await Highlights.update({ _id: project }, { $push: { highlights: highlight } } );
-    const highlights = await Highlights.findOne({ _id: project });
+    highlights = await Highlights.findOne({ _id: project });
     const response = highlights.highlights.filter( h => {
       return (Number(h.start) === Number(start) && Number(h.stop) === Number(stop) && h.comment === comment && h.video === video);
     });
@@ -241,7 +256,7 @@ module.exports = (app) => {
                             response = { type: "dataVolley", data: newVolley };
                             break;
         case "project":     const highlights = (create.highlights !== undefined) ? create.highlights: [];
-                            const newProject = new Highlights({ highlights, title: create.title, description: create.description, videos: create.videos, parent: create.parent, privacy: create.privacy, _uid: _id });
+                            const newProject = new Highlights({ highlights, sort: "index", title: create.title, description: create.description, videos: create.videos, parent: create.parent, privacy: create.privacy, _uid: _id });
                             await newProject.save();
                             await Promise.all(invites.map( async i => {
                               await User.update({ _id: i }, { $push: { access: { target: newProject._id, user: _id, type: create.type, status: "invited" } } });

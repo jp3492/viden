@@ -31,7 +31,7 @@ class PlayerEdit extends Component{
   renderEdit(high, selectedProject){
     const { edit, action: { deleteHighlight }, dispatch } = this.props;
     if (edit) {
-      return <a href="#" className="btn red" onClick={ () => deleteHighlight(selectedProject, high._id)}>Delete</a>;
+      return <a href="#" className="btn red" onClick={ () => deleteHighlight(selectedProject, high._id, high.index)}>Delete</a>;
     }
     return <a href="#" className="btn red" onClick={ () => dispatch({ type: DISSMISS_HIGHLIGHT })}>Dismiss</a>;
   }
@@ -42,7 +42,6 @@ class PlayerEdit extends Component{
     const admin = (project === null) ? false: (project[0]._uid === auth._id) ? true: false;
     const highlights = _.sortBy(filteredHighlights, "start");
     const high = highlights[highlight];
-    console.log(copy.highlights);
     const del = (selectedProjects === false && admin === true) ?
       <a onClick={ () => deleteHighlights(copy.highlights, selectedProject) } className="btn red col s4">Delete</a>: null;
     $(document).ready(function(){

@@ -11,6 +11,7 @@ import PlayerHeader from './PlayerHeader';
 import PlayerFilter from './PlayerFilter';
 import PlayerVideoHeader from './PlayerVideoHeader';
 import PlayerInitiate from './PlayerInitiate';
+import PlayerSort from './PlayerSort';
 
 import { SELECT_PROJECT } from '../actions/types';
 import { getProject } from '../actions';
@@ -43,6 +44,7 @@ class Player extends Component{
         </div>
         <div id="playerRight" className="col l3 m2 s12">
           <PlayerFilter />
+          <PlayerSort />
           <PlayerList />
           <PlayerEdit />
         </div>

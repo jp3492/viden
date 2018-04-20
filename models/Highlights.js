@@ -18,6 +18,7 @@ const CommentSchema = new Schema({
 });
 
 const HighlightSchema = new Schema({
+  index: Number,
   start: Number,
   stop: Number,
   comment: String,
@@ -42,6 +43,7 @@ const HighlightsSchema = new Schema({
   type: String,
   videos: [String],
   highlights: [HighlightSchema],
+  sort: String,
   access: [AccessSchema]
 }, { timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } });
 

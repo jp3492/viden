@@ -20,15 +20,19 @@ class PlayerList extends Component{
       <a id={`checkbox${i}`} className="secondary-content" onClick={ e => {
         e.preventDefault();
         e.stopPropagation();
-        dispatch({ type: COPY_ADD, payload: { start, stop, comment, video, link: videos[video], _id } }); } }><p>
+        dispatch({ type: COPY_ADD, payload: { start, stop, comment, video, link: videos[video], _id } }); } }>
         <input type="checkbox" className="filled-in" id={`check${i}`} checked={defaultChecked} />
         <label htmlFor={`check${i}`}></label>
-      </p></a>: null;
+      </a>: null;
     return <li
       onDoubleClick={ () => dispatch({ type: EDIT, payload: { comment: selectedHighlight.comment, start: selectedHighlight.start, stop: selectedHighlight.stop } })}
       onClick={ () => this.selectHighlight(video, i)}
       id={`highlight${i}`} className={className}>
-      <a  >{start+"  "+comment}</a>{copying}</li>;
+        <a className="listIndex col s1">{i}</a>
+        <a className="listTime col s1">{start}</a>
+        <a className="listCode col s9">{comment}</a>
+        <a className="listCopy col s1">{copying}</a>
+      </li>;
   }
   render(){
     const { projects, selectedProject, filteredHighlights, selectedProjects } = this.props;

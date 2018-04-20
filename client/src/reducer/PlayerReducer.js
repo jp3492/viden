@@ -1,6 +1,6 @@
 import { PP, MUTE, SU, SD, VU, VD, CV, HP, HN, SET_PLAYER, SET_TIME, MARK, SUBMIT_HIGHLIGHT, CHANGE_COMMENT, SELECT_HIGHLIGHT, EDIT, UPDATE_HIGHLIGHT, LOGOUT,
 PROGRESS, CHANGE_TIME, DELETE_HIGHLIGHT, PLAY_LIST, INITIATE, CHANGE_SEARCH_TERM, COPY, COPY_ADD, COPY_CREATE, SELECT_PROJECT, CHANGE_PAGE, CREATE_POST,
-DELETE_HIGHLIGHTS, COPY_SELECT_FOLDER, COPY_ADD_TARGET, COPY_ADDED, DISSMISS_HIGHLIGHT } from '../actions/types';
+DELETE_HIGHLIGHTS, COPY_SELECT_FOLDER, COPY_ADD_TARGET, COPY_ADDED, DISSMISS_HIGHLIGHT, COPY_ADD_ALL } from '../actions/types';
 const initialState = {
   playing: true,
   playList: true,
@@ -47,6 +47,17 @@ export default function ( state = initialState, action ){
       return state;
     case SELECT_PROJECT: return { ...initialState, players: {}};
     case COPY_CREATE: return { ...state, playing: false };
+    case COPY_ADD_ALL:
+      if (action.payload.add === true) {
+        const inIds = state.copy.highlights.map( h => { return h._id });
+        const newHighlights = action.payload.filteredHighlights.filter( h => {
+          return inIds.indexOf(h._id) === -1;
+        });
+        return { ...state, copy: { ...state.copy, highlights: state.copy.highlights.concat(newHighlights)}}
+      } else {
+        const newIds = action.payload.filteredHighlights.map( h => { return h._id });
+        return { ...state, copy: { ...state.copy, highlights: state.copy.highlights.filter( h => { return newIds.indexOf(h._id) === -1 })}}
+      }
     case COPY_ADD:
       const inCopy = state.copy.highlights.filter( h => { return h._id === action.payload._id });
       if (inCopy.length === 1) {

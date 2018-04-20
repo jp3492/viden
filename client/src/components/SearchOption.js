@@ -26,7 +26,7 @@ class SearchOption extends Component{
         <ul id="searchOptions" className='dropdown-content'>
           <li  className="center-align col s12" onClick={() => dispatch({ type: CHANGE_SEARCH_OPTION, payload: "projects" })}><a>Projects</a></li>
           <li  className="center-align col s12" onClick={() => dispatch({ type: CHANGE_SEARCH_OPTION, payload: "people" })}><a>People</a></li>
-
+          <li  className="center-align col s12" onClick={() => dispatch({ type: CHANGE_SEARCH_OPTION, payload: "sequences" })}><a>People</a></li>
         </ul>
       </div>
     )
