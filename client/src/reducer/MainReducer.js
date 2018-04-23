@@ -3,7 +3,6 @@ CREATE, CHANGE_CREATE_ATTRIBUTE, CLEAR_CREATE, CREATE_REMOVE_VIDEO, CREATE_POST,
 DELETE_HIGHLIGHT, REQUEST, ANSWER_REQUEST, COPY_CREATE, COPY, SELECT_MULTIPLE, ADD_PROJECT, INVITE, DELETE_MULTIPLE, DELETE_HIGHLIGHTS,
 LOG, GET_PROJECT, COPY_ADDED } from '../actions/types';
 import ReactPlayer from 'react-player';
-import $ from 'jquery';
 import _ from 'lodash';
 
 const initialState = {
@@ -56,7 +55,7 @@ export default function ( state = initialState, action ){
         })
       }
     case GET_PROJECT:
-      return { ...state, site: "player", filteredProjects: [...state.filteredProjects, action.payload ], projects: [ ...state.projects, action.payload], filteredHighlights: action.payload.highlights, selectedProject: action.payload._id };
+      return { ...state, site: "player", filteredProjects: [...state.filteredProjects, action.payload ], filteredHighlights: action.payload.highlights, selectedProject: action.payload._id };
     case LOG:
       return { ...state, log: true };
     case DELETE_HIGHLIGHTS:
@@ -89,7 +88,7 @@ export default function ( state = initialState, action ){
       if (state.selectedProjects === false) { return { ...state, selectedProjects: { videos: [], projects: [], highlights: [] } } }
       else { return { ...state, selectedProjects: false } }
     case ANSWER_REQUEST:
-      const { me, target, confirm } = action.payload;
+      const { target, confirm } = action.payload;
       if (action.payload.type === "friend") {
         if (confirm === true) {
           friends = state.friends.map( f => {
@@ -177,7 +176,6 @@ export default function ( state = initialState, action ){
       return { ...state, projects, filteredHighlights, edit: false };
     case SUBMIT_HIGHLIGHT:
       project = state.projects.filter( p => { return p._id === state.selectedProject });
-      const index = state.projects.indexOf(project[0]);
       let highlights = project[0].highlights;
       highlights = [ ...highlights, action.payload ];
       highlights = _.sortBy(highlights, "start");
@@ -202,6 +200,7 @@ export default function ( state = initialState, action ){
         case "user":
           friends = state.friends.filter( f => { return f._id !== state.create._id });
           return { ...state, friends, filteredFriends: friends, create: null, update: false, selectedUser: null };
+        default: return state;
       }
     case INVITE:
       if (action.payload.type === "user") {
@@ -221,6 +220,7 @@ export default function ( state = initialState, action ){
           if (invites.indexOf(f) === -1) {
             invites.push(f);
           }
+          return f;
         });
       }
       return { ...state, create: { ...state.create, invites } };
@@ -238,6 +238,7 @@ export default function ( state = initialState, action ){
         case "user":
           user = state.friends.filter( f => { return f._id === state.selectedUser });
           create = { ...user[0], type: "user" }; break;
+        default: create = false;
       }
       return { ...state, update: true, create };
     case CREATE_POST:
@@ -253,6 +254,7 @@ export default function ( state = initialState, action ){
             if (data.invites.length !== 0) {
               data.invites.map( i => {
                 access.push({ user: i, target: data._id, status: "inviteSent", type: "project"})
+                return i;
               });
             }
             return { ...state, projects, filteredProjects: projects, create: null, update: false, access };
@@ -274,12 +276,14 @@ export default function ( state = initialState, action ){
               return f;
             });
             return { ...state, friends, filteredFriends: friends, create: null, update: false };
+          default: return state;
         }
       }
       switch (type) {
         case "project":   return { ...state, projects: [ ...state.projects, data ], create: null };
         case "folder":    return { ...state, folders: [ ...state.folders, data ], create: null };
         case "group":     return { ...state, groups: [ ...state.groups, data ], create: null };
+        default: return state;
       }
     case CREATE_REMOVE_VIDEO:
       videos = state.create.videos.filter( v => { return v !== action.payload });
@@ -380,9 +384,10 @@ export default function ( state = initialState, action ){
             state.projects.map( p => {
               const aHighlights = p.highlights.map( h => { return { ...h, project: p._id } });
               allSequences.concat(aHighlights);
+              return p;
             })
-            console.log(allSequences);
             return state;
+          default: return state;
         }
       } else {
         searchTerm = (action.payload === "") ? "": (typeof action.payload === "object") ? action.payload.term: state.searchTerm;
@@ -394,6 +399,7 @@ export default function ( state = initialState, action ){
             filteredFriends = (action.payload.constructor === Array) ? action.payload: state.filteredFriends;
             return { ...state, filteredFriends, searchTerm, selectedUser: null };
           case "sequences": return { ...state, searchTerm };
+          default: return state;
         }
       }
     case LOGOUT: return initialState;
@@ -404,7 +410,7 @@ export default function ( state = initialState, action ){
         }
         return { ...state, site: action.payload, searchTerm: "", create: null, filteredHighlights: state.selectedProjects.highlights };
       }
-      return { ...state, site: action.payload, searchTerm: "", create: null, selectedProject: null };
+      return { ...state, site: action.payload, searchTerm: "", create: null };
     case FETCH_USER:
       if (action.payload === false) {
         return initialState;

@@ -30,6 +30,7 @@ class CreateInvite extends Component{
       const childFriends = friends.filter( f => { return f.parent === group });
       childFriends.map( f => {
         allFriends.push(f._id);
+        return f;
       });
       childGroups.map( g => addFromGroup(g._id));
     }
@@ -73,7 +74,7 @@ class CreateInvite extends Component{
     </li>);
   }
   render(){
-    const { groups, friends, create } = this.props;
+    const { groups } = this.props;
     const parentGroups = groups.filter( g => { return g.parent === null });
     return(
       <div id="inviteFriends" className="row">

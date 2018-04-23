@@ -12,7 +12,7 @@ class Directory extends Component{
   }
   renderFolder(f, folders){
     const { dispatch, selectedFolder } = this.props;
-    const { name, description, parent, _id } = f;
+    const { name, _id } = f;
     const className = (selectedFolder === _id) ? "folderSelected collapsible-header": "collapsible-header";
     const children = folders.filter( f => { return f.parent === _id });
     const mapOver = (children.length !== 0) ? children: null;

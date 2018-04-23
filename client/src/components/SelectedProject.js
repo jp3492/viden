@@ -26,7 +26,7 @@ class SelectedProject extends Component{
         </div>
       )
     }
-        const { title, description, _id } = project[0];
+        const { title, description } = project[0];
     return(
       <div id="selectedProject">
         <span className="card-title">{title}<a onClick={ () => dispatch({type: SELECT_PROJECT, payload: null }) } href="#!" className="secondary-content"><i className="material-icons">clear</i></a></span>

@@ -31,13 +31,16 @@ class PlayerEdit extends Component{
   renderEdit(high, selectedProject){
     const { edit, action: { deleteHighlight }, dispatch } = this.props;
     if (edit) {
-      return <a href="#" className="btn red" onClick={ () => deleteHighlight(selectedProject, high._id, high.index)}>Delete</a>;
+      return <a className="btn red" onClick={ () => deleteHighlight(selectedProject, high._id, high.index)}>Delete</a>;
     }
-    return <a href="#" className="btn red" onClick={ () => dispatch({ type: DISSMISS_HIGHLIGHT })}>Dismiss</a>;
+    return <a className="btn red" onClick={ () => dispatch({ type: DISSMISS_HIGHLIGHT })}>Dismiss</a>;
   }
   render(){
     const { auth, dispatch, comment, start, stop, filteredHighlights, highlight, selectedProject, copy, filteredProjects, selectedProjects,
       action: { copyCreate, deleteHighlights } } = this.props;
+      if (selectedProject === null) {
+        return null;
+      }
     const project = (selectedProjects === false) ? filteredProjects.filter( p => { return p._id === selectedProject }): (selectedProjects.projects.length === 1) ? filteredProjects.filter( p => { return p._id === selectedProjects.projects[0] }): null;
     const admin = (project === null) ? false: (project[0]._uid === auth._id) ? true: false;
     const highlights = _.sortBy(filteredHighlights, "start");

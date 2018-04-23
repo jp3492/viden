@@ -7,7 +7,7 @@ import { CHANGE_SEARCH_TERM, COPY } from '../actions/types';
 class PlayerFilter extends Component{
 
   render(){
-    const { auth, history, dispatch, searchTerm, filteredProjects, selectedProject, selectedProjects, copy } = this.props;
+    const { auth, dispatch, copy } = this.props;
     const copyClass = (copy === false) ? "col s2 center-align material-icons": "col s2 center-align material-icons iconSelected";
     const multi = (auth === false) ? null: <i className={copyClass} onClick={ () => dispatch({ type: COPY })}>playlist_add</i>;
     return (

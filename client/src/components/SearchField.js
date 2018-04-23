@@ -16,7 +16,7 @@ class SearchField extends Component{
     }
   }
   render(){
-    const { dispatch, searchTerm, searchOption, searchLocal } = this.props;
+    const { searchTerm, searchOption, searchLocal } = this.props;
     const where = (searchLocal === true) ? "locally": "globally";
     const placeholder = `Search ${where} for ${searchOption}...`;
     return(

@@ -5,7 +5,7 @@ import _ from 'lodash';
 import $ from 'jquery';
 
 import { submitHighlight, updateHighlight } from '../actions';
-import { PP, CV, MARK, SUBMIT_HIGHLIGHT, HP, HN, SAVE, PLAY_LIST } from '../actions/types';
+import { PP, CV, MARK, HP, HN, PLAY_LIST } from '../actions/types';
 
 class PlayerControls extends Component{
   componentDidMount(){
@@ -23,7 +23,7 @@ class PlayerControls extends Component{
         case 37: this.forward(false); break;
         case 39: this.forward(true); break;
         case 13: e.preventDefault(); this.mark(); break;
-        default: null; break;
+        default: console.log("invalid key command"); break;
       }
     };
     if (document.getElementById('codeInput') !== null && document.activeElement !== document.getElementById('playerFilterSearch')) {
@@ -31,7 +31,7 @@ class PlayerControls extends Component{
     }
   }
   mark() {
-    const { dispatch, player: { playing, start, stop, players, video, comment, edit, highlight }, action: { submitHighlight, updateHighlight }, selectedProject, filteredHighlights } = this.props;
+    const { dispatch, player: { start, stop, players, video, comment, edit, highlight }, action: { submitHighlight, updateHighlight }, selectedProject, filteredHighlights } = this.props;
     const highlights = _.sortBy(filteredHighlights, "start");
     const selectedHighlight = (highlights[highlight] !== undefined && highlights.length !== 0) ? highlights[highlight]._id: null;
     const act = (edit === true) ? 1: (start === null) ? 2: (stop === null) ? 3: 4;
@@ -40,6 +40,7 @@ class PlayerControls extends Component{
       case 2: dispatch({ type: MARK, payload: { what: "start", time: players[video].getCurrentTime() }}); break;
       case 3: dispatch({ type: MARK, payload: { what: "stop",time: players[video].getCurrentTime() }}); break;
       case 4: submitHighlight(selectedProject, video, start, stop, comment); break;
+      default: console.log("unvalid mark"); break;
     }
   }
   renderMark(admin){
@@ -79,6 +80,9 @@ class PlayerControls extends Component{
   }
   render(){
     const { dispatch, auth, player: { progress, playList, playing }, selectedProjects, filteredProjects, selectedProject } = this.props;
+    if (selectedProject === null) {
+      return null;
+    }
     const project = (selectedProjects === false) ? filteredProjects.filter( p => { return p._id === selectedProject }): (selectedProjects.projects.length === 1) ? filteredProjects.filter( p => { return p._id === selectedProjects.projects[0] }): null;
     const admin = (project === null) ? false: (project[0]._uid === auth._id) ? true: false;
     const playingList = (playList === true) ? "material-icons playList center-align": "material-icons center-align";

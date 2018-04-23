@@ -1,27 +1,19 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { CHANGE_PAGE, SELECT_PROJECT } from '../actions/types';
+import { CHANGE_PAGE } from '../actions/types';
 
 import Menu from './Menu';
 import Search from './Search';
-import Create from './Create';
-import Login from './Login';
 
 class Header extends Component{
   componentDidMount(){
     const { auth, history, site, location: { pathname }, dispatch } = this.props;
-    if (pathname.includes('player') === true) {
-      const id = pathname.split('player/')[1];
-      console.log(id);
-      // dispatch({ type: CHANGE_PAGE, payload: "player" });
-      // history.push(pathname);
-    }
     if (auth === false && pathname.includes('player') === false) {
       history.push('/login')
     } else if (site !== "player" && pathname.includes('player') === false) {
       history.push('/home')
-    }
+    } 
   }
   render(){
     const { auth, site } = this.props;

@@ -16,25 +16,25 @@ class Notifications extends Component{
     const { firstName, lastName, _id } = f;
     return (
       <li className="collection-item">{firstName+" "+lastName}
-        <a href="#" className="secondary-content"
+        <a className="secondary-content"
           onClick={ () => answerRequest(auth._id, "friend", null, _id, true )}><i className="material-icons">check</i></a>
-        <a href="#" className="secondary-content"
+        <a className="secondary-content"
           onClick={ () => answerRequest(auth._id, "friend", null, _id, false )}><i className="material-icons">clear</i></a>
       </li>
     );
   }
   renderAccess(a){
     const { auth, action: { answerRequest } } = this.props;
-    const { target, type, status, user, firstName, lastName, name } = a;
+    const { target, type, user, firstName, lastName, name } = a;
     const text = (a.status === "requested") ?
       firstName+" "+lastName+" wants to access your "+type+": "+name :
       firstName+" "+lastName+" invited you to have access to his "+type+": "+name;
     return (
       <li className="collection-item">
         {text}
-        <a href="#" className="secondary-content"
+        <a className="secondary-content"
           onClick={ () => answerRequest(auth._id, type, target, user, true )}><i className="material-icons">check</i></a>
-        <a href="#" className="secondary-content"
+        <a className="secondary-content"
           onClick={ () => answerRequest(auth._id, type, target, user, false )}><i className="material-icons">clear</i></a>
       </li>
     );
@@ -47,7 +47,7 @@ class Notifications extends Component{
       <ul id="notification" className="collapsible" data-collapsible="accordion">
         <li>
           <div className="collapsible-header"><i className="material-icons">person_add</i>Friend Requests
-            <a href="#" className="right">{requestedFriends.length}</a>
+            <a className="right">{requestedFriends.length}</a>
           </div>
           <div className="collapsible-body">
             <ul className="collection">
@@ -57,7 +57,7 @@ class Notifications extends Component{
         </li>
         <li>
           <div className="collapsible-header"><i className="material-icons">folder_shared</i>Access Requests
-            <a href="#" className="right">{requestedAccess.length}</a>
+            <a className="right">{requestedAccess.length}</a>
           </div>
           <div className="collapsible-body">
             <ul className="collection">

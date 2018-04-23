@@ -1,6 +1,7 @@
-import { PP, MUTE, SU, SD, VU, VD, CV, HP, HN, SET_PLAYER, SET_TIME, MARK, SUBMIT_HIGHLIGHT, CHANGE_COMMENT, SELECT_HIGHLIGHT, EDIT, UPDATE_HIGHLIGHT, LOGOUT,
+import { PP, MUTE, SU, SD, VU, VD, CV, HP, HN, SET_PLAYER, MARK, SUBMIT_HIGHLIGHT, CHANGE_COMMENT, SELECT_HIGHLIGHT, EDIT, UPDATE_HIGHLIGHT, LOGOUT,
 PROGRESS, CHANGE_TIME, DELETE_HIGHLIGHT, PLAY_LIST, INITIATE, CHANGE_SEARCH_TERM, COPY, COPY_ADD, COPY_CREATE, SELECT_PROJECT, CHANGE_PAGE, CREATE_POST,
 DELETE_HIGHLIGHTS, COPY_SELECT_FOLDER, COPY_ADD_TARGET, COPY_ADDED, DISSMISS_HIGHLIGHT, COPY_ADD_ALL } from '../actions/types';
+
 const initialState = {
   playing: true,
   playList: true,
@@ -15,14 +16,14 @@ const initialState = {
   changing: null,
   comment: "",
   highlight: 0,
-  initiated: false,
+  initiated: {},
   counter: 0,
   edit: false,
   copy: false
 }
 
 export default function ( state = initialState, action ){
-  let volume, speed, players, highlight, initiated, playing, copy, start, stop;
+  let volume, players, highlight, initiated, playing, copy;
   switch (action.type) {
     case DISSMISS_HIGHLIGHT:
       return { ...state, start: null, stop: null, comment: "" };
@@ -84,18 +85,18 @@ export default function ( state = initialState, action ){
     case SUBMIT_HIGHLIGHT:  return { ...state, start: null, stop: null, comment: "" };
     case MARK:  return { ...state, [action.payload.what]: action.payload.time.toFixed(1) };
     case INITIATE:
-      initiated = (state.initiated === 1) ? true: state.initiated - 1;
-      playing = (state.initiated === 1) ? false: true;
-      if (initiated === true) {
+      initiated = state.initiated;
+      initiated[action.payload] = true;
+      const check = Object.keys(initiated).every( i => { return state.initiated[i] === true });
+      if (check !== true) {
+        return { ...state, initiated: { ...state.initiated, [action.payload]: true } }
+      } else {
         document.getElementById("playerInitiate").style.display = "none";
+        return { ...state, initiated: true, playing: false }
       }
-      return { ...state, initiated, playing };
     case SET_PLAYER:
       const { i, p } = action.payload;
-      players = state.players;
-      players[i] = p;
-      initiated = (state.initiated === false) ? 1: state.initiated + 1;
-      return { ...state, players, initiated };
+      return { ...state, players: { ...state.players, [i]: p }, initiated: { ...state.initiated, [i]: false } };
     case PP:    return { ...state, playing: !state.playing };
     case MUTE:  return { ...state, muted: !state.muted };
     case VU:

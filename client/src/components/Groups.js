@@ -12,7 +12,7 @@ class Groups extends Component{
   }
   renderGroup(g, groups){
     const { dispatch, selectedGroup } = this.props;
-    const { name, description, parent, _id } = g;
+    const { name, _id } = g;
     const className = (selectedGroup === _id) ? "groupSelected collapsible-header": "collapsible-header";
     const children = groups.filter( g => { return g.parent === _id });
     const mapOver = (children.length !== 0) ? children: null;

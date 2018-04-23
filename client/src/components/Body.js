@@ -16,11 +16,11 @@ class Body extends Component{
     }
   }
   componentDidMount(){
-    const { dispatch, auth } = this.props;
+    const { dispatch } = this.props;
     dispatch({ type: CHANGE_PAGE, payload: "home" });
   }
   render(){
-    const { dispatch, auth } = this.props;
+    const { auth } = this.props;
     if (auth === false) {
       return null;
     }

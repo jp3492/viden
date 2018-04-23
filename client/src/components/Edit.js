@@ -14,9 +14,8 @@ class Edit extends Component{
     window.location.href = "/api/logout";
   }
   render(){
-    const { auth, history, dispatch, view, selectedGroup, selectedFolder, selectedUser, selectedProject, friends, filteredFriends, projects, access, filteredProjects,
+    const { auth, history, dispatch, view, selectedGroup, selectedFolder, selectedUser, selectedProject, friends, projects, access, filteredProjects,
       selectedProjects, action: { request, deleteMultiple } } = this.props;
-    const what = (view === "directory") ? "Folder": "Group";
     const type = (selectedUser !== null) ? "user": (selectedProject !== null) ? "project": (selectedGroup !== null) ? "group": "folder";
     const mulDel = (selectedProjects !== false) ? <a onClick={ () => deleteMultiple(selectedProjects.projects)} className="btn red">Delete All</a>: null;
     const edit = (selectedProjects !== false) ? null: <a onClick={ () => { dispatch({ type: UPDATE, payload: type }); $('.modal').modal('open'); } } className="btn-flat">Edit</a>;

@@ -25,7 +25,7 @@ class CreateFolder extends Component{
     const { dispatch, folders, create } = this.props;
     return(
       <div className="modal-content">
-        <h4>Create Folder<a onClick={ () => dispatch({type: CLEAR_CREATE }) } href="#" className="secondary-content modal-close"><i className="material-icons">clear</i></a></h4>
+        <h4>Create Folder<a onClick={ () => dispatch({type: CLEAR_CREATE }) } className="secondary-content modal-close"><i className="material-icons">clear</i></a></h4>
         <div className="row">
           <div className="input-field col s12">
             <input

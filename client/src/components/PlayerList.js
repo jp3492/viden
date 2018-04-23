@@ -11,7 +11,7 @@ class PlayerList extends Component{
   }
   renderHighlights(h, i, videos){
     const { start, stop, comment, _id, video } = h;
-    const { dispatch, highlight, players, filteredHighlights, copy } = this.props;
+    const { dispatch, highlight, filteredHighlights, copy } = this.props;
     const selectedHighlight = filteredHighlights[highlight];
     const className = (highlight === i) ? "collection-item selectedHighlight": "collection-item";
     const inCopy = (copy !== false) ? copy.highlights.filter( h => { return h._id === _id }): [];
@@ -25,6 +25,7 @@ class PlayerList extends Component{
         <label htmlFor={`check${i}`}></label>
       </a>: null;
     return <li
+      key={i}
       onDoubleClick={ () => dispatch({ type: EDIT, payload: { comment: selectedHighlight.comment, start: selectedHighlight.start, stop: selectedHighlight.stop } })}
       onClick={ () => this.selectHighlight(video, i)}
       id={`highlight${i}`} className={className}>
@@ -35,8 +36,11 @@ class PlayerList extends Component{
       </li>;
   }
   render(){
-    const { projects, selectedProject, filteredHighlights, selectedProjects } = this.props;
-    const project = projects.filter( p => { return p._id === selectedProject });
+    const { filteredProjects, selectedProject, filteredHighlights, selectedProjects } = this.props;
+    if (selectedProject === null) {
+      return null;
+    }
+    const project = filteredProjects.filter( p => { return p._id === selectedProject });
     const highlights = _.sortBy(filteredHighlights, "start");
     const videos = (selectedProjects === false) ? project[0].videos: selectedProjects.videos;
     return(
@@ -47,8 +51,8 @@ class PlayerList extends Component{
   }
 }
 
-const mapStateToProps = ({ main: { selectedProject, projects, filteredHighlights, selectedProjects }, player: { highlight, players, video, copy } }) => {
-  return { selectedProject, projects, highlight, players, video, filteredHighlights, copy, selectedProjects };
+const mapStateToProps = ({ main: { selectedProject, filteredProjects, filteredHighlights, selectedProjects }, player: { highlight, players, video, copy } }) => {
+  return { selectedProject, filteredProjects, highlight, players, video, filteredHighlights, copy, selectedProjects };
 }
 
 export default connect(mapStateToProps)(PlayerList);

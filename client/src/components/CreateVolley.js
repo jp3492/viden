@@ -33,7 +33,7 @@ class CreateVolley extends Component{
   }
   renderVideos(v, dispatch, admin, copy){
     if (admin === true && copy !== true) {
-      return <li className="collection-item">{v}<a onClick={ () => dispatch({type: CREATE_REMOVE_VIDEO, payload: v }) } href="#" className="secondary-content"><i className="material-icons">clear</i></a></li>;
+      return <li className="collection-item">{v}<a onClick={ () => dispatch({type: CREATE_REMOVE_VIDEO, payload: v }) } className="secondary-content"><i className="material-icons">clear</i></a></li>;
     } else {
       return <li className="collection-item">{v}</li>;
     }
@@ -102,7 +102,7 @@ class CreateVolley extends Component{
     const invite = (admin) ? <CreateInvite />: null;
     return(
       <div className="modal-content">
-        <h4>{head}<a onClick={ () => dispatch({type: CLEAR_CREATE }) } href="#" className="secondary-content modal-close"><i className="material-icons">clear</i></a></h4>
+        <h4>{head}<a onClick={ () => dispatch({type: CLEAR_CREATE }) } className="secondary-content modal-close"><i className="material-icons">clear</i></a></h4>
         <div className="row">
         <div className="col s7">
           <div className="input-field col s12">

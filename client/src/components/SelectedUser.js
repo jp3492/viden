@@ -7,7 +7,7 @@ class SelectedUser extends Component{
   render(){
     const { dispatch, selectedUser, filteredFriends } = this.props;
     const user = filteredFriends.filter( f => { return f._id === selectedUser });
-    const { firstName, lastName, _id } = user[0];
+    const { firstName, lastName } = user[0];
     return(
       <div id="selectedUser">
         <span className="card-title">{firstName+lastName}<a onClick={ () => dispatch({type: SELECT_USER, payload: null }) } href="#!" className="secondary-content"><i className="material-icons">clear</i></a></span>

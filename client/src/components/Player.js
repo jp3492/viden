@@ -7,33 +7,34 @@ import PlayerVideo from './PlayerVideo';
 import PlayerList from './PlayerList';
 import PlayerControls from './PlayerControls';
 import PlayerEdit from './PlayerEdit';
-import PlayerHeader from './PlayerHeader';
 import PlayerFilter from './PlayerFilter';
 import PlayerVideoHeader from './PlayerVideoHeader';
 import PlayerInitiate from './PlayerInitiate';
 import PlayerSort from './PlayerSort';
 
-import { SELECT_PROJECT } from '../actions/types';
+import { SELECT_PROJECT, CHANGE_PAGE } from '../actions/types';
 import { getProject } from '../actions';
 
 class Player extends Component{
   //needed: filteredHighlights, selectedProject, selectedProjects
   componentWillMount(){
-    const { auth, selectedProject, action: { getProject }, projects, dispatch, history } = this.props;
+    const { selectedProject, action: { getProject }, projects, dispatch, site } = this.props;
+    if (site === "home") {
+      dispatch({ type: CHANGE_PAGE, payload: "player" });
+    }
     if (this.props.match.params.id !== selectedProject) {
       const project = (projects !== undefined) ? projects.filter( p => { return p._id === this.props.match.params.id }): [];
       if (project.length === 0) {
         getProject(this.props.match.params.id);
       } else {
+        // getProject(this.props.match.params.id);
         dispatch({ type: SELECT_PROJECT, payload: this.props.match.params.id });
       }
     }
   }
   render(){
     const { projects, selectedProject } = this.props;
-    if (projects === [] || selectedProject === null) {
-      return <PlayerInitiate />
-    }
+    console.log(this.props);
     return(
       <div id="player" className="row">
         <PlayerInitiate />
@@ -52,8 +53,8 @@ class Player extends Component{
     )
   }
 }
-const mapStateToProps = ({ auth, main: { selectedProject, selectedProjects, projects } }) => {
-  return { selectedProject, selectedProjects, auth, projects }
+const mapStateToProps = ({ auth, main: { selectedProject, selectedProjects, projects, site } }) => {
+  return { selectedProject, selectedProjects, auth, projects, site }
 }
 const mapDispatchToProps = (dispatch) => {
   return { action: bindActionCreators({ getProject }, dispatch), dispatch };

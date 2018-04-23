@@ -14,7 +14,7 @@ class ProjectList extends Component{
   }
   renderFolder(f, folders){
     const { dispatch, copy: { folder } } = this.props;
-    const { name, description, parent, _id } = f;
+    const { name, _id } = f;
     const className = (folder === _id) ? "folderSelected collapsible-header": "collapsible-header";
     const children = folders.filter( f => { return f.parent === _id });
     const mapOver = (children.length !== 0) ? children: null;
@@ -53,9 +53,9 @@ class ProjectList extends Component{
     if (this.props.copy === false) {
       return null;
     }
-    const { folders, projects, copy: { folder, targets }, action: { copyAdd } } = this.props;
+    const { folders, projects, copy: { folder, targets }, action: { copyAdd }, _id } = this.props;
     const mapOver = folders.filter( f => { return f.parent === null });
-    const mapProjects = (folder === null) ? projects: projects.filter( p => { return p.parent === folder });
+    const mapProjects = (folder === null) ? projects.filter( p => { return p._uid === _id}): projects.filter( p => { return p.parent === folder && _id === p._uid });
     const add = (targets.length === 0) ? null:
       <a className="btn" onClick={ () => { copyAdd(this.props.copy); $('.modal').modal('close'); }}>Add</a>
     return (
@@ -76,8 +76,8 @@ class ProjectList extends Component{
     )
   }
 }
-const mapStateToProps = ({ player: { copy }, main: { projects, folders, selectedFolder } }) => {
-  return { copy, projects, folders, selectedFolder }
+const mapStateToProps = ({ auth: { _id }, player: { copy }, main: { projects, folders, selectedFolder } }) => {
+  return { copy, projects, folders, selectedFolder, _id }
 }
 const mapDispatchToProps = (dispatch) => {
   return { action: bindActionCreators({ copyAdd }, dispatch), dispatch };

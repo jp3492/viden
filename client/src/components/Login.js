@@ -8,6 +8,9 @@ class Login extends Component {
   componentWillReceiveProps(nextProps){
     const { auth, history } = nextProps;
     if (auth !== false) {
+      if (auth.approved === false) {
+        history.push('/approve');
+      }
       history.push('/home');
     }
   }
@@ -18,7 +21,7 @@ class Login extends Component {
     }
   }
   render(){
-    const { history, dispatch, log, auth } = this.props;
+    const { dispatch, log, auth } = this.props;
     const text = (auth === false && log === true) ? <b>Signing in...</b>: <b>Retrieving user data...</b>
     const button = (auth === false && log === true) ?
       (

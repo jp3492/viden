@@ -18,6 +18,7 @@ class BodyLeft extends Component{
       case "groups": showThis = <Groups />; break;
       case "directory": showThis = <Directory />; break;
       case "notifications": showThis = <Notifications />; break;
+      default: showThis = null; break;
     }
     if (selectedUser !== null) { showThis = <SelectedUser /> }
     if (selectedProject !== null) { showThis = <SelectedProject /> }

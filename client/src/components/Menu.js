@@ -11,7 +11,7 @@ class Menu extends Component{
     const accessRequests = access.filter( a => { return (a.status === "requested" || a.status === "invited")});
     const number = (tab[0] === "notifications") ? <a id="numNotif">{friendRequests.length+accessRequests.length}</a>: null;
     return (
-      <li className={className} onClick={ () => dispatch({ type: CHANGE_VIEW, payload: tab[0] })}>
+      <li key={tab} className={className} onClick={ () => dispatch({ type: CHANGE_VIEW, payload: tab[0] })}>
         <i id={tab[0]} className="material-icons">
           {tab[1]}
         </i>

@@ -9,10 +9,13 @@ class PlayerVideoHeader extends Component{
     const className = (video === i) ? "active": "";
     let width = 100 / len;
     width = `${width}%`;
-    return <li onClick={ () => dispatch({ type: CV, payload: i }) } className="tab col s3" style={{ width }}><a className={className}>Video {i+1}</a></li>;
+    return <li key={i} onClick={ () => dispatch({ type: CV, payload: i }) } className="tab col s3" style={{ width }}><a className={className}>Video {i+1}</a></li>;
   }
   render(){
     const { history, filteredProjects, selectedProject, selectedProjects } = this.props;
+    if (selectedProject === null) {
+      return null;
+    }
     const project = filteredProjects.filter( p => { return p._id === selectedProject });
     const videos = (selectedProjects === false) ? project[0].videos: selectedProjects.videos;
     const multiple = (selectedProjects !== false) ? { projects: selectedProjects.projects.length, videos: selectedProjects.videos.length, highlights: selectedProjects.highlights.length }: null;

@@ -19,7 +19,7 @@ class Profile extends Component{
     return(
       <div id="profile">
         <div id="profile-head" className="row">
-          <img className="col s5" id="profile-pic" src={require("../media/profile.jpg")} />
+          <img alt="" className="col s5" id="profile-pic" src={require("../media/profile.jpg")} />
           <span className="card-title">{firstName}</span>
           <span className="card-title">{lastName}</span>
           <a>{email}</a>

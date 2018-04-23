@@ -1,6 +1,6 @@
 import axios from 'axios';
-import { FETCH_USER, CREATE_UPDATE, CREATE_POST, CREATING_UPDATE, CREATING_POST, REMOVE, CHANGE_SEARCH_TERM, SUBMIT_HIGHLIGHT, UPDATE_HIGHLIGHT,
-DELETE_HIGHLIGHT, REQUEST, ANSWER_REQUEST, COPY_CREATE, DELETE_MULTIPLE, DELETE_HIGHLIGHTS, LOG, GET_PROJECT, CHANGE_PAGE, COPY_ADDED,
+import { FETCH_USER, CREATE_POST, REMOVE, CHANGE_SEARCH_TERM, SUBMIT_HIGHLIGHT, UPDATE_HIGHLIGHT,
+DELETE_HIGHLIGHT, REQUEST, ANSWER_REQUEST, COPY_CREATE, DELETE_MULTIPLE, DELETE_HIGHLIGHTS, LOG, GET_PROJECT, COPY_ADDED,
 DISSMISS_HIGHLIGHT } from './types';
 
 export const copyAdd = copy => async dispatch => {
@@ -30,7 +30,7 @@ export const deleteMultiple = projects => async dispatch => {
 
 export const copyCreate = (copy, project) => async dispatch => {
   const videos = copy.highlights.reduce((arr, highlight) => {
-    const { video, link } = highlight;
+    const { link } = highlight;
     if (arr.includes(link)) {
       return arr;
     } else {

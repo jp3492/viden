@@ -22,7 +22,7 @@ class SearchOption extends Component{
     const { dispatch, searchOption } = this.props;
     return(
       <div id="searchOption" className="col s2">
-        <a id="changeSearchBtn" materialize="dropdown" className='dropdown-button btn folderBtn' href='#' data-activates="searchOptions">{searchOption}</a>
+        <a id="changeSearchBtn" materialize="dropdown" className='dropdown-button btn folderBtn' data-activates="searchOptions">{searchOption}</a>
         <ul id="searchOptions" className='dropdown-content'>
           <li  className="center-align col s12" onClick={() => dispatch({ type: CHANGE_SEARCH_OPTION, payload: "projects" })}><a>Projects</a></li>
           <li  className="center-align col s12" onClick={() => dispatch({ type: CHANGE_SEARCH_OPTION, payload: "people" })}><a>People</a></li>

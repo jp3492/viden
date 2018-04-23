@@ -14,7 +14,7 @@ class BodyRight extends Component{
     return <Project title={title} description={description} parent={parent} id={_id} />;
   }
   render(){
-    const { dispatch, view, filteredProjects, filteredFriends } = this.props;
+    const { view, filteredProjects, filteredFriends } = this.props;
     const mapOver = (view === "groups") ? filteredFriends: filteredProjects;
     return(
       <div>

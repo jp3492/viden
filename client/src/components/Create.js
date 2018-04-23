@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux';
 import $ from 'jquery';
 
 import { create_update, removeObj } from '../actions';
-import { CREATE, CLEAR_CREATE, REMOVE } from '../actions/types';
+import { CREATE } from '../actions/types';
 
 import CreateProject from './CreateProject';
 import CreateFolder from './CreateFolder';
@@ -30,7 +30,6 @@ class Create extends Component{
   }
   submitCreate(update){
     const { action, create, auth, create: { invites } } = this.props;
-    console.log("creating");
     action.create_update(update, create, auth._id, invites);
     $('.modal').modal('close');
   }
@@ -54,7 +53,7 @@ class Create extends Component{
       <a onClick={ () => this.submitCreate(false) } id="create_btn" ref="#" className="btn waves-effect waves-green">Create</a>
     return(
       <div className="col s6" id="bodyCreate">
-        <a  materialize="dropdown" className='dropdown-button btn folderBtn col s12' href='#' data-activates="createOptions">New</a>
+        <a  materialize="dropdown" className='dropdown-button btn folderBtn col s12'  data-activates="createOptions">New</a>
         <ul id="createOptions" className='dropdown-content'>
           <li onClick={ () => dispatch({ type: CREATE, payload: "project" }) }><a  className="modal-trigger" href="#modal1">Project</a></li>
           <li onClick={ () => dispatch({ type: CREATE, payload: "folder" }) }><a  className="modal-trigger" href="#modal1">Folder</a></li>

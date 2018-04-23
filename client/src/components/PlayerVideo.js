@@ -2,9 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import ReactPlayer from 'react-player';
 import { withRouter } from 'react-router-dom';
-import _ from 'lodash';
 
-import { SET_PLAYER, PAUSE, PP, PROGRESS, SELECT_HIGHLIGHT, INITIATE } from '../actions/types';
+import { SET_PLAYER, PP, PROGRESS, SELECT_HIGHLIGHT, INITIATE } from '../actions/types';
 
 class PlayerVideo extends Component{
   seeking(players, video, dispatch, start, stop, playList, count){
@@ -44,7 +43,8 @@ class PlayerVideo extends Component{
   }
   componentWillReceiveProps(nextProps){
     if (nextProps.player.counter !== this.props.player.counter) {
-      const { dispatch, filteredHighlights, player: { highlight, players, video, playList, edit, counter }, site } = nextProps;
+      const { dispatch, filteredHighlights, player: { highlight, players, video, playList, counter, initiated } } = nextProps;
+      console.log(initiated);
       if (filteredHighlights[highlight] === undefined) {
         return null;
       }
@@ -65,7 +65,10 @@ class PlayerVideo extends Component{
     }
   }
   shouldComponentUpdate(nextProps, nextState){
-    if ((this.props.player.playing !== nextProps.player.playing) || (this.props.player.video !== nextProps.player.video) || (this.props.filteredHighlights !== nextProps.filteredHighlights)) { return true }
+    if ((this.props.player.playing !== nextProps.player.playing) ||
+        (this.props.player.video !== nextProps.player.video) ||
+        (this.props.filteredHighlights !== nextProps.filteredHighlights) ||
+        (this.props.player.initiated !== nextProps.player.initiated)) { return true }
     return false;
   }
   setPlayer(i, p){
@@ -84,7 +87,7 @@ class PlayerVideo extends Component{
   }
   renderVideo(v, i){
     const { dispatch, player: { playing, video, initiated } } = this.props;
-    const p = (initiated === true) ? ((video === i) ? playing: false): true;
+    const p = (initiated === true) ? ((video === i) ? playing: false): (initiated[i] === true) ? false: true;
     const className = (video === i) ? "player": "invisible player";
     return <ReactPlayer
             height='100%'
@@ -101,10 +104,11 @@ class PlayerVideo extends Component{
             ref={ p => this.setPlayer(i, p) }/>;
   }
   render(){
-    const { selectedProject, projects, site, selectedProjects } = this.props;
-    if (site === "home") { return null }
-    const project = projects.filter( p => { return p._id === selectedProject });
+    const { selectedProject, filteredProjects, site, selectedProjects } = this.props;
+    if (site === "home" || selectedProject === null) { return null }
+    const project = filteredProjects.filter( p => { return p._id === selectedProject });
     const videos = (selectedProjects === false) ? project[0].videos: selectedProjects.videos;
+    console.log(videos);
     return(
       <div id="playerVideo">
         {videos.map( (v, i) => this.renderVideo(v, i))}
@@ -113,8 +117,8 @@ class PlayerVideo extends Component{
   }
 }
 
-const mapStateToProps = ({ main: { selectedProject, projects, filteredHighlights, site, selectedProjects }, player }) => {
-  return { selectedProject, projects, player, filteredHighlights, site, selectedProjects };
+const mapStateToProps = ({ main: { selectedProject, projects, filteredHighlights, site, selectedProjects, filteredProjects }, player }) => {
+  return { selectedProject, projects, player, filteredHighlights, site, selectedProjects, filteredProjects };
 }
 
 export default withRouter(connect(mapStateToProps)(PlayerVideo));
