@@ -8,7 +8,6 @@ import Header from './Header';
 import Body from './Body';
 import Player from './Player';
 import Login from './Login';
-import Test from './Test';
 
 class App extends Component {
   componentWillMount(){
@@ -26,7 +25,6 @@ class App extends Component {
               <Route exact path="/home" component={Body} />
               <Route exact path="/login" component={Login} />
               <Route path="/player/:id" component={Player} />
-              <Route path="/test" component={Test} />
             </div>
           </BrowserRouter>
         </div>
