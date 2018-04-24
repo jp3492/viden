@@ -41,6 +41,7 @@ const HighlightsSchema = new Schema({
   privacy: String,
   parent: String,
   type: String,
+  infos: String,
   videos: [String],
   highlights: [HighlightSchema],
   sort: String,

@@ -75,6 +75,7 @@
 #bodyRight {
   border: none !important;
   margin-top: 10px !important;
+  overflow-y: scroll !important;
 }
 #bodyRight > li {
   margin-bottom: 0px !important;
