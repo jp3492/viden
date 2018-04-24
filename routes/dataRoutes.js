@@ -3,7 +3,10 @@ const mongoose = require('mongoose');
 const User = mongoose.model('users');
 const Highlights = mongoose.model('highlights');
 
-module.exports = (app) => {
+module.exports = (app, io) => {
+  io.on('connection', () => {
+    console.log('user connected');
+  });
   app.post('/api/addHighlights', async (req, res) => {
     const { targets, highlights } = req.body;
     let videos = highlights.map( h => { return h.link } );
@@ -61,6 +64,7 @@ module.exports = (app) => {
       }
     }));
     const admins = req.body.filter( p => { return p._uid === req.user._id});
+    console.log(admins);
     res.send("emoved");
   });
   app.post('/api/answerRequest', async (req, res) => {
