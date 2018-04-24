@@ -79,12 +79,12 @@ class PlayerControls extends Component{
     dispatch({ type, payload: { v: nextHighlight.video, h: nextIndex } });
   }
   render(){
-    const { dispatch, auth, player: { progress, playList, playing }, selectedProjects, filteredProjects, selectedProject } = this.props;
-    if (selectedProject === null) {
+    const { dispatch, auth, player: { progress, playList, playing }, selectedProjects, filteredProjects, selectedProject, sequencedProject } = this.props;
+    if (selectedProject === null && sequencedProject === false) {
       return null;
     }
     const project = (selectedProjects === false) ? filteredProjects.filter( p => { return p._id === selectedProject }): (selectedProjects.projects.length === 1) ? filteredProjects.filter( p => { return p._id === selectedProjects.projects[0] }): null;
-    const admin = (project === null) ? false: (project[0]._uid === auth._id) ? true: false;
+    const admin = (sequencedProject !== false) ? true: (project === null) ? false: (project[0]._uid === auth._id) ? true: false;
     const playingList = (playList === true) ? "material-icons playList center-align": "material-icons center-align";
     const play = (playing === false) ? "Play": "Pause";
     return(
@@ -111,8 +111,8 @@ class PlayerControls extends Component{
   }
 }
 
-const mapStateToProps = ({ auth, player, main: { projects, selectedProject, filteredHighlights, selectedProjects, filteredProjects } }) => {
-  return { auth, player, projects, selectedProject, filteredHighlights, selectedProjects, filteredProjects };
+const mapStateToProps = ({ auth, player, main: { projects, selectedProject, filteredHighlights, selectedProjects, filteredProjects, sequencedProject } }) => {
+  return { auth, player, projects, selectedProject, filteredHighlights, selectedProjects, filteredProjects, sequencedProject };
 }
 
 const mapDispatchToProps = (dispatch) => {

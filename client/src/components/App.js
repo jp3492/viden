@@ -26,6 +26,7 @@ class App extends Component {
               <Route exact path="/home" component={Body} />
               <Route exact path="/login" component={Login} />
               <Route path="/player/:id" component={Player} />
+              <Route exact path="/player/sequenced" component={Player} />
             </div>
           </BrowserRouter>
         </div>

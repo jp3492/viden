@@ -8,10 +8,11 @@ import Notifications from './Notifications';
 import SelectedProject from './SelectedProject';
 import SelectedUser from './SelectedUser';
 import Edit from './Edit';
+import SelectedSequence from './SelectedSequence';
 
 class BodyLeft extends Component{
   render(){
-    const { view, selectedProject, selectedUser, selectedProjects } = this.props;
+    const { view, selectedProject, selectedUser, selectedProjects, searchOption } = this.props;
     let showThis;
     switch (view) {
       case "profile": showThis = <Profile />; break;
@@ -20,6 +21,7 @@ class BodyLeft extends Component{
       case "notifications": showThis = <Notifications />; break;
       default: showThis = null; break;
     }
+    if (searchOption === "sequences") { showThis = <SelectedSequence /> }
     if (selectedUser !== null) { showThis = <SelectedUser /> }
     if (selectedProject !== null) { showThis = <SelectedProject /> }
     else if (selectedProjects !== false) {
@@ -43,8 +45,8 @@ class BodyLeft extends Component{
     )
   }
 }
-const mapStateToProps = ({ main: { view, selectedProject, selectedUser, selectedProjects } }) => {
-  return { view, selectedProject, selectedUser, selectedProjects };
+const mapStateToProps = ({ main: { view, selectedProject, selectedUser, selectedProjects, searchOption } }) => {
+  return { view, selectedProject, selectedUser, selectedProjects, searchOption };
 }
 
 export default connect(mapStateToProps)(BodyLeft);

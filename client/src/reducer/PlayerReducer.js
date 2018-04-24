@@ -87,7 +87,9 @@ export default function ( state = initialState, action ){
     case SUBMIT_HIGHLIGHT:  return { ...state, start: null, stop: null, comment: "" };
     case MARK:  return { ...state, [action.payload.what]: action.payload.time.toFixed(1) };
     case INITIATE:
+      console.log(action.payload);
       initiated = state.initiated;
+      console.log(initiated);
       initiated[action.payload] = true;
       const check = Object.keys(initiated).every( i => { return state.initiated[i] === true });
       if (check !== true) {

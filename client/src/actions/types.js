@@ -57,3 +57,7 @@ export const COPY_ADD_TARGET = "copy_add_target";
 export const COPY_ADDED = "copy_added";
 export const DISSMISS_HIGHLIGHT = "dismiss_highlight";
 export const COPY_ADD_ALL = "copy_add_all";
+export const ADD_SEQUENCE = "add_sequence";
+export const SELECT_SEQUENCE = "select_sequence";
+export const ADD_ALL_SEQUENCES = "add_all_sequences";
+export const VIEW_SEQUENCES = "view_sequences";

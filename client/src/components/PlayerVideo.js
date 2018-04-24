@@ -44,7 +44,6 @@ class PlayerVideo extends Component{
   componentWillReceiveProps(nextProps){
     if (nextProps.player.counter !== this.props.player.counter) {
       const { dispatch, filteredHighlights, player: { highlight, players, video, playList, counter, initiated } } = nextProps;
-      console.log(initiated);
       if (filteredHighlights[highlight] === undefined) {
         return null;
       }
@@ -68,7 +67,7 @@ class PlayerVideo extends Component{
     if ((this.props.player.playing !== nextProps.player.playing) ||
         (this.props.player.video !== nextProps.player.video) ||
         (this.props.filteredHighlights !== nextProps.filteredHighlights) ||
-        (this.props.player.initiated !== nextProps.player.initiated)) { return true }
+        (this.props.player.initiated !== nextProps.player.initiated)) { console.log("updating"); return true; }
     return false;
   }
   setPlayer(i, p){
@@ -104,11 +103,10 @@ class PlayerVideo extends Component{
             ref={ p => this.setPlayer(i, p) }/>;
   }
   render(){
-    const { selectedProject, filteredProjects, site, selectedProjects } = this.props;
-    if (site === "home" || selectedProject === null) { return null }
+    const { selectedProject, filteredProjects, site, selectedProjects, sequencedProject } = this.props;
+    if (site === "home" || (selectedProject === null && sequencedProject === false)) { return null }
     const project = filteredProjects.filter( p => { return p._id === selectedProject });
-    const videos = (selectedProjects === false) ? project[0].videos: selectedProjects.videos;
-    console.log(videos);
+    const videos = (sequencedProject !== false) ? sequencedProject.videos: (selectedProjects === false) ? project[0].videos: selectedProjects.videos;
     return(
       <div id="playerVideo">
         {videos.map( (v, i) => this.renderVideo(v, i))}
@@ -117,8 +115,8 @@ class PlayerVideo extends Component{
   }
 }
 
-const mapStateToProps = ({ main: { selectedProject, projects, filteredHighlights, site, selectedProjects, filteredProjects }, player }) => {
-  return { selectedProject, projects, player, filteredHighlights, site, selectedProjects, filteredProjects };
+const mapStateToProps = ({ main: { selectedProject, projects, filteredHighlights, site, selectedProjects, filteredProjects, sequencedProject }, player }) => {
+  return { selectedProject, projects, player, filteredHighlights, site, selectedProjects, filteredProjects, sequencedProject };
 }
 
 export default withRouter(connect(mapStateToProps)(PlayerVideo));

@@ -1,7 +1,7 @@
 import { FETCH_USER, CHANGE_VIEW, CHANGE_PAGE, CHANGE_SEARCH_LOCAL, CHANGE_SEARCH_OPTION, CHANGE_SEARCH_TERM, SELECT_USER, SELECT_PROJECT, SELECT_GROUP, SELECT_FOLDER,
 CREATE, CHANGE_CREATE_ATTRIBUTE, CLEAR_CREATE, CREATE_REMOVE_VIDEO, CREATE_POST, UPDATE, REMOVE, SUBMIT_HIGHLIGHT, UPDATE_HIGHLIGHT, LOGOUT,
 DELETE_HIGHLIGHT, REQUEST, ANSWER_REQUEST, COPY_CREATE, COPY, SELECT_MULTIPLE, ADD_PROJECT, INVITE, DELETE_MULTIPLE, DELETE_HIGHLIGHTS,
-LOG, GET_PROJECT, COPY_ADDED, COPY_ADD_ALL } from '../actions/types';
+LOG, GET_PROJECT, COPY_ADDED, COPY_ADD_ALL, SELECT_SEQUENCE, ADD_SEQUENCE, VIEW_SEQUENCES } from '../actions/types';
 import ReactPlayer from 'react-player';
 import _ from 'lodash';
 
@@ -21,19 +21,34 @@ const initialState = {
   access: [],
   filteredProjects: [],
   filteredHighlights: [],
+  filteredSequences: [],
   filteredFriends: [],
   selectedUser: null,
   selectedGroup: null,
   selectedFolder: null,
   selectedProject: null,
-  selectedProjects: false
+  selectedProjects: false,
+  selectedSequence: null,
+  selectedSequences: false,
+  sequencedProject: false
 }
 
 export default function ( state = initialState, action ){
   let filteredProjects, filteredFriends, selectedProject, selectedUser, create, videos, folder, group, project,
    user, projects, folders, groups, friends, searchOption, searchTerm, view, filteredHighlights, highlights, access, video, invites,
-   selectedProjects;
+   selectedProjects, selectedSequence, selectedSequences, filteredSequences;
   switch (action.type) {
+    case VIEW_SEQUENCES:
+      return { ...state, sequencedProject: action.payload, site: "player", filteredHighlights: action.payload.highlights }
+    case ADD_SEQUENCE:
+      if (state.selectedSequences.indexOf(action.payload) === -1) {
+        return { ...state, selectedSequences: [ ...state.selectedSequences, action.payload ]};
+      } else {
+        return { ...state, selectedSequences: state.selectedSequences.filter( s => { return s !== action.payload }) };
+      }
+    case SELECT_SEQUENCE:
+      selectedSequence = (state.selectedSequence === action.payload) ? null: action.payload;
+      return { ...state, selectedSequence };
     case COPY_ADDED:
       const newProjects = action.payload.map( p => { return p._id });
       return { ...state, projects: state.projects.map( p => {
@@ -84,6 +99,10 @@ export default function ( state = initialState, action ){
         return { ...state, selectedProjects: { ...state.selectedProjects, projects: state.selectedProjects.projects.filter( p => {  return p !== action.payload }) } };
       }
     case SELECT_MULTIPLE:
+      if (state.searchOption === "sequences") {
+        selectedSequences = (state.selectedSequences === false) ? []: false;
+        return { ...state, selectedSequences }
+      }
       if (state.selectedProjects === false) { return { ...state, selectedProjects: { videos: [], projects: [], highlights: [] } } }
       else { return { ...state, selectedProjects: false } }
     case ANSWER_REQUEST:
@@ -242,7 +261,6 @@ export default function ( state = initialState, action ){
       return { ...state, update: true, create };
     case CREATE_POST:
       const { type, data } = action.payload;
-      console.log(data);
       if (state.update === true) {
         switch (type) {
           case "dataVolley":
@@ -362,11 +380,11 @@ export default function ( state = initialState, action ){
         }
         return f;
       });
-      return { ...state, searchOption, view: action.payload, selectedUser: null, selectedProject: null, filteredFriends: state.friends, filteredProjects, selectedGroup: null, selectedFolder: null };
+      return { ...state, searchOption, sequencedProject: false, searchTerm: "", view: action.payload, filteredSequences: [], selectedSequence: null, selectedSequences: false, selectedUser: null, selectedProject: null, filteredFriends: state.friends, filteredProjects, selectedGroup: null, selectedFolder: null };
     case CHANGE_SEARCH_LOCAL:   return { ...state, searchLocal: !state.searchLocal };
     case CHANGE_SEARCH_OPTION:
-      view = (action.payload === "people") ? "groups": (action.payload === "projects") ? "directory": state.view;
-      return { ...state, searchOption: action.payload, view };
+      view = (action.payload === "people") ? "groups": (action.payload === "projects" ||action.payload === "sequences") ? "directory": state.view;
+      return { ...state, searchOption: action.payload, sequencedProject: false, view, selectedProjects: false, selectedSequences: false, electedUser: null, selectedGroup: null, selectedProject: null, selectedSequence: null };
     case CHANGE_SEARCH_TERM:
       if (state.site === "player") {
         project = state.projects.filter( p => { return p._id === state.selectedProject });
@@ -396,11 +414,15 @@ export default function ( state = initialState, action ){
           case "sequences":
             let allSequences = [];
             state.projects.map( p => {
-              const aHighlights = p.highlights.map( h => { return { ...h, project: p._id } });
-              allSequences.concat(aHighlights);
+              const aHighlights = p.highlights.map( h => { allSequences.push({ ...h, project: p._id }); return h; });
               return p;
+            });
+            allSequences = allSequences.filter( s => { return s.comment.toLowerCase().includes(action.payload.toLowerCase()) })
+            allSequences = allSequences.map( s => {
+              const project = state.projects.filter( p => { return p._id === s.project });
+              return { ...s, link: project[0].videos[s.video] }
             })
-            return state;
+            return { ...state, searchTerm: action.payload, filteredSequences: allSequences };
           default: return state;
         }
       } else {

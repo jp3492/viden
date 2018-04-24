@@ -37,12 +37,12 @@ class PlayerEdit extends Component{
   }
   render(){
     const { auth, dispatch, comment, start, stop, filteredHighlights, highlight, selectedProject, copy, filteredProjects, selectedProjects,
-      action: { copyCreate, deleteHighlights } } = this.props;
-      if (selectedProject === null) {
+      action: { copyCreate, deleteHighlights }, sequencedProject } = this.props;
+      if (selectedProject === null && sequencedProject === false) {
         return null;
       }
     const project = (selectedProjects === false) ? filteredProjects.filter( p => { return p._id === selectedProject }): (selectedProjects.projects.length === 1) ? filteredProjects.filter( p => { return p._id === selectedProjects.projects[0] }): null;
-    const admin = (project === null) ? false: (project[0]._uid === auth._id) ? true: false;
+    const admin = (sequencedProject !== false) ? true: (project === null) ? false: (project[0]._uid === auth._id) ? true: false;
     const highlights = _.sortBy(filteredHighlights, "start");
     const high = highlights[highlight];
     const del = (selectedProjects === false && admin === true) ?
@@ -91,8 +91,8 @@ class PlayerEdit extends Component{
   }
 }
 
-const mapStateToProps = ({ auth, player: { start, stop, comment, highlight, edit, copy }, main: { filteredHighlights, selectedProject, filteredProjects, selectedProjects } }) => {
-  return { auth, start, stop, comment, highlight, filteredHighlights, selectedProject, edit, copy, filteredProjects, selectedProjects };
+const mapStateToProps = ({ auth, player: { start, stop, comment, highlight, edit, copy }, main: { sequencedProject, filteredHighlights, selectedProject, filteredProjects, selectedProjects } }) => {
+  return { auth, start, stop, comment, highlight, filteredHighlights, selectedProject, edit, copy, filteredProjects, selectedProjects, sequencedProject };
 }
 
 const mapDispatchToProps = (dispatch) => {

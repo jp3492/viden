@@ -1,7 +1,19 @@
 import axios from 'axios';
 import { FETCH_USER, CREATE_POST, REMOVE, CHANGE_SEARCH_TERM, SUBMIT_HIGHLIGHT, UPDATE_HIGHLIGHT,
 DELETE_HIGHLIGHT, REQUEST, ANSWER_REQUEST, COPY_CREATE, DELETE_MULTIPLE, DELETE_HIGHLIGHTS, LOG, GET_PROJECT, COPY_ADDED,
-DISSMISS_HIGHLIGHT } from './types';
+DISSMISS_HIGHLIGHT, VIEW_SEQUENCES } from './types';
+
+export const viewSequences = (sequences, history) => dispatch => {
+  let videos = [];
+  sequences.map( s => {
+    if (videos.indexOf(s.link) === -1) {
+      videos.push(s.link)
+    }
+  })
+  const highlights = sequences.map( s => { return { ...s, video: videos.indexOf(s.link) } });
+  history.push('/player/sequenced');
+  dispatch({ type: VIEW_SEQUENCES, payload: { videos, highlights }});
+}
 
 export const copyAdd = copy => async dispatch => {
   const res = await axios.post('/api/addHighlights', copy);

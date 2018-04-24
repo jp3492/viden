@@ -16,25 +16,33 @@ import { SELECT_PROJECT, CHANGE_PAGE } from '../actions/types';
 import { getProject } from '../actions';
 
 class Player extends Component{
-  //needed: filteredHighlights, selectedProject, selectedProjects
+  shouldComponentUpdate(nextProps, nextState){
+    console.log("notupdating");
+    return false;
+  }
   componentWillMount(){
-    const { selectedProject, action: { getProject }, projects, dispatch, site } = this.props;
+    const { selectedProject, action: { getProject }, projects, dispatch, site, sequencedProject } = this.props;
     if (site === "home") {
       dispatch({ type: CHANGE_PAGE, payload: "player" });
+    }
+    if (sequencedProject !== false) {
+      return null;
     }
     if (this.props.match.params.id !== selectedProject) {
       const project = (projects !== undefined) ? projects.filter( p => { return p._id === this.props.match.params.id }): [];
       if (project.length === 0) {
         getProject(this.props.match.params.id);
       } else {
-        // getProject(this.props.match.params.id);
         dispatch({ type: SELECT_PROJECT, payload: this.props.match.params.id });
       }
     }
   }
   render(){
-    const { projects, selectedProject } = this.props;
+    const { projects, selectedProject, match } = this.props;
     console.log(this.props);
+    if (match.path === "/player/:id" && match.url === "/player/sequenced") {
+      return null;
+    }
     return(
       <div id="player" className="row">
         <PlayerInitiate />
@@ -53,8 +61,8 @@ class Player extends Component{
     )
   }
 }
-const mapStateToProps = ({ auth, main: { selectedProject, selectedProjects, projects, site } }) => {
-  return { selectedProject, selectedProjects, auth, projects, site }
+const mapStateToProps = ({ auth, main: { selectedProject, selectedProjects, projects, site, sequencedProject } }) => {
+  return { selectedProject, selectedProjects, auth, projects, site, sequencedProject }
 }
 const mapDispatchToProps = (dispatch) => {
   return { action: bindActionCreators({ getProject }, dispatch), dispatch };

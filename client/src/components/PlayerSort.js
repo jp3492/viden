@@ -6,10 +6,10 @@ import { COPY_ADD_ALL } from '../actions/types';
 class PlayerSort extends Component{
 
   render(){
-    const { copy, filteredHighlights, dispatch, selectedProjects, selectedProject, projects } = this.props;
+    const { copy, filteredHighlights, dispatch, selectedProjects, selectedProject, projects, sequencedProject } = this.props;
     let copyIds, filterIds, checked, add;
     let project = (selectedProjects !== false) ? selectedProjects: projects.filter( p => { return p._id === selectedProject });
-    project = (selectedProjects !== false) ? project: project[0];
+    project = (sequencedProject !== false) ? sequencedProject: (selectedProjects !== false) ? project: project[0];
     if (copy !== false) {
       copyIds = copy.highlights.map( h => { return h._id });
       filterIds = filteredHighlights.map( h => { return h._id });
@@ -33,7 +33,7 @@ class PlayerSort extends Component{
     )
   }
 }
-const mapStateToProps = ({ player: { copy }, main: { filteredHighlights, selectedProjects, selectedProject, projects } }) => {
-  return { copy, filteredHighlights, selectedProjects, selectedProject, projects }
+const mapStateToProps = ({ player: { copy }, main: { filteredHighlights, selectedProjects, selectedProject, projects, sequencedProject } }) => {
+  return { copy, filteredHighlights, selectedProjects, selectedProject, projects, sequencedProject }
 }
 export default connect(mapStateToProps)(PlayerSort);

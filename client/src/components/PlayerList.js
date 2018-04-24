@@ -36,13 +36,13 @@ class PlayerList extends Component{
       </li>;
   }
   render(){
-    const { filteredProjects, selectedProject, filteredHighlights, selectedProjects } = this.props;
-    if (selectedProject === null) {
+    const { filteredProjects, selectedProject, filteredHighlights, selectedProjects, sequencedProject } = this.props;
+    if (selectedProject === null && sequencedProject === false) {
       return null;
     }
     const project = filteredProjects.filter( p => { return p._id === selectedProject });
-    const highlights = _.sortBy(filteredHighlights, "start");
-    const videos = (selectedProjects === false) ? project[0].videos: selectedProjects.videos;
+    const highlights = (sequencedProject !== false) ? _.sortBy(sequencedProject.highlights, "start"): _.sortBy(filteredHighlights, "start");
+    const videos = (sequencedProject !== false) ? sequencedProject.videos: (selectedProjects === false) ? project[0].videos: selectedProjects.videos;
     return(
       <ul id="playerList" className="collection">
         {highlights.map( (h, i) => this.renderHighlights(h, i, videos))}
@@ -51,8 +51,8 @@ class PlayerList extends Component{
   }
 }
 
-const mapStateToProps = ({ main: { selectedProject, filteredProjects, filteredHighlights, selectedProjects }, player: { highlight, players, video, copy } }) => {
-  return { selectedProject, filteredProjects, highlight, players, video, filteredHighlights, copy, selectedProjects };
+const mapStateToProps = ({ main: { selectedProject, filteredProjects, filteredHighlights, selectedProjects, sequencedProject }, player: { highlight, players, video, copy } }) => {
+  return { selectedProject, filteredProjects, highlight, players, video, filteredHighlights, copy, selectedProjects, sequencedProject };
 }
 
 export default connect(mapStateToProps)(PlayerList);

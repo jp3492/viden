@@ -18,9 +18,11 @@
 #profile-head > a {
   padding-top: 10px !important;
 }
+#root, #root > div, #root > div > div {
+  height: 100% !important;
+}
 #body {
-  height: auto !important;
-  height: calc(100% - 76px) !important;
+  height: calc(100% - 66px) !important;
   margin-bottom: 0 !important;
   position: relative;
 }
@@ -49,7 +51,7 @@
 #bodyLeft {
   padding-left: 0 !important;
   padding-right: 0 !important;
-  height: 100% !important;
+  height: calc(100% - 60px) !important;
 }
 #createBtn {
   margin-top: 13px !important;
@@ -73,9 +75,10 @@
   height: 100% !important;
 }
 #bodyRight {
+  max-height: calc(100% - 60px) !important;
   border: none !important;
   margin-top: 10px !important;
-  overflow-y: scroll !important;
+  overflow-y: auto !important;
 }
 #bodyRight > li {
   margin-bottom: 0px !important;
