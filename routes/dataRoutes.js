@@ -234,9 +234,11 @@ module.exports = (app) => {
                               if (!stat[0].includes('p')) { let isHome, quality; isHome = alterHome(stat[0][0]); quality = alterQuality(stat[0][5]);
                                 return { time: stat[12], home: isHome, player: Number(stat[0].substr(1,2)), action: stat[0][3], type: stat[0][4], quality, s, s_h, s_v, p_h, p_v }; }
                             });
+                            console.log("before indexing");
                             scout.map((stat, i) => {
                               if (stat === undefined) { scout.splice(i, 1); } });
-                            scout = scout.map((stat, i) => { stat.index = i+1; return stat; });
+                            scout = scout.map((stat, i) => { return { ...stat, index: i+1 }});
+                            console.log("index applied");
                             scout = scout.map( stat => {
                               const stop = Number(stat.time) + 15;
                               const comment = `${stat.home},${stat.player}:${stat.action},${stat.type}=${stat.quality}.${stat.s_h}:${stat.s_v},${stat.p_h}:${stat.p_v}`;
@@ -244,10 +246,25 @@ module.exports = (app) => {
                             })
                             const newHighlights = new Highlights({ type: "dataVolley", title: create.title, description: create.description, videos: create.videos, _uid: _id, privacy: create.privacy, parent: create.parent });
                             await newHighlights.save();
+                            console.log("newHighlight saved");
                             const id = newHighlights._id;
+                            let counter = 0;
                             await Promise.all(scout.map( async (highlight) => {
-                              await Highlights.update({ _id: id }, { $push: { highlights: highlight } } );
+                              if (highlight.start === NaN) {
+                                console.log(highlight);
+                              }
+                              console.log(counter);
+                              console.log(typeof highlight);
+
+                              console.log(scout.length);
+                              counter = counter + 1;
+                              try {
+                                await Highlights.update({ _id: id }, { $push: { highlights: highlight } } );
+                              } catch (e) {
+                                console.log(e);
+                              }
                             }));
+                            console.log("after new highlights");
                             await Promise.all(invites.map( async i => {
                               await User.update({ _id: i }, { $push: { access: { target: id, user: _id, type: create.type, status: "invited" } } });
                               await User.update({ _id }, { $push: { access: { target: id, user: i, type: create.type, status: "inviteSent" } } });

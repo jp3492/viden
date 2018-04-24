@@ -11,6 +11,7 @@ import Login from './Login';
 
 class App extends Component {
   componentWillMount(){
+    console.log("need to add: only add needed videos to copy, remove video if neccessary when removing a highlight");
     const { auth, fetchUser, main: { selectedProject } } = this.props;
     if (auth === false || auth.approved === false) {
       fetchUser();

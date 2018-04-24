@@ -84,6 +84,7 @@ export const removeObj = (obj, _id) => async dispatch => {
 
 export const create_update = (update, create, _id, invites) => async dispatch => {
   const res = await axios.post('/api/create_update', { update, create, _id, invites });
+  console.log(res.data);
   dispatch({ type: CREATE_POST, payload: res.data });
 }
 

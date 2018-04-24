@@ -26,7 +26,7 @@ class ProjectList extends Component{
       </div>
     ): null;
     return (
-      <li>
+      <li key={_id}>
         <div className={className} onClick={ () => dispatch({ type: COPY_SELECT_FOLDER, payload: _id })}><i className="material-icons">folder</i>{name}</div>
         {nested}
       </li>
@@ -36,7 +36,7 @@ class ProjectList extends Component{
     const { title, _id } = p;
     const { dispatch, copy: { targets } } = this.props;
     const checked = (targets.indexOf(_id) === -1) ? false: true;
-    return <li className="collection-item">
+    return <li key={_id} className="collection-item">
             <div>
               {title}
               <a id={`checkp${i}`} className="secondary-content" onClick={ e => {

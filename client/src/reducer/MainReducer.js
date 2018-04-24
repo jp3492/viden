@@ -1,7 +1,7 @@
 import { FETCH_USER, CHANGE_VIEW, CHANGE_PAGE, CHANGE_SEARCH_LOCAL, CHANGE_SEARCH_OPTION, CHANGE_SEARCH_TERM, SELECT_USER, SELECT_PROJECT, SELECT_GROUP, SELECT_FOLDER,
 CREATE, CHANGE_CREATE_ATTRIBUTE, CLEAR_CREATE, CREATE_REMOVE_VIDEO, CREATE_POST, UPDATE, REMOVE, SUBMIT_HIGHLIGHT, UPDATE_HIGHLIGHT, LOGOUT,
 DELETE_HIGHLIGHT, REQUEST, ANSWER_REQUEST, COPY_CREATE, COPY, SELECT_MULTIPLE, ADD_PROJECT, INVITE, DELETE_MULTIPLE, DELETE_HIGHLIGHTS,
-LOG, GET_PROJECT, COPY_ADDED } from '../actions/types';
+LOG, GET_PROJECT, COPY_ADDED, COPY_ADD_ALL } from '../actions/types';
 import ReactPlayer from 'react-player';
 import _ from 'lodash';
 
@@ -35,7 +35,6 @@ export default function ( state = initialState, action ){
    selectedProjects;
   switch (action.type) {
     case COPY_ADDED:
-      //map over state.projects, check if is in received projects, if so, return new project
       const newProjects = action.payload.map( p => { return p._id });
       return { ...state, projects: state.projects.map( p => {
           if (newProjects.indexOf(p._id) !== -1) {
@@ -243,8 +242,22 @@ export default function ( state = initialState, action ){
       return { ...state, update: true, create };
     case CREATE_POST:
       const { type, data } = action.payload;
+      console.log(data);
       if (state.update === true) {
         switch (type) {
+          case "dataVolley":
+            projects = state.projects.map( p => {
+              if (p._id === data._id) { return data }
+              return p;
+            });
+            access = state.access;
+            if (data.invites.length !== 0) {
+              data.invites.map( i => {
+                access.push({ user: i, target: data._id, status: "inviteSent", type: "project"})
+                return i;
+              });
+            }
+          return { ...state, projects, filteredProjects: projects, create: null, update: false, access };
           case "project":
             projects = state.projects.map( p => {
               if (p._id === data._id) { return data }
@@ -280,6 +293,7 @@ export default function ( state = initialState, action ){
         }
       }
       switch (type) {
+        case "dataVolley": return { ...state, projects: [ ...state.projects, data ], create: null };
         case "project":   return { ...state, projects: [ ...state.projects, data ], create: null };
         case "folder":    return { ...state, folders: [ ...state.folders, data ], create: null };
         case "group":     return { ...state, groups: [ ...state.groups, data ], create: null };

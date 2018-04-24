@@ -20,7 +20,7 @@ class CreateProject extends Component{
   }
   renderFolder(f){
     const { name, _id } = f;
-    return <option value={_id}>{name}</option>;
+    return <option key={_id} value={_id}>{name}</option>;
   }
   renderVideos(v, dispatch, admin, copy){
     if (admin === true && copy !== true) {

@@ -2,6 +2,8 @@ import { PP, MUTE, SU, SD, VU, VD, CV, HP, HN, SET_PLAYER, MARK, SUBMIT_HIGHLIGH
 PROGRESS, CHANGE_TIME, DELETE_HIGHLIGHT, PLAY_LIST, INITIATE, CHANGE_SEARCH_TERM, COPY, COPY_ADD, COPY_CREATE, SELECT_PROJECT, CHANGE_PAGE, CREATE_POST,
 DELETE_HIGHLIGHTS, COPY_SELECT_FOLDER, COPY_ADD_TARGET, COPY_ADDED, DISSMISS_HIGHLIGHT, COPY_ADD_ALL } from '../actions/types';
 
+import _ from 'lodash';
+
 const initialState = {
   playing: true,
   playList: true,
@@ -23,7 +25,7 @@ const initialState = {
 }
 
 export default function ( state = initialState, action ){
-  let volume, players, highlight, initiated, playing, copy;
+  let volume, players, highlight, initiated, playing, copy, videos;
   switch (action.type) {
     case DISSMISS_HIGHLIGHT:
       return { ...state, start: null, stop: null, comment: "" };
@@ -51,12 +53,12 @@ export default function ( state = initialState, action ){
     case COPY_ADD_ALL:
       if (action.payload.add === true) {
         const inIds = state.copy.highlights.map( h => { return h._id });
-        const newHighlights = action.payload.filteredHighlights.filter( h => {
+        const newHighlights = action.payload.withLinks.filter( h => {
           return inIds.indexOf(h._id) === -1;
         });
-        return { ...state, copy: { ...state.copy, highlights: state.copy.highlights.concat(newHighlights)}}
+        return { ...state, copy: { ...state.copy, highlights: state.copy.highlights.concat(newHighlights) }}
       } else {
-        const newIds = action.payload.filteredHighlights.map( h => { return h._id });
+        const newIds = action.payload.withLinks.map( h => { return h._id });
         return { ...state, copy: { ...state.copy, highlights: state.copy.highlights.filter( h => { return newIds.indexOf(h._id) === -1 })}}
       }
     case COPY_ADD:

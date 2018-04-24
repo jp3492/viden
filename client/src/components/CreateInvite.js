@@ -41,7 +41,7 @@ class CreateInvite extends Component{
       return null;
     }
     return (
-        <li className="collection-item">
+        <li key={group._id} className="collection-item">
           <div className="collapsible-header"><i className="material-icons">people</i>{group.name}
             <a id={`checkb${i}`} className="secondary-content" onClick={ e => {
               e.preventDefault();
@@ -64,7 +64,7 @@ class CreateInvite extends Component{
     const { dispatch, create: { invites } } = this.props;
     const checked = (invites.indexOf(f._id) !== -1) ? true: false;
     return (
-    <li className="collection-item"><i className="material-icons">person</i>{f.firstName}
+    <li key={f._id} className="collection-item"><i className="material-icons">person</i>{f.firstName}
       <a id={`checkb${i}`} className="secondary-content" onClick={ e => {
         e.preventDefault();
         dispatch({ type: INVITE, payload: { type: "user", _id: f._id} }); } }>

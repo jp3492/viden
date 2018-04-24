@@ -13,7 +13,9 @@ class Header extends Component{
       history.push('/login')
     } else if (site !== "player" && pathname.includes('player') === false) {
       history.push('/home')
-    } 
+    } else if (auth !== false && pathname.includes('/') === false) {
+      history.push('/home');
+    }
   }
   render(){
     const { auth, site } = this.props;
