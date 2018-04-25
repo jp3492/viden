@@ -28,6 +28,11 @@ class PlayerEdit extends Component{
       return false
     }
   }
+  changeTime(start, time){
+    const { players, video, dispatch } = this.props;
+    players[video].seekTo(time);
+    dispatch({ type: CHANGE_TIME, payload: start });
+  }
   renderEdit(high, selectedProject){
     const { edit, action: { deleteHighlight }, dispatch } = this.props;
     if (edit) {
@@ -76,10 +81,10 @@ class PlayerEdit extends Component{
         <textarea id="codeInput" value={comment} placeholder="Code..." className="col s12 materialize-textarea" onChange={ e => dispatch({ type: CHANGE_COMMENT, payload: e.target.value })}>
         </textarea>
         <div className="col s12" id="times">
-          <div className="col s4 center-align" onClick={ () => dispatch({ type: CHANGE_TIME, payload: "start" })}>
+          <div className="col s4 center-align" onClick={ () => this.changeTime("start", start)}>
             {`Start: ${start}`}
           </div>
-          <div className="col s4 center-align" onClick={ () => dispatch({ type: CHANGE_TIME, payload: "stop" })}>
+          <div className="col s4 center-align" onClick={ () => this.changeTime("stop", stop)}>
             {`Stop: ${stop}`}
           </div>
           <div className="col s4 center-align">
@@ -91,8 +96,8 @@ class PlayerEdit extends Component{
   }
 }
 
-const mapStateToProps = ({ auth, player: { start, stop, comment, highlight, edit, copy }, main: { sequencedProject, filteredHighlights, selectedProject, filteredProjects, selectedProjects } }) => {
-  return { auth, start, stop, comment, highlight, filteredHighlights, selectedProject, edit, copy, filteredProjects, selectedProjects, sequencedProject };
+const mapStateToProps = ({ auth, player: { start, stop, comment, highlight, edit, copy, players, video }, main: { sequencedProject, filteredHighlights, selectedProject, filteredProjects, selectedProjects } }) => {
+  return { auth, start, stop, comment, highlight, filteredHighlights, selectedProject, players, video, edit, copy, filteredProjects, selectedProjects, sequencedProject };
 }
 
 const mapDispatchToProps = (dispatch) => {

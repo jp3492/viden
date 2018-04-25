@@ -31,6 +31,9 @@
   line-height: 1.3 !important;
   font-size: 35px !important;
 }
+#playerVideoHeader > div > ul > li > a > a {
+  color: white !important;
+}
 #controlButtons {
   display: flex !important;
   flex-direction: row;

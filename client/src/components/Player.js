@@ -39,7 +39,6 @@ class Player extends Component{
   }
   render(){
     const { projects, selectedProject, match } = this.props;
-    console.log(this.props);
     if (match.path === "/player/:id" && match.url === "/player/sequenced") {
       return null;
     }

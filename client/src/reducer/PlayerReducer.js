@@ -74,7 +74,7 @@ export default function ( state = initialState, action ){
     case DELETE_HIGHLIGHT:
       highlight = (state.highlight === 0) ? 0: state.highlight-1;
       return { ...state, start: null, stop: null, comment: "", changing: null, edit: false, highlight };
-    case CHANGE_TIME:   return { ...state, [action.payload]: null, changing: action.payload };
+    case CHANGE_TIME:   return { ...state, [action.payload]: null, changing: action.payload, playing: false };
     case PROGRESS:
       if (state.changing === null) { return { ...state, progress: action.payload.played * 100 } }
       else { return { ...state, progress: action.payload.played * 100, [state.changing]: action.payload.playedSeconds.toFixed(1) } }
@@ -87,9 +87,7 @@ export default function ( state = initialState, action ){
     case SUBMIT_HIGHLIGHT:  return { ...state, start: null, stop: null, comment: "" };
     case MARK:  return { ...state, [action.payload.what]: action.payload.time.toFixed(1) };
     case INITIATE:
-      console.log(action.payload);
       initiated = state.initiated;
-      console.log(initiated);
       initiated[action.payload] = true;
       const check = Object.keys(initiated).every( i => { return state.initiated[i] === true });
       if (check !== true) {

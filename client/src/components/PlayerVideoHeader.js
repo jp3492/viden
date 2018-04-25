@@ -1,15 +1,29 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { CV } from '../actions/types';
+import { CV, DISABLE_VIDEO } from '../actions/types';
 
 class PlayerVideoHeader extends Component{
   renderLink(v, i, len){
-    const { dispatch, video } = this.props;
-    const className = (video === i) ? "active": "";
+    const { dispatch, video, disabledVideos } = this.props;
+    const className = (video === i) ? "active row": "row";
+    const checked = (disabledVideos.indexOf(i) !== -1) ? false: true;
     let width = 100 / len;
     width = `${width}%`;
-    return <li key={i} onClick={ () => dispatch({ type: CV, payload: i }) } className="tab col s3" style={{ width }}><a className={className}>Video {i+1}</a></li>;
+    return (
+      <li key={i} className="tab col s3" style={{ width }}>
+        <a className={className}>
+          <a className="col s10" onClick={ () => dispatch({ type: CV, payload: i }) }>Video {i+1}</a>
+          <a id={`checktab${i}`} className="secondary-content col s1" onClick={ e => {
+            e.preventDefault();
+            e.stopPropagation();
+            dispatch({ type: DISABLE_VIDEO, payload: i }); } }>
+            <input type="checkbox" className="filled-in" id={`vidTab${i}`} checked={checked}/>
+            <label htmlFor={`vidTab${i}`}></label>
+          </a>
+        </a>
+      </li>
+    )
   }
   render(){
     const { history, filteredProjects, selectedProject, selectedProjects, sequencedProject } = this.props;
@@ -44,7 +58,7 @@ class PlayerVideoHeader extends Component{
     )
   }
 }
-const mapStateToProps = ({ player: { video, players, videos }, main: { selectedProject, selectedProjects, filteredProjects, sequencedProject } }) => {
-  return { video, players, selectedProject, selectedProjects, filteredProjects, sequencedProject };
+const mapStateToProps = ({ player: { video, players, videos }, main: { disabledVideos, selectedProject, selectedProjects, filteredProjects, sequencedProject } }) => {
+  return { video, players, selectedProject, selectedProjects, filteredProjects, sequencedProject, disabledVideos };
 }
 export default withRouter(connect(mapStateToProps)(PlayerVideoHeader));

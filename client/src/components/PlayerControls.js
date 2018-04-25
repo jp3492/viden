@@ -12,16 +12,31 @@ class PlayerControls extends Component{
     document.addEventListener('keydown', e => this.keyPress(e) );
   }
   keyPress(e){
-    const { dispatch } = this.props;
+    console.log(e.keyCode);
+    const { dispatch, player: { edit } } = this.props;
     if ($('#modalCopy')[0] === undefined || $('#modalCopy')[0].M_Modal.isOpen !== true) {
-      if (e.keyCode === 37 && e.ctrlKey) { this.nextVideo(false) }
-      else if (e.keyCode === 39 && e.ctrlKey) { this.nextVideo(true) }
-      else if (e.keyCode === 32 && e.ctrlKey) { dispatch({ type: PP }) }
+      if (e.keyCode === 37 && e.ctrlKey) {
+        if (edit === true) {
+          this.forward(false, true)
+        } else {
+          this.nextVideo(false)
+        }
+        return;
+      }
+      else if (e.keyCode === 39 && e.ctrlKey) {
+        if (edit === true) {
+          this.forward(true, true)
+        } else {
+          this.nextVideo(true)
+        }
+        return;
+      }
+      else if (e.keyCode === 32 && e.ctrlKey) { dispatch({ type: PP }); return; }
       switch (e.keyCode) {
         case 38: this.nextHighlight(false); break;
         case 40: this.nextHighlight(true); break;
-        case 37: this.forward(false); break;
-        case 39: this.forward(true); break;
+        case 37: this.forward(false, false); break;
+        case 39: this.forward(true, false); break;
         case 13: e.preventDefault(); this.mark(); break;
         default: console.log("invalid key command"); break;
       }
@@ -54,11 +69,15 @@ class PlayerControls extends Component{
     const progress = ((e.clientX * 100)/document.getElementById('progress').offsetWidth) / 100;
     players[video].seekTo(progress);
   }
-  forward(f){
+  forward(f, edit){
+    console.log(edit);
     const { player: { players, video, playing } } = this.props;
     const current = players[video].getCurrentTime();
-    const time = (playing === true) ? 1: 0.1;
+    console.log(current);
+    const time = (playing === true) ? 1: (edit === true) ? 1: 0.1;
+    console.log(time);
     const to = (f === true) ? current + time: (current !== 0) ? current - time: 0;
+    console.log(to);
     players[video].seekTo(to);
   }
   nextVideo(next){

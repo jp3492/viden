@@ -1,7 +1,7 @@
 import { FETCH_USER, CHANGE_VIEW, CHANGE_PAGE, CHANGE_SEARCH_LOCAL, CHANGE_SEARCH_OPTION, CHANGE_SEARCH_TERM, SELECT_USER, SELECT_PROJECT, SELECT_GROUP, SELECT_FOLDER,
 CREATE, CHANGE_CREATE_ATTRIBUTE, CLEAR_CREATE, CREATE_REMOVE_VIDEO, CREATE_POST, UPDATE, REMOVE, SUBMIT_HIGHLIGHT, UPDATE_HIGHLIGHT, LOGOUT,
 DELETE_HIGHLIGHT, REQUEST, ANSWER_REQUEST, COPY_CREATE, COPY, SELECT_MULTIPLE, ADD_PROJECT, INVITE, DELETE_MULTIPLE, DELETE_HIGHLIGHTS,
-LOG, GET_PROJECT, COPY_ADDED, COPY_ADD_ALL, SELECT_SEQUENCE, ADD_SEQUENCE, VIEW_SEQUENCES } from '../actions/types';
+LOG, GET_PROJECT, COPY_ADDED, COPY_ADD_ALL, SELECT_SEQUENCE, ADD_SEQUENCE, VIEW_SEQUENCES, DISABLE_VIDEO } from '../actions/types';
 import ReactPlayer from 'react-player';
 import _ from 'lodash';
 
@@ -30,14 +30,32 @@ const initialState = {
   selectedProjects: false,
   selectedSequence: null,
   selectedSequences: false,
-  sequencedProject: false
+  sequencedProject: false,
+  disabledVideos: []
 }
 
 export default function ( state = initialState, action ){
   let filteredProjects, filteredFriends, selectedProject, selectedUser, create, videos, folder, group, project,
    user, projects, folders, groups, friends, searchOption, searchTerm, view, filteredHighlights, highlights, access, video, invites,
-   selectedProjects, selectedSequence, selectedSequences, filteredSequences;
+   selectedProjects, selectedSequence, selectedSequences, filteredSequences, disabledVideos;
   switch (action.type) {
+    case DISABLE_VIDEO:
+      if (state.disabledVideos.indexOf(action.payload) === -1) {
+        return { ...state, disabledVideos: [ ...state.disabledVideos, action.payload ], filteredHighlights: state.filteredHighlights.filter( h => { return h.video !== action.payload }) }
+      } else {
+        disabledVideos = state.disabledVideos.filter( v => { return v !== action.payload });
+        project = state.projects.filter( p => { return p._id === state.selectedProject });
+        highlights = (state.selectedProjects === false) ? project[0].highlights: state.selectedProjects.highlights;
+        filteredHighlights = highlights.filter( h => {
+          const comm = h.comment.toLowerCase();
+          if (comm.includes(state.searchTerm.toLowerCase()) && disabledVideos.indexOf(h.video) === -1) {
+            return true;
+          }
+          return false;
+        });
+        filteredHighlights = _.sortBy(filteredHighlights, "start");
+        return { ...state, disabledVideos: state.disabledVideos.filter( v => { return v !== action.payload }), filteredHighlights }
+      }
     case VIEW_SEQUENCES:
       return { ...state, sequencedProject: action.payload, site: "player", filteredHighlights: action.payload.highlights }
     case ADD_SEQUENCE:
@@ -391,7 +409,7 @@ export default function ( state = initialState, action ){
         highlights = (state.selectedProjects === false) ? project[0].highlights: state.selectedProjects.highlights;
         filteredHighlights = highlights.filter( h => {
           const comm = h.comment.toLowerCase();
-          if (comm.includes(action.payload.toLowerCase())) {
+          if (comm.includes(action.payload.toLowerCase()) && state.disabledVideos.indexOf(h.video) === -1) {
             return true;
           }
           return false;

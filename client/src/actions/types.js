@@ -61,3 +61,4 @@ export const ADD_SEQUENCE = "add_sequence";
 export const SELECT_SEQUENCE = "select_sequence";
 export const ADD_ALL_SEQUENCES = "add_all_sequences";
 export const VIEW_SEQUENCES = "view_sequences";
+export const DISABLE_VIDEO = "disable_video";
