@@ -1,4 +1,4 @@
-Source Code for Viden.pro
+Source Code for Viden.pro - last push to master 3 months ago. Architecture outdated, been working on a new improved back and frontend!
 
 Viden is a cross streaming platform media player with social and interactive features
 
